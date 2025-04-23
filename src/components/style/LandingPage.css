@@ -1,0 +1,266 @@
+/* COLORES BASE */
+:root {
+    --color-primario: #0093E9;
+    --color-secundario: #7EC8E3;
+    --color-marca: #1e3d87;
+    --color-blanco: #fff;
+  }
+  
+  /* GENERAL */
+  .landing-page {
+    font-family: 'Poppins', sans-serif;
+    scroll-behavior: smooth;
+    padding-top: 70px;
+    background-color: #fdfdfd;
+    color: #333;
+  }
+  
+  /* NAVBAR */
+  .lp-navbar {
+    background: linear-gradient(90deg, var(--color-primario) 0%, #80D0C7 100%);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .lp-navbar:hover {
+    filter: brightness(1.1);
+  }
+  
+  .lp-logo {
+    width: 130px;
+    height: auto;
+  }
+  
+  .lp-nav .nav-link {
+    color: white;
+    font-weight: 500;
+    transition: color 0.3s;
+  }
+  
+  .lp-nav .nav-link:hover {
+    color: #ffe58f;
+  }
+  
+  .lp-toggle {
+    background: transparent;
+    border: none;
+    color: white;
+  }
+  
+  /* MENÚ MÓVIL */
+  .lp-drawer-menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    background-color: white;
+    width: 250px;
+    height: 100%;
+    z-index: 2000;
+    box-shadow: -2px 0 6px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .lp-drawer-close {
+    align-self: flex-end;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+  }
+  
+  .lp-drawer-nav .nav-link {
+    color: var(--color-marca);
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+  
+  /* HERO */
+  .lp-hero {
+    background-image: url("/fondo-hero.webp");
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .lp-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 147, 233, 0.6);
+    z-index: 1;
+  }
+  
+  .lp-hero-content {
+    position: relative;
+    z-index: 2;
+    color: white;
+  }
+  
+  .lp-hero-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+  
+  .lp-hero-subtitle {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .lp-hero-btn {
+    background-color: #fff;
+    color: var(--color-primario);
+    font-weight: bold;
+    border-radius: 30px;
+    padding: 0.7rem 2rem;
+    border: none;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .lp-hero-btn:hover {
+    background-color: var(--color-marca);
+    color: white;
+  }
+  
+  /* SECCIONES */
+  .lp-section {
+    padding: 4rem 1rem;
+  }
+  
+  .lp-section-title {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    color: var(--color-marca);
+    margin-bottom: 2rem;
+  }
+  
+  .lp-section-text {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    text-align: justify;
+  }
+  
+  .lp-img-fit-text {
+    max-width: 100%;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* TARJETAS */
+  .lp-card {
+    background-color: white;
+    border-radius: 20px;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease;
+  }
+  
+  .lp-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .lp-card-icon-top {
+    font-size: 2.5rem;
+    color: var(--color-primario);
+    margin-bottom: 1rem;
+  }
+  
+  .lp-card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--color-marca);
+  }
+  
+  .lp-card-text {
+    font-size: 1rem;
+    color: #555;
+  }
+  
+  /* FAQ Y BENEFICIOS */
+  .lp-check-list {
+    list-style: none;
+    padding-left: 0;
+  }
+  
+  .lp-check-list li::before {
+    content: "✔️";
+    margin-right: 0.5rem;
+    color: var(--color-primario);
+  }
+  
+  .lp-faq-item strong {
+    display: block;
+    margin-top: 1rem;
+    font-weight: 600;
+    color: var(--color-marca);
+  }
+  
+  /* FOOTER */
+  .lp-footer {
+    background-color: var(--color-marca);
+    color: white;
+    padding: 2rem 1rem;
+    text-align: center;
+  }
+  
+  .lp-footer-contact span {
+    margin: 0 0.5rem;
+    display: inline-block;
+  }
+  
+  .lp-footer-copy {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    opacity: 0.8;
+  }
+  
+  /* ANIMACIONES */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  
+  .reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  /* ENCABEZADO DOCENTE */
+  .encabezado-docente {
+    background-color: #7EC8E3; /* Color de la marca */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    height: 65px;
+  }
+  
+  .titulo-nicalee {
+    font-weight: bold;
+    font-size: 1.4rem;
+    color: white;
+  }
+  
+  /* TEXTO DE MARCA */
+  .color-texto-marca {
+    color: #1e3d87;
+    font-weight: bold;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, #1e3d87, #0093E9);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .color-texto-marca:hover {
+    filter: brightness(1.2);
+  }
+  

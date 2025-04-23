@@ -1,0 +1,41 @@
+.color-navbar {
+  background: linear-gradient(90deg, #0093E9 0%, #80D0C7 100%);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+}
+
+.color-navbar:hover {
+  body {
+    padding-top: 70px; /* Para que el contenido no quede debajo del navbar */
+  }
+  
+  filter: brightness(1.1);
+}
+.encabezado-docente {
+  background-color: #7EC8E3; /* Cambia este color por el de tu marca */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  height: 65px;
+}
+
+.titulo-nicalee {
+  font-weight: bold;
+  font-size: 1.4rem;
+  color: white;
+}
+
+
+.color-texto-marca {
+  color: #1e3d87;
+  font-weight: bold;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, #1e3d87, #0093E9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: all 0.3s ease-in-out;
+}
+
+.color-texto-marca:hover {
+  filter: brightness(1.2);
+}
+
+
