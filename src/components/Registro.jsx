@@ -23,7 +23,7 @@ const Registro = () => {
       const userId = userCredential.user.uid;
       await setDoc(doc(db, "users", userId), { email, role: selectedRole });
 
-      if (selectedRole === "estudiante") navigate("/registroestudiante");
+      if (selectedRole === "estudiante") navigate("/estudianteformularios");
       else if (selectedRole === "docente") navigate("/formulariodocente");
       else if (selectedRole === "padre") navigate("/dashboard-padre");
       else navigate("/dashboard");

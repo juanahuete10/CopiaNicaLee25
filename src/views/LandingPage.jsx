@@ -44,9 +44,10 @@ const LandingPage = () => {
     <div className="landing-page">
       {/* NAVBAR */}
       <Navbar expand="lg" fixed="top" className="lp-navbar">
-        <Container>
+        <Container className="lp-navbar-container">
           <Navbar.Brand className="lp-brand" onClick={() => scrollTo("hero")}>
             <img src={logo} alt="Logo NicaLee" className="lp-logo" loading="lazy" />
+            NicaLee
           </Navbar.Brand>
           <div className="d-none d-lg-block">
             <Nav className="lp-nav">
@@ -99,7 +100,7 @@ const LandingPage = () => {
         </Container>
       </section>
 
-      
+      {/* SOBRE NOSOTROS */}
       <section id="about" className="lp-section lp-about reveal">
         <Container>
           <Row className="align-items-center">

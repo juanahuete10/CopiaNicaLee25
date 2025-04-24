@@ -7,13 +7,13 @@ import Encabezado from "./components/Encabezado";
 import Login from './components/Login';
 import Registro from "./components/Registro";
 import EstudianteFormularios from "./components/Formularios/EstudianteFormularios";
-import EstudianteDashboard from "./components/Formularios/EstudianteDashboard";
 import DashboardDocente from "./components/Docente/DashboardDocente";
 import FormularioDocente from "./components/Docente/FormularioDocente";
 import CrearGrupo from "./components/Docente/CrearGrupo";
 import MisGrupos from "./components/Docente/MisGrupos";
 import PerfilDocente from "./components/Docente/PerfilDocente";
 import LandingPage from "./views/LandingPage";
+import DashboardNiño from "./components/Formularios/DashboardNiño";
 
 function AppContent() {
   const location = useLocation();
@@ -28,13 +28,14 @@ function AppContent() {
           <Route path="/inicionicalee" element={<InicioNicaLee />} />
           <Route path="/registro" element={<Registro />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/estudianteformularios" element={<ProtectedRoute><EstudianteFormularios /></ProtectedRoute>} />
-          <Route path="/estudiantedashboard" element={<EstudianteDashboard />} />
           <Route path="/dashboarddocente" element={<DashboardDocente />} />
           <Route path="/formulariodocente" element={<FormularioDocente />} />
           <Route path="/creargrupo" element={<CrearGrupo />} />
           <Route path="/misgrupos" element={<MisGrupos />} />
           <Route path="/perfildocente" element={<PerfilDocente />} />
+           <Route path="/estudianteformularios" element={<EstudianteFormularios/>} />
+          <Route path="/dashboardnino" element={<DashboardNiño />} />
+          
         </Routes>
       </main>
     </div>

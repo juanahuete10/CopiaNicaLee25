@@ -32,7 +32,7 @@ const EstudianteFormularios = () => {
       alert('Por favor, completa todos los campos obligatorios.');
       return;
     }
-  
+
     const estudiante = {
       id: Date.now(),
       nombre,
@@ -45,13 +45,12 @@ const EstudianteFormularios = () => {
       genero,
       imagen,
     };
-  
-    console.log(estudiante); // Imprimir el objeto para asegurarnos de que tiene los datos correctos
-  
-    // Navega al dashboard del estudiante después de completar el registro
-    navigate('/dashboard', { state: { estudiante } });
-  
-    // Limpiar campos
+
+    console.log(estudiante); // Verifica que los datos están bien
+
+    navigate('/dashboardnino', { state: { estudiante } });
+
+    // Limpiar formulario (opcional)
     setNombre('');
     setApellido('');
     setEdad('');
@@ -62,7 +61,6 @@ const EstudianteFormularios = () => {
     setGenero('');
     setImagen(null);
   };
-  
 
   return (
     <GradientContainer>
@@ -94,16 +92,16 @@ const EstudianteFormularios = () => {
 
         <SelectField value={nivelEducativo} onChange={(e) => setNivelEducativo(e.target.value)} >
           <option value="">Selecciona el nivel educativo</option>
-          <option value="Primaria">Primaria</option>
-          <option value="Secundaria">Secundaria</option>
-          <option value="Preparatoria">Preparatoria</option>
-          <option value="Universidad">Universidad</option>
+          <option value="inicial">Inicial</option
+          ><option value="medio">Medio</option>
+          <option value="avanzado">Avanzado</option>
+          
+         
         </SelectField>
 
         <InputField type="text" placeholder="Intereses" value={intereses} onChange={(e) => setIntereses(e.target.value)} />
         <InputField type="text" placeholder="Ubicación" value={ubicacion} onChange={(e) => setUbicacion(e.target.value)} />
 
-        {/* Cambio de género a un campo de selección */}
         <SelectField value={genero} onChange={(e) => setGenero(e.target.value)} >
           <option value="">Selecciona tu género</option>
           <option value="Masculino">Masculino</option>
@@ -139,27 +137,25 @@ const SelectField = styled.select`
   width: 100%;
 `;
 
-// 🎨 Botón centrado estilizado
 const StyledButton = styled.button`
   padding: 12px 25px;
-  background-color: #28a745; /* Verde */
+  background-color: #28a745;
   color: white;
   font-size: 16px;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
   display: block;
-  margin: 20px auto; /* Esto centra el botón */
-  width: auto; /* Ancho automático */
-  
+  margin: 20px auto;
+  width: auto;
+
   &:hover {
-    background-color: #218838; /* Verde más oscuro */
+    background-color: #218838;
     transform: scale(1.05);
   }
 
   &:active {
-    background-color: #1e7e34; /* Verde más oscuro al hacer clic */
+    background-color: #1e7e34;
     transform: scale(1);
   }
 `;
