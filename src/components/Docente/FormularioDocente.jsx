@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { db } from '../../database/firebaseConfig';
+import { db, auth } from '../../database/firebaseConfig'; // ✅ asegurarte de importar auth
 import { collection, addDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 
@@ -9,7 +9,7 @@ function FormularioDocente() {
   const [fechaNacimiento, setFechaNacimiento] = useState('');
   const [edad, setEdad] = useState('');
   const [genero, setGenero] = useState('masculino');
-  const [ setFotoPerfil] = useState(null);
+  const [ , setFotoPerfil] = useState(null); // no se usa pero se mantiene la vista previa
   const [previewFoto, setPreviewFoto] = useState(null);
   const [errores, setErrores] = useState({});
   const [registroExitoso, setRegistroExitoso] = useState(false);
@@ -57,15 +57,21 @@ function FormularioDocente() {
     e.preventDefault();
     if (!validarCampos()) return;
 
+    const user = auth.currentUser;
+    if (!user) {
+      alert('Debes iniciar sesión para registrar un docente.');
+      return;
+    }
+
     try {
       await addDoc(collection(db, 'docentes'), {
+        uid: user.uid, // ✅ guarda el UID del usuario autenticado
         nombre,
         apellido,
         fechaNacimiento,
         edad,
         genero,
-        creadoEn: new Date(),
-        // Nota: No se sube la foto, solo se guarda localmente en el formulario
+        creadoEn: new Date()
       });
 
       setRegistroExitoso(true);

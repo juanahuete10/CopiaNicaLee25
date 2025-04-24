@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, Button, Container, Card, Row, Col, Image } from 'react-bootstrap';
 import { db } from '../../database/firebaseConfig';
 import { collection, addDoc, getDocs } from 'firebase/firestore';
+import { useAuth } from '../../database/AuthContext';
 import logo from '../../assets/LogoNicaLee.png';
 
 function CrearGrupo() {
@@ -10,6 +11,7 @@ function CrearGrupo() {
   const [estudiantes, setEstudiantes] = useState([]);
   const [estudiantesGrado, setEstudiantesGrado] = useState([]);
   const [estudiantesSeleccionados, setEstudiantesSeleccionados] = useState([]);
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchEstudiantes = async () => {
@@ -21,7 +23,6 @@ function CrearGrupo() {
       }));
       setEstudiantes(estudiantesData);
     };
-
     fetchEstudiantes();
   }, []);
 
@@ -29,23 +30,33 @@ function CrearGrupo() {
     if (grado) {
       const filtrados = estudiantes.filter((e) => e.grado === grado);
       setEstudiantesGrado(filtrados);
+      setEstudiantesSeleccionados([]); // Reiniciar seleccionados si cambia el grado
     } else {
       setEstudiantesGrado([]);
     }
   }, [grado, estudiantes]);
 
-  const handleAgregarEstudiante = (estudiante) => {
-    if (!estudiantesSeleccionados.find((e) => e.id === estudiante.id)) {
-      setEstudiantesSeleccionados([...estudiantesSeleccionados, estudiante]);
+  const handleSeleccionEstudiante = (estudiante, checked) => {
+    if (checked) {
+      setEstudiantesSeleccionados(prev => [...prev, estudiante]);
+    } else {
+      setEstudiantesSeleccionados(prev => prev.filter(e => e.id !== estudiante.id));
     }
   };
 
   const handleCrearGrupo = async () => {
+    if (!nombreGrupo || !grado || estudiantesSeleccionados.length === 0) {
+      alert('Por favor, completa todos los campos y selecciona al menos un estudiante.');
+      return;
+    }
+
     await addDoc(collection(db, 'grupos'), {
       nombre: nombreGrupo,
       grado,
-      estudiantes: estudiantesSeleccionados.map((e) => e.id),
+      estudiantes: estudiantesSeleccionados.map(e => e.id),
+      uidDocente: user.uid,
     });
+
     alert('¡Grupo creado con éxito!');
     setNombreGrupo('');
     setGrado('');
@@ -73,7 +84,6 @@ function CrearGrupo() {
                   <Form.Label><strong>Nombre del Grupo</strong></Form.Label>
                   <Form.Control
                     type="text"
-                    placeholder="Ej. Grupo A de Primero"
                     value={nombreGrupo}
                     onChange={(e) => setNombreGrupo(e.target.value)}
                     required
@@ -97,14 +107,19 @@ function CrearGrupo() {
                   <>
                     <Form.Label><strong>Seleccionar Estudiantes</strong></Form.Label>
                     <div className="mb-3 p-2 rounded border" style={{ maxHeight: '200px', overflowY: 'auto' }}>
-                      {estudiantesGrado.map((estudiante) => (
-                        <Form.Check
-                          key={estudiante.id}
-                          type="checkbox"
-                          label={`${estudiante.nombre} ${estudiante.apellido}`}
-                          onChange={() => handleAgregarEstudiante(estudiante)}
-                        />
-                      ))}
+                      {estudiantesGrado.length > 0 ? (
+                        estudiantesGrado.map((estudiante) => (
+                          <Form.Check
+                            key={estudiante.id}
+                            type="checkbox"
+                            label={`${estudiante.nombre} ${estudiante.apellido}`}
+                            checked={estudiantesSeleccionados.some(e => e.id === estudiante.id)}
+                            onChange={(e) => handleSeleccionEstudiante(estudiante, e.target.checked)}
+                          />
+                        ))
+                      ) : (
+                        <p className="text-muted">No hay estudiantes registrados en este grado.</p>
+                      )}
                     </div>
                   </>
                 )}
