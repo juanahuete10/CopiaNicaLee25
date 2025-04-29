@@ -1,266 +1,243 @@
 /* COLORES BASE */
 :root {
-    --color-primario: #0093E9;
-    --color-secundario: #7EC8E3;
-    --color-marca: #1e3d87;
-    --color-blanco: #fff;
-  }
-  
-  /* GENERAL */
-  .landing-page {
-    font-family: 'Poppins', sans-serif;
-    scroll-behavior: smooth;
-    padding-top: 70px;
-    background-color: #fdfdfd;
-    color: #333;
-  }
-  
-  /* NAVBAR */
-  .lp-navbar {
-    background: linear-gradient(90deg, var(--color-primario) 0%, #80D0C7 100%);
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-    transition: all 0.3s ease-in-out;
-  }
-  
-  .lp-navbar:hover {
-    filter: brightness(1.1);
-  }
-  
-  .lp-logo {
-    width: 130px;
-    height: auto;
-  }
-  
-  .lp-nav .nav-link {
-    color: white;
-    font-weight: 500;
-    transition: color 0.3s;
-  }
-  
-  .lp-nav .nav-link:hover {
-    color: #ffe58f;
-  }
-  
-  .lp-toggle {
-    background: transparent;
-    border: none;
-    color: white;
-  }
-  
-  /* MENÚ MÓVIL */
-  .lp-drawer-menu {
-    position: fixed;
-    top: 0;
-    right: 0;
-    background-color: white;
-    width: 250px;
-    height: 100%;
-    z-index: 2000;
-    box-shadow: -2px 0 6px rgba(0, 0, 0, 0.1);
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-  
-  .lp-drawer-close {
-    align-self: flex-end;
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-  }
-  
-  .lp-drawer-nav .nav-link {
-    color: var(--color-marca);
-    font-size: 1.1rem;
-    font-weight: 600;
-  }
-  
-  /* HERO */
-  .lp-hero {
-    background-image: url("/fondo-hero.webp");
-    background-size: cover;
-    background-position: center;
-    position: relative;
-    min-height: 90vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-  }
-  
-  .lp-hero-overlay {
-    position: absolute;
-    inset: 0;
-    background-color: rgba(0, 147, 233, 0.6);
-    z-index: 1;
-  }
-  
-  .lp-hero-content {
-    position: relative;
-    z-index: 2;
-    color: white;
-  }
-  
-  .lp-hero-title {
-    font-size: 2.5rem;
-    font-weight: bold;
-    margin-bottom: 1rem;
-  }
-  
-  .lp-hero-subtitle {
-    font-size: 1.2rem;
-    margin-bottom: 2rem;
-  }
-  
-  .lp-hero-btn {
-    background-color: #fff;
-    color: var(--color-primario);
-    font-weight: bold;
-    border-radius: 30px;
-    padding: 0.7rem 2rem;
-    border: none;
-    transition: all 0.3s ease-in-out;
-  }
-  
-  .lp-hero-btn:hover {
-    background-color: var(--color-marca);
-    color: white;
-  }
-  
-  /* SECCIONES */
-  .lp-section {
-    padding: 4rem 1rem;
-  }
-  
-  .lp-section-title {
-    font-size: 2rem;
-    font-weight: bold;
-    text-align: center;
-    color: var(--color-marca);
-    margin-bottom: 2rem;
-  }
-  
-  .lp-section-text {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    text-align: justify;
-  }
-  
-  .lp-img-fit-text {
-    max-width: 100%;
-    height: auto;
-    border-radius: 20px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* TARJETAS */
-  .lp-card {
-    background-color: white;
-    border-radius: 20px;
-    padding: 1.5rem;
-    text-align: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    transition: transform 0.3s ease;
-  }
-  
-  .lp-card:hover {
-    transform: translateY(-5px);
-  }
-  
-  .lp-card-icon-top {
-    font-size: 2.5rem;
-    color: var(--color-primario);
-    margin-bottom: 1rem;
-  }
-  
-  .lp-card-title {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: var(--color-marca);
-  }
-  
-  .lp-card-text {
-    font-size: 1rem;
-    color: #555;
-  }
-  
-  /* FAQ Y BENEFICIOS */
-  .lp-check-list {
-    list-style: none;
-    padding-left: 0;
-  }
-  
-  .lp-check-list li::before {
-    content: "✔️";
-    margin-right: 0.5rem;
-    color: var(--color-primario);
-  }
-  
-  .lp-faq-item strong {
-    display: block;
-    margin-top: 1rem;
-    font-weight: 600;
-    color: var(--color-marca);
-  }
-  
-  /* FOOTER */
-  .lp-footer {
-    background-color: var(--color-marca);
-    color: white;
-    padding: 2rem 1rem;
-    text-align: center;
-  }
-  
-  .lp-footer-contact span {
-    margin: 0 0.5rem;
-    display: inline-block;
-  }
-  
-  .lp-footer-copy {
-    margin-top: 1rem;
-    font-size: 0.9rem;
-    opacity: 0.8;
-  }
-  
-  /* ANIMACIONES */
-  .reveal {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
-  }
-  
-  .reveal.active {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  
-  /* ENCABEZADO DOCENTE */
-  .encabezado-docente {
-    background-color: #7EC8E3; /* Color de la marca */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    height: 65px;
-  }
-  
-  .titulo-nicalee {
-    font-weight: bold;
-    font-size: 1.4rem;
-    color: white;
-  }
-  
-  /* TEXTO DE MARCA */
-  .color-texto-marca {
-    color: #1e3d87;
-    font-weight: bold;
-    text-transform: uppercase;
-    background: linear-gradient(90deg, #1e3d87, #0093E9);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    transition: all 0.3s ease-in-out;
-  }
-  
-  .color-texto-marca:hover {
-    filter: brightness(1.2);
-  }
-  
+  --color-primario: #00B4DB;
+  --color-secundario: #0083B0;
+  --color-marca: #1e3d87;
+  --color-blanco: #ffffff;
+  --color-acento: #FFB703; /* Un acento vibrante */
+}
+
+/* GENERAL */
+.landing-page {
+  font-family: 'Poppins', sans-serif;
+  scroll-behavior: smooth;
+  padding-top: 70px;
+  background: linear-gradient(135deg, #fdfdfd, #e0f7fa);
+  color: #333;
+}
+
+/* NAVBAR */
+.lp-navbar {
+  background: linear-gradient(90deg, var(--color-primario) 0%, var(--color-secundario) 100%);
+  box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  transition: all 0.3s ease-in-out;
+}
+
+.lp-navbar:hover {
+  filter: brightness(1.1);
+}
+
+.lp-logo {
+  width: 140px;
+}
+
+.lp-nav .nav-link {
+  color: var(--color-blanco);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.lp-nav .nav-link:hover {
+  color: var(--color-acento);
+}
+
+.lp-toggle {
+  background: none;
+  border: none;
+  color: var(--color-blanco);
+}
+
+/* MENÚ MÓVIL */
+.lp-drawer-menu {
+  background: var(--color-blanco);
+  width: 260px;
+  padding: 2rem;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.lp-drawer-close {
+  font-size: 1.8rem;
+  color: var(--color-primario);
+}
+
+/* HERO */
+.lp-hero {
+  background-image: url("/fondo-hero.webp");
+  background-size: cover;
+  background-position: center;
+  min-height: 95vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+}
+
+.lp-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 131, 176, 0.6);
+}
+
+.lp-hero-content {
+  position: relative;
+  z-index: 2;
+  color: var(--color-blanco);
+}
+
+.lp-hero-title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+}
+
+.lp-hero-subtitle {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.lp-hero-btn {
+  background: var(--color-acento);
+  color: var(--color-marca);
+  font-weight: 700;
+  border-radius: 50px;
+  padding: 0.8rem 2.5rem;
+  border: none;
+  transition: all 0.3s ease-in-out;
+  font-size: 1.1rem;
+}
+
+.lp-hero-btn:hover {
+  background: var(--color-marca);
+  color: var(--color-blanco);
+}
+
+/* SECCIONES */
+.lp-section {
+  padding: 5rem 2rem;
+}
+
+.lp-section-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-align: center;
+  color: var(--color-marca);
+  margin-bottom: 2rem;
+}
+
+.lp-section-text {
+  font-size: 1.2rem;
+  line-height: 1.7;
+  text-align: center;
+}
+
+/* TARJETAS */
+.lp-card {
+  background: var(--color-blanco);
+  border-radius: 25px;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.08);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.lp-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0px 12px 25px rgba(0, 0, 0, 0.15);
+}
+
+.lp-card-icon-top {
+  font-size: 3rem;
+  color: var(--color-primario);
+  margin-bottom: 1rem;
+}
+
+.lp-card-title {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: var(--color-marca);
+}
+
+.lp-card-text {
+  font-size: 1.1rem;
+  color: #666;
+}
+
+/* FAQ Y BENEFICIOS */
+.lp-check-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.lp-check-list li {
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.lp-check-list li::before {
+  content: \"✔️\";
+  margin-right: 0.5rem;
+  color: var(--color-primario);
+}
+
+/* FOOTER */
+.lp-footer {
+  background: var(--color-marca);
+  color: var(--color-blanco);
+  padding: 3rem 1rem;
+  text-align: center;
+}
+
+.lp-footer-contact span {
+  margin: 0 0.5rem;
+  font-size: 1.2rem;
+}
+
+.lp-footer-copy {
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+/* ANIMACIONES */
+.reveal {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ENCABEZADO DOCENTE */
+.encabezado-docente {
+  background: var(--color-secundario);
+  height: 65px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+}
+
+.titulo-nicalee {
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: var(--color-blanco);
+}
+
+/* TEXTO DE MARCA */
+.color-texto-marca {
+  background: linear-gradient(90deg, var(--color-marca), var(--color-primario));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: bold;
+  font-size: 1.3rem;
+  text-transform: uppercase;
+  transition: filter 0.3s ease;
+}
+
+.color-texto-marca:hover {
+  filter: brightness(1.3);
+}

@@ -24,6 +24,16 @@ const DashboardNiño = () => {
             <button className="btn btn-success" onClick={() => navigate("/juegos")}>Jugar</button>
           </div>
         </div>
+
+        <div className="col-md-4">
+          <div className="card shadow-lg p-3">
+            <h3>🎮 Lecciones</h3>
+            <p>Practica para adquirir conocimiento.</p>
+            <button className="btn btn-success" onClick={() => navigate("/lecciones")}>Jugar</button>
+          </div>
+        </div>
+
+
         <div className="col-md-4">
           <div className="card shadow-lg p-3">
             <h3>🏆 Recompensas</h3>

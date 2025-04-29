@@ -14,6 +14,11 @@ import MisGrupos from "./components/Docente/MisGrupos";
 import PerfilDocente from "./components/Docente/PerfilDocente";
 import LandingPage from "./views/LandingPage";
 import DashboardNiño from "./components/Formularios/DashboardNiño";
+import LeccionMatch from "./components/Lecciones/LeccionMatch";
+import Lecciones from "./components/Lecciones/Lecciones";
+import Juegos from "./components/Lecciones/Juegos"
+import Biblioteca from "./components/Lecciones/Biblioteca";
+import LeccionFill from "./components/Lecciones/LeccionFill";
 
 function AppContent() {
   const location = useLocation();
@@ -35,6 +40,12 @@ function AppContent() {
           <Route path="/perfildocente" element={<PerfilDocente />} />
            <Route path="/estudianteformularios" element={<EstudianteFormularios/>} />
           <Route path="/dashboardnino" element={<DashboardNiño />} />
+          <Route path="/lecciones" element={<Lecciones />} />
+          <Route path="/leccionmatch" element={<LeccionMatch />} />
+          <Route path="/juegos" element={<Juegos />} />
+          <Route path="/biblioteca" element={<Biblioteca />} />
+          <Route path="/leccionfill" element={<LeccionFill />} />
+
           
         </Routes>
       </main>
