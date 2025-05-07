@@ -27,10 +27,12 @@ function CrearGrupo() {
   }, []);
 
   useEffect(() => {
-    if (grado) {
-      const filtrados = estudiantes.filter((e) => e.grado === grado);
+    if (grado && estudiantes.length > 0) {
+      const filtrados = estudiantes.filter((e) =>
+        e.grado?.toLowerCase().trim() === grado.toLowerCase().trim()
+      );
       setEstudiantesGrado(filtrados);
-      setEstudiantesSeleccionados([]); // Reiniciar seleccionados si cambia el grado
+      setEstudiantesSeleccionados([]);
     } else {
       setEstudiantesGrado([]);
     }

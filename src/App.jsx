@@ -19,6 +19,10 @@ import Lecciones from "./components/Lecciones/Lecciones";
 import Juegos from "./components/Lecciones/Juegos"
 import Biblioteca from "./components/Lecciones/Biblioteca";
 import LeccionFill from "./components/Lecciones/LeccionFill";
+import DashboardAdmin from "./components/Administrador/DashboardAdmin";
+import CrearAdmin from "./components/Administrador/CrearAdmin";
+import ListaDocentes from "./components/Administrador/ListaDocentes";
+import Recompensas from "./components/Lecciones/Recompensas";
 
 function AppContent() {
   const location = useLocation();
@@ -45,6 +49,11 @@ function AppContent() {
           <Route path="/juegos" element={<Juegos />} />
           <Route path="/biblioteca" element={<Biblioteca />} />
           <Route path="/leccionfill" element={<LeccionFill />} />
+          <Route path="/dashboardadmin" element={<DashboardAdmin />} />
+          <Route path="/crearadmin" element={<CrearAdmin />} />
+          <Route path="/listadocentes" element={<ListaDocentes />} />
+          <Route path="/listaestudiantes" element={<ListaDocentes />} />
+          <Route path="/recompensas" element={<Recompensas />} />
 
           
         </Routes>

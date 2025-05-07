@@ -16,7 +16,15 @@ const Login = () => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const uid = userCredential.user.uid;
+      const correo = userCredential.user.email;
 
+      // Si es el administrador principal, redirige directamente
+      if (correo === "juanamasis18@gmail.com") {
+        navigate("/dashboardadmin");
+        return;
+      }
+
+      // Obtiene rol desde Firestore
       const userDoc = await getDoc(doc(db, "users", uid));
 
       if (userDoc.exists()) {

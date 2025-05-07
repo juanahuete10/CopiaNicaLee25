@@ -1,0 +1,77 @@
+.memoria-container {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .modo-selector button {
+    margin: 5px;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 8px;
+    background-color: #dbeafe;
+    cursor: pointer;
+  }
+  
+  .memoria-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+    gap: 10px;
+    margin: 20px auto;
+    max-width: 500px;
+  }
+  
+  .carta {
+    position: relative;
+    width: 100%;
+    padding-top: 100%;
+    cursor: pointer;
+    perspective: 1000px;
+  }
+  
+  .carta .cara {
+    position: absolute;
+    top: 0; left: 0;
+    right: 0; bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: bold;
+    border-radius: 10px;
+    backface-visibility: hidden;
+    transition: transform 0.6s;
+  }
+  
+  .carta .frente {
+    background-color: #93c5fd;
+  }
+  
+  .carta .trasera {
+    background-color: #4ade80;
+    transform: rotateY(180deg);
+  }
+  
+  .carta.volteada .frente {
+    transform: rotateY(180deg);
+  }
+  
+  .carta.volteada .trasera {
+    transform: rotateY(0);
+  }
+  
+  .mensaje-final {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .reiniciar-btn {
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #facc15;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  

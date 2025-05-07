@@ -1,0 +1,64 @@
+.abecedario-container {
+  padding: 20px;
+  text-align: center;
+  font-family: sans-serif;
+}
+
+.juego-grid {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  margin-top: 20px;
+}
+
+.letras-col,
+.palabras-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.boton-letra-col,
+.boton-palabra-col {
+  padding: 12px 20px;
+  font-size: 1.2rem;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  background-color: #f0f0f0;
+}
+
+.boton-letra-col:hover,
+.boton-palabra-col:hover {
+  background-color: #e0f7fa;
+}
+
+.seleccionada {
+  background-color: #90caf9;
+  font-weight: bold;
+}
+
+.completada {
+  background-color: #c8e6c9;
+  text-decoration: line-through;
+  color: #388e3c;
+}
+
+.mensaje-juego {
+  margin-top: 20px;
+  font-size: 1.1rem;
+  min-height: 1.5em;
+}
+
+.mensaje-final {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 15px;
+  margin: 10px auto;
+  border-radius: 10px;
+  font-weight: bold;
+  max-width: 400px;
+}

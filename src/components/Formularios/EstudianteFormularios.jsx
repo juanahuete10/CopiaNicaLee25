@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
+// 👉 Importa Firestore
+import { db } from '../../database/firebaseConfig'; // Ajusta la ruta si es diferente
+import { collection, addDoc } from 'firebase/firestore';
+
 const EstudianteFormularios = () => {
   const [nombre, setNombre] = useState('');
   const [apellido, setApellido] = useState('');
@@ -24,7 +28,7 @@ const EstudianteFormularios = () => {
     }
   };
 
-  const handleRegistro = () => {
+  const handleRegistro = async () => {
     if (
       !nombre || !apellido || !edad || !grado || !intereses ||
       !nivelEducativo || !ubicacion || !genero || !imagen
@@ -34,7 +38,6 @@ const EstudianteFormularios = () => {
     }
 
     const estudiante = {
-      id: Date.now(),
       nombre,
       apellido,
       edad,
@@ -44,13 +47,19 @@ const EstudianteFormularios = () => {
       ubicacion,
       genero,
       imagen,
+      creado: new Date()
     };
 
-    console.log(estudiante); // Verifica que los datos están bien
+    try {
+      const docRef = await addDoc(collection(db, 'estudiantes'), estudiante);
+      console.log("Estudiante guardado con ID: ", docRef.id);
+      navigate('/dashboardnino', { state: { estudiante } });
+    } catch (error) {
+      console.error("Error al guardar en Firestore:", error);
+      alert("Error al registrar el estudiante. Intenta nuevamente.");
+    }
 
-    navigate('/dashboardnino', { state: { estudiante } });
-
-    // Limpiar formulario (opcional)
+    // Limpiar formulario
     setNombre('');
     setApellido('');
     setEdad('');
@@ -92,11 +101,9 @@ const EstudianteFormularios = () => {
 
         <SelectField value={nivelEducativo} onChange={(e) => setNivelEducativo(e.target.value)} >
           <option value="">Selecciona el nivel educativo</option>
-          <option value="inicial">Inicial</option
-          ><option value="medio">Medio</option>
+          <option value="inicial">Inicial</option>
+          <option value="medio">Medio</option>
           <option value="avanzado">Avanzado</option>
-          
-         
         </SelectField>
 
         <InputField type="text" placeholder="Intereses" value={intereses} onChange={(e) => setIntereses(e.target.value)} />
