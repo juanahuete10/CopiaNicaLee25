@@ -1,37 +1,57 @@
-import React, { useState, useEffect } from "react";
-import { Document, Page } from 'react-pdf';
-import Turn from 'turn.js';
-import { storage } from '../firebase';  // Asumiendo que has configurado Firebase
+import React, { useState } from 'react';
+import { Container, Card, Button, Row, Col } from 'react-bootstrap';
+import { cuentoEjemplo } from '../../data/cuentoData'; // Ruta a tu archivo de datos
+
+const hablar = (texto) => {
+  const utterance = new SpeechSynthesisUtterance(texto);
+  utterance.lang = 'es-ES';
+  window.speechSynthesis.speak(utterance);
+};
+
+const escucharPronunciacion = (fraseOriginal) => {
+  const recognition = new window.webkitSpeechRecognition();
+  recognition.lang = 'es-ES';
+  recognition.start();
+  recognition.onresult = (event) => {
+    const transcript = event.results[0][0].transcript;
+    alert(`Dijiste: "${transcript}"\nFrase original: "${fraseOriginal}"`);
+  };
+};
 
 const CuentosAnimados = () => {
-  const [pdfFile, setPdfFile] = useState(null);
-  const [numPages, setNumPages] = useState(null);
-  
-  useEffect(() => {
-    // Cargar el PDF desde Firebase Storage
-    const loadPdf = async () => {
-      const url = await storage.ref('cuentos/mi_cuento.pdf').getDownloadURL();
-      setPdfFile(url);
-    };
-    loadPdf();
-  }, []);
+  const [cuento, setCuento] = useState([]);
 
-  const onLoadSuccess = ({ numPages }) => setNumPages(numPages);
+  const generarCuento = () => {
+    setCuento(cuentoEjemplo.paginas); // Cargar el cuento completo
+  };
 
   return (
-    <div className="cuento-container">
-      <h2>Mi Cuento Animado</h2>
-      <div id="flipbook" style={{ maxWidth: '600px', margin: '0 auto' }}>
-        <Document
-          file={pdfFile}
-          onLoadSuccess={onLoadSuccess}
-        >
-          {Array.from(new Array(numPages), (el, index) => (
-            <Page key={index} pageNumber={index + 1} />
+    <Container className="py-4 text-center">
+      <h2>📖 Cuento Animado Infantil</h2>
+
+      {!cuento.length && (
+        <Button onClick={generarCuento} className="my-4">
+          Generar cuento
+        </Button>
+      )}
+
+      {cuento.length > 0 && (
+        <Row className="g-4 justify-content-center">
+          {cuento.map((pagina, index) => (
+            <Col key={index} xs={12} md={6} lg={4}>
+              <Card>
+                <Card.Img variant="top" src={pagina.imagenUrl} />
+                <Card.Body>
+                  <Card.Text style={{ fontSize: '1.1rem' }}>{pagina.texto}</Card.Text>
+                  <Button className="me-2" onClick={() => hablar(pagina.texto)}>🔊 Escuchar</Button>
+                  <Button onClick={() => escucharPronunciacion(pagina.texto)}>🎤 Repetir frase</Button>
+                </Card.Body>
+              </Card>
+            </Col>
           ))}
-        </Document>
-      </div>
-    </div>
+        </Row>
+      )}
+    </Container>
   );
 };
 

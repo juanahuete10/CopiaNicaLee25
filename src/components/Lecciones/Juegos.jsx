@@ -3,18 +3,57 @@ import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import AbecedarioAE from '../JuegosInteractivos/AbecedarioAE';
 import MemoriaLetras from '../JuegosInteractivos/MemoriaLetras';
 import SonidosLetras from '../JuegosInteractivos/SonidosLetras';
+import ActividadesPronunciacion from '../Pronunciacion/ActividadesPronunciacion';
+import SonidosYPronunciacion from '../Pronunciacion/SonidosYPronunciacion';
 
 const levels = [
   { id: 1, label: 'Nivel 1', icon: '/src/assets/nivel1.png' },
   { id: 2, label: 'Nivel 2', icon: '/src/assets/dos.png' },
-  // ...otros niveles
+  { id: 3, label: 'Nivel 3', icon: '/src/assets/nivel3.png' },
+  { id: 4, label: 'Nivel 4', icon: '/src/assets/cuatro.png' },
+  { id: 5, label: 'Nivel 5', icon: '/src/assets/numero-5.png' },
+  { id: 6, label: 'Nivel 6', icon: '/src/assets/seis.png' },
 ];
 
 const juegosPorNivel = {
-  1: [
-    { id: 'abc1', nombre: 'Abecedario A-E', descripcion: 'Aprende las letras A-E', icono: '/src/assets/juego1.png', componente: <AbecedarioAE /> },
-    { id: 'parejas1', nombre: 'Memoria de letras', descripcion: 'Haz coincidir las letras', icono: '/src/assets/juego2.png', componente: <MemoriaLetras /> },
-    { id: 'sonidos1', nombre: 'Sonidos y letras', descripcion: 'Relaciona letras con sonidos', icono: '/src/assets/juego3.png', componente: <SonidosLetras /> },
+  2: [
+    {
+      id: 'pronunciacion1',
+      nombre: 'Actividades de Pronunciación',
+      descripcion: 'Escucha y repite palabras',
+      icono: '/src/assets/pronunciacion.png',
+      componente: <ActividadesPronunciacion />
+    },
+    {
+      id: 'pronunciacion2',
+      nombre: 'Sonidos y Pronunciación',
+      descripcion: 'Relaciona sonidos con letras',
+      icono: '/src/assets/auricular.png',
+      componente: <SonidosYPronunciacion />
+    },
+  ],
+  4: [
+    {
+      id: 'abc1',
+      nombre: 'Abecedario A-E',
+      descripcion: 'Aprende las letras A-E',
+      icono: '/src/assets/bloque-abc.png',
+      componente: <AbecedarioAE />
+    },
+    {
+      id: 'parejas1',
+      nombre: 'Memoria de letras',
+      descripcion: 'Haz coincidir las letras',
+      icono: '/src/assets/alfabeto.png',
+      componente: <MemoriaLetras />
+    },
+    {
+      id: 'sonidos1',
+      nombre: 'Sonidos y letras',
+      descripcion: 'Relaciona letras con sonidos',
+      icono: '/src/assets/pronunciacion.png',
+      componente: <SonidosLetras />
+    },
   ],
 };
 
