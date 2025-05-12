@@ -10,52 +10,50 @@ import ModalInstalacionIOS from "../components/Inicio/ModalInstalacionIOS";
 const InicioNicaLee = () => {
   const navigate = useNavigate();
 
-  // 📌 Estados para la PWA
-  const [deferredPrompt, setDeferredPrompt] = useState(null);
-  const [showInstallButton, setShowInstallButton] = useState(false);
-  const [showModalInstrucciones, setShowModalInstrucciones] = useState(false); // Estado para el modal
+  // 📌 Estados PWA con nombres solicitados
+  const [solicitudInstalacion, setSolicitudInstalacion] = useState(null);
+  const [mostrarBotonInstalacion, setMostrarBotonInstalacion] = useState(false);
+  const [esDispositivoIOS, setEsDispositivoIOS] = useState(false);
+  const [mostrarModalInstrucciones, setMostrarModalInstrucciones] = useState(false);
 
-  // Estado para detectar el tipo de dispositivo
-  const [isDispositivoIOS, setIsDispositivoIOS] = useState(false);
+  // 🎯 useEffect para detectar dispositivo iOS
+  useEffect(() => {
+    const userAgent = window.navigator.userAgent.toLowerCase();
+    const esIOS = /iphone|ipad|ipod/.test(userAgent);
+    setEsDispositivoIOS(esIOS);
+  }, []);
 
-  // 🎯 Detectar evento beforeinstallprompt
+  // 🎯 useEffect para capturar el evento beforeinstallprompt
   useEffect(() => {
     const handler = (e) => {
       e.preventDefault();
-      setDeferredPrompt(e);
-      setShowInstallButton(true);
+      setSolicitudInstalacion(e);
+      setMostrarBotonInstalacion(true);
     };
 
     window.addEventListener("beforeinstallprompt", handler);
-
-    // Detectar si el dispositivo es iOS
-    const userAgent = navigator.userAgent.toLowerCase();
-    setIsDispositivoIOS(userAgent.includes("iphone") || userAgent.includes("ipod") || userAgent.includes("ipad"));
-
     return () => window.removeEventListener("beforeinstallprompt", handler);
   }, []);
 
-  // 🚀 Función para lanzar el prompt de instalación
+  // 🚀 Función para instalar la PWA
   const instalarPWA = async () => {
-    if (!deferredPrompt) return;
+    if (!solicitudInstalacion) return;
 
     try {
-      await deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
+      solicitudInstalacion.prompt();
+      const { outcome } = await solicitudInstalacion.userChoice;
       console.log(outcome === "accepted" ? "✅ Instalación aceptada" : "❌ Instalación rechazada");
     } catch (error) {
       console.error("Error al intentar instalar la PWA:", error);
     } finally {
-      setDeferredPrompt(null);
-      setShowInstallButton(false);
+      setSolicitudInstalacion(null);
+      setMostrarBotonInstalacion(false);
     }
   };
 
-  // 📄 Función para abrir el modal de instrucciones
-  const abrirModalInstrucciones = () => setShowModalInstrucciones(true);
-
-  // ❌ Función para cerrar el modal de instrucciones
-  const cerrarModalInstrucciones = () => setShowModalInstrucciones(false);
+  // 📄 Funciones para abrir/cerrar el modal
+  const abrirModalInstrucciones = () => setMostrarModalInstrucciones(true);
+  const cerrarModalInstrucciones = () => setMostrarModalInstrucciones(false);
 
   return (
     <div
@@ -97,8 +95,8 @@ const InicioNicaLee = () => {
             🔐 Iniciar Sesión
           </button>
 
-          {/* Mostrar el botón de instalación solo en dispositivos compatibles */}
-          {showInstallButton && !isDispositivoIOS && (
+          {/* Botón de instalación para Android/otros */}
+          {mostrarBotonInstalacion && !esDispositivoIOS && (
             <div className="my-4">
               <button className="btn btn-success btn-lg rounded-pill" onClick={instalarPWA}>
                 📲 Instalar App
@@ -106,8 +104,8 @@ const InicioNicaLee = () => {
             </div>
           )}
 
-          {/* Mostrar el botón de instrucciones solo en dispositivos iOS */}
-          {isDispositivoIOS && (
+          {/* Botón para instrucciones en iOS */}
+          {esDispositivoIOS && (
             <div className="text-center my-4">
               <button className="btn btn-info btn-lg rounded-pill" onClick={abrirModalInstrucciones}>
                 Cómo instalar NicaLee en iPhone <i className="bi-phone"></i>
@@ -123,9 +121,9 @@ const InicioNicaLee = () => {
       </div>
 
       {/* Modal de instrucciones para iOS */}
-      {isDispositivoIOS && showModalInstrucciones && (
+      {esDispositivoIOS && mostrarModalInstrucciones && (
         <ModalInstalacionIOS
-          mostrar={showModalInstrucciones}
+          mostrar={mostrarModalInstrucciones}
           cerrar={cerrarModalInstrucciones}
         />
       )}
