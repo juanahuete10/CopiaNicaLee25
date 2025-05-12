@@ -5,6 +5,13 @@ import MemoriaLetras from '../JuegosInteractivos/MemoriaLetras';
 import SonidosLetras from '../JuegosInteractivos/SonidosLetras';
 import ActividadesPronunciacion from '../Pronunciacion/ActividadesPronunciacion';
 import SonidosYPronunciacion from '../Pronunciacion/SonidosYPronunciacion';
+import Nivel1AsociarImagen from '../JuegosInteractivos/Nivel1AsociarImagen';
+import Nivel1LetraCorrecta from '../JuegosInteractivos/Nivel1LetraCorrecta';
+import Nivel1RepetirPalabra from '../JuegosInteractivos/Nivel1RepetirPalabra';
+// Importa aquí también los componentes para nivel 3 si existen
+// import LeccionMatch from '../JuegosInteractivos/LeccionMatch';
+// import LeccionFill from '../JuegosInteractivos/LeccionFill';
+// import Biblioteca from '../Biblioteca/Biblioteca';
 
 const levels = [
   { id: 1, label: 'Nivel 1', icon: '/src/assets/nivel1.png' },
@@ -16,6 +23,30 @@ const levels = [
 ];
 
 const juegosPorNivel = {
+  1: [
+    {
+      id: 'leccion1',
+      nombre: 'Asociar Imagen',
+      descripcion: 'Asocia imagen con las palabras.',
+      icono: '/src/assets/escoger.png',
+      componente: <Nivel1AsociarImagen />
+    },
+    {
+      id: 'leccion2',
+      nombre: 'Letras Correctas',
+      descripcion: 'Puedes ver las letras correctas de tus lecciones.',
+      icono: '/src/assets/Letras.png',
+      componente: <Nivel1LetraCorrecta />
+    },
+    {
+      id: 'leccion3',
+      nombre: 'Repetición de Palabras',
+      descripcion: 'Puedes repetir palabras.',
+      icono: '/src/assets/repeticion.png',
+      componente: <Nivel1RepetirPalabra />
+    },
+  ],
+
   2: [
     {
       id: 'pronunciacion1',
@@ -32,6 +63,38 @@ const juegosPorNivel = {
       componente: <SonidosYPronunciacion />
     },
   ],
+
+  3: [
+    {
+      id: 'leccion1',
+      nombre: 'Unir Palabra con Imagen',
+      descripcion: 'Asocia palabras con su imagen correspondiente.',
+      icono: '/src/assets/cooperacion.png',
+      componente: <div>LeccionMatch (aquí debe ir el componente real)</div> // reemplazar por <LeccionMatch />
+    },
+    {
+      id: 'leccion2',
+      nombre: 'Seleccionar Palabra Correcta',
+      descripcion: 'Completa la oración con la palabra correcta.',
+      icono: '/src/assets/escoger.png',
+      componente: <div>LeccionFill (aquí debe ir el componente real)</div> // reemplazar por <LeccionFill />
+    },
+    {
+      id: 'leccion3',
+      nombre: 'Biblioteca NicaLee',
+      descripcion: 'Explora cuentos, poemas y lecturas.',
+      icono: '/src/assets/libro-de-ninos.png',
+      componente: <div>Biblioteca (aquí debe ir el componente real)</div> // reemplazar por <Biblioteca />
+    },
+    {
+      id: 'leccion4',
+      nombre: 'Juegos NicaLee',
+      descripcion: 'Actividades divertidas para aprender jugando.',
+      icono: '/src/assets/jugando.png',
+      componente: <div>Próximamente...</div>
+    }
+  ],
+
   4: [
     {
       id: 'abc1',
@@ -42,14 +105,14 @@ const juegosPorNivel = {
     },
     {
       id: 'parejas1',
-      nombre: 'Memoria de letras',
+      nombre: 'Memoria de Letras',
       descripcion: 'Haz coincidir las letras',
       icono: '/src/assets/alfabeto.png',
       componente: <MemoriaLetras />
     },
     {
       id: 'sonidos1',
-      nombre: 'Sonidos y letras',
+      nombre: 'Sonidos y Letras',
       descripcion: 'Relaciona letras con sonidos',
       icono: '/src/assets/pronunciacion.png',
       componente: <SonidosLetras />

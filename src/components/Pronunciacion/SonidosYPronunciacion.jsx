@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const lecciones = [
   { letra: 'A', palabra: 'Ardilla' },
@@ -17,6 +18,7 @@ export default function SonidosYPronunciacion() {
   const [indiceActual, setIndiceActual] = useState(0);
   const [mensaje, setMensaje] = useState('');
   const [escuchando, setEscuchando] = useState(false);
+  const navigate = useNavigate();
 
   const leccion = lecciones[indiceActual];
 
@@ -61,36 +63,52 @@ export default function SonidosYPronunciacion() {
     }
   };
 
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   return (
-    <div className="container mt-4">
-      <h4>🗣️ Juego: Sonidos y Pronunciación</h4>
-      <div className="card p-3 mb-3">
-        <h5>Letra: <span className="text-primary">{leccion.letra}</span></h5>
-        <p>Palabra: <strong>{leccion.palabra}</strong></p>
-        <div className="btn-group mb-2">
-          <button className="btn btn-success" onClick={() => hablar(leccion.letra)}>
+    <div className="container py-4">
+      {/* Botón de retroceso */}
+      <button className="btn btn-outline-secondary mb-4 d-flex align-items-center" onClick={handleBack}>
+        <span className="me-2">←</span> Volver
+      </button>
+
+      {/* Tarjeta principal */}
+      <div className="card shadow-lg p-4 rounded-4 bg-light">
+        <h3 className="text-center text-primary fw-bold mb-4">🗣️ Juego: Sonidos y Pronunciación</h3>
+
+        <div className="text-center mb-3">
+          <h4>Letra: <span className="text-success">{leccion.letra}</span></h4>
+          <p className="fs-5">Palabra: <strong>{leccion.palabra}</strong></p>
+        </div>
+
+        <div className="d-flex flex-wrap justify-content-center gap-3 mb-3">
+          <button className="btn btn-success btn-lg" onClick={() => hablar(leccion.letra)}>
             🔊 Escuchar letra
           </button>
-          <button className="btn btn-info" onClick={() => hablar(leccion.palabra)}>
+          <button className="btn btn-info btn-lg" onClick={() => hablar(leccion.palabra)}>
             🔊 Escuchar palabra
           </button>
+          <button className="btn btn-warning btn-lg" onClick={escucharPronunciacion} disabled={escuchando}>
+            🎤 Pronunciar
+          </button>
         </div>
-        <div>
-          <button className="btn btn-warning" onClick={escucharPronunciacion} disabled={escuchando}>
-            🎤 Pronunciar "{leccion.palabra}"
+
+        <div className="text-center">
+          {mensaje && <p className="alert alert-secondary">{mensaje}</p>}
+        </div>
+
+        <div className="text-center mt-3">
+          <button
+            className="btn btn-primary btn-lg"
+            onClick={siguienteLeccion}
+            disabled={indiceActual >= lecciones.length - 1}
+          >
+            👉 Siguiente
           </button>
         </div>
       </div>
-
-      <p className="alert alert-secondary">{mensaje}</p>
-
-      <button
-        className="btn btn-primary"
-        onClick={siguienteLeccion}
-        disabled={indiceActual >= lecciones.length - 1}
-      >
-        👉 Siguiente
-      </button>
     </div>
   );
 }

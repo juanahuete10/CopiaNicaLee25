@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { auth, db } from "../database/firebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
-import "../../src/styles.css";
+import { FaArrowLeft } from "react-icons/fa"; // FLECHA
 import LogoNicaLee from "../assets/LogoNicaLee.png";
+import "../../src/styles.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -18,18 +19,27 @@ const Login = () => {
       const uid = userCredential.user.uid;
       const correo = userCredential.user.email;
 
-      // Si es el administrador principal, redirige directamente
+      console.log("Usuario autenticado:", correo, "UID:", uid); // DEBUG
+
+      // Administrador
       if (correo === "juanamasis18@gmail.com") {
         navigate("/dashboardadmin");
         return;
       }
 
-      // Obtiene rol desde Firestore
+      // Firestore
       const userDoc = await getDoc(doc(db, "users", uid));
 
       if (userDoc.exists()) {
         const userData = userDoc.data();
         const role = userData.role;
+
+        console.log("Datos en Firestore:", userData); // DEBUG
+
+        if (!role) {
+          alert("El usuario no tiene un rol asignado.");
+          return;
+        }
 
         if (role === "estudiante") navigate("/dashboardniño");
         else if (role === "docente") navigate("/dashboarddocente");
@@ -39,7 +49,8 @@ const Login = () => {
         alert("No se encontró información del usuario.");
       }
     } catch (error) {
-      alert(error.message);
+      console.error("Error al iniciar sesión:", error); // DEBUG
+      alert("Error al iniciar sesión: " + error.message);
     }
   };
 
@@ -52,7 +63,17 @@ const Login = () => {
         padding: "20px",
       }}
     >
+      {/* Botón de retroceso */}
+      <button
+        className="btn btn-link align-self-start ms-3 mb-2 text-decoration-none text-dark"
+        onClick={() => navigate(-1)}
+      >
+        <FaArrowLeft className="me-2" />
+        Volver
+      </button>
+
       <img src={LogoNicaLee} alt="Logo" className="mb-4" style={{ width: "180px" }} />
+
       <div className="card p-4 shadow" style={{ width: "350px", borderRadius: "12px" }}>
         <h2 className="mb-3">Iniciar Sesión</h2>
         <form onSubmit={handleLogin}>

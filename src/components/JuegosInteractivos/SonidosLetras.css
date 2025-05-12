@@ -1,44 +1,86 @@
 .sonidos-container {
-    text-align: center;
-    padding: 20px;
+  text-align: center;
+  padding: 30px;
+  background: linear-gradient(to bottom right, #f0f9ff, #e0f2fe);
+  min-height: 100vh;
+  font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', cursive;
+}
+
+.reproducir-btn {
+  padding: 12px 20px;
+  background-color: #38bdf8;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.reproducir-btn:hover {
+  background-color: #0ea5e9;
+  transform: scale(1.05);
+}
+
+.letras-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+  gap: 16px;
+  max-width: 500px;
+  margin: 0 auto;
+  animation: fadeIn 1s ease;
+}
+
+.letra-boton {
+  padding: 14px;
+  font-size: 22px;
+  background-color: #e0f2fe;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.letra-boton:hover {
+  background-color: #3b82f6;
+  color: white;
+  border-color: #1d4ed8;
+  transform: translateY(-2px);
+}
+
+.resultado {
+  margin-top: 25px;
+  font-size: 20px;
+  color: #1e40af;
+  font-weight: bold;
+  animation: pulse 1.2s infinite;
+}
+
+/* Animaciones extra */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
   }
-  
-  .reproducir-btn {
-    padding: 10px 15px;
-    background-color: #60a5fa;
-    color: white;
-    font-size: 16px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    margin-bottom: 20px;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  .letras-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
-    gap: 10px;
-    max-width: 400px;
-    margin: 0 auto;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
   }
-  
-  .letra-boton {
-    padding: 10px;
-    font-size: 18px;
-    background-color: #dbeafe;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    transition: background 0.3s;
+  50% {
+    transform: scale(1.03);
   }
-  
-  .letra-boton:hover {
-    background-color: #3b82f6;
-    color: white;
+  100% {
+    transform: scale(1);
   }
-  
-  .resultado {
-    margin-top: 20px;
-    font-size: 18px;
-  }
-  
+}
