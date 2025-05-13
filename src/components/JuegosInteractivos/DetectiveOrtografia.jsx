@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Form, Alert, Container, Row, Col, Card } from 'react-bootstrap';
-import { CheckCircle, ArrowRightCircle, Pencil, HouseDoor, Sun, Leaf, PersonFill, MusicNoteBeamed, Book, Flower, Fire, CloudSun, Tree, Car, Bell, XCircle } from 'react-bootstrap-icons';
+import { CheckCircle, ArrowRightCircle, Pencil, HouseDoor, Sun, Leaf, PersonFill, MusicNoteBeamed, Book, Fire } from 'react-bootstrap-icons';
+
 
 const frases = [
   { texto: 'El gato se acuesta en la ___.', correcta: 'alfombra', icono: 'cat' },
