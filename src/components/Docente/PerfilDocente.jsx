@@ -15,7 +15,8 @@ import {
   Button,
   Spinner,
   Row,
-  Col
+  Col,
+  Image
 } from 'react-bootstrap';
 
 function PerfilDocente() {
@@ -111,111 +112,156 @@ function PerfilDocente() {
   }
 
   return (
-    <Container className="mt-5 mb-5">
-      <Row className="justify-content-center">
-        <Col md={8} lg={6}>
-          <Card className="shadow-lg border-0 rounded-4">
-            {previewFoto && (
-              <Card.Img
-                variant="top"
-                src={previewFoto}
-                style={{ maxHeight: '300px', objectFit: 'cover' }}
-              />
-            )}
-            <Card.Body>
-              <Card.Title className="text-center mb-4" style={{ color: '#007bff' }}>
-                👨‍🏫 Perfil del Docente
-              </Card.Title>
+    <div style={{ background: 'linear-gradient(to bottom, #00c6ff, #ffffff)', minHeight: '100vh' }}>
+      <Container className="mt-5 mb-5">
+        <Row className="justify-content-center">
+          <Col md={8} lg={6}>
+            <Card className="shadow-lg border-0 rounded-4">
+              <Card.Body>
+                <Card.Title className="text-center mb-4" style={{ color: '#007bff' }}>
+                  👨‍🏫 Perfil del Docente
+                </Card.Title>
 
-              <Form>
-                <Form.Group className="mb-3">
-                  <Form.Label>Nombre</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="nombre"
-                    value={docente.nombre || ''}
-                    onChange={handleChange}
-                    disabled={!editando}
-                  />
-                </Form.Group>
+                {previewFoto && (
+                  <div className="text-center mb-3">
+                    <Image
+                      src={previewFoto}
+                      roundedCircle
+                      width={100}
+                      height={100}
+                      style={{ objectFit: 'cover', border: '3px solid #007bff' }}
+                      alt="Foto de perfil"
+                    />
+                  </div>
+                )}
 
-                <Form.Group className="mb-3">
-                  <Form.Label>Apellido</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="apellido"
-                    value={docente.apellido || ''}
-                    onChange={handleChange}
-                    disabled={!editando}
-                  />
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-                  <Form.Label>Fecha de Nacimiento</Form.Label>
-                  <Form.Control
-                    type="date"
-                    name="fechaNacimiento"
-                    value={docente.fechaNacimiento || ''}
-                    onChange={handleChange}
-                    disabled={!editando}
-                  />
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-                  <Form.Label>Edad</Form.Label>
-                  <Form.Control
-                    type="number"
-                    name="edad"
-                    value={docente.edad || ''}
-                    disabled
-                  />
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-                  <Form.Label>Género</Form.Label>
-                  <Form.Select
-                    name="genero"
-                    value={docente.genero || ''}
-                    onChange={handleChange}
-                    disabled={!editando}
-                  >
-                    <option value="masculino">Masculino</option>
-                    <option value="femenino">Femenino</option>
-                  </Form.Select>
-                </Form.Group>
-
-                <Form.Group className="mb-4">
-                  <Form.Label>Foto de Perfil (solo vista previa)</Form.Label>
+                {/* Input de archivo debajo de la imagen */}
+                <Form.Group className="mb-4 text-center">
+                  <Form.Label className="fw-bold">Foto de Perfil (solo vista previa)</Form.Label>
                   <Form.Control
                     type="file"
                     accept="image/*"
                     onChange={handleFotoChange}
                     disabled={!editando}
+                    style={{
+                      borderColor: '#007bff',
+                      borderWidth: '2px',
+                      boxShadow: editando ? '0 0 10px rgba(0, 123, 255, 0.5)' : 'none',
+                      borderRadius: '20px',
+                      marginTop: '10px',
+                    }}
                   />
                 </Form.Group>
 
-                <div className="d-flex justify-content-center">
-                  {editando ? (
-                    <>
-                      <Button variant="success" onClick={handleGuardar} className="me-2">
-                        Guardar Cambios
+                <Form>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Nombre</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="nombre"
+                      value={docente.nombre || ''}
+                      onChange={handleChange}
+                      disabled={!editando}
+                      style={{
+                        borderColor: '#007bff',
+                        borderWidth: '2px',
+                        boxShadow: editando ? '0 0 10px rgba(0, 123, 255, 0.5)' : 'none',
+                        borderRadius: '20px',
+                      }}
+                    />
+                  </Form.Group>
+
+                  <Form.Group className="mb-3">
+                    <Form.Label>Apellido</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="apellido"
+                      value={docente.apellido || ''}
+                      onChange={handleChange}
+                      disabled={!editando}
+                      style={{
+                        borderColor: '#007bff',
+                        borderWidth: '2px',
+                        boxShadow: editando ? '0 0 10px rgba(0, 123, 255, 0.5)' : 'none',
+                        borderRadius: '20px',
+                      }}
+                    />
+                  </Form.Group>
+
+                  <Form.Group className="mb-3">
+                    <Form.Label>Fecha de Nacimiento</Form.Label>
+                    <Form.Control
+                      type="date"
+                      name="fechaNacimiento"
+                      value={docente.fechaNacimiento || ''}
+                      onChange={handleChange}
+                      disabled={!editando}
+                      style={{
+                        borderColor: '#007bff',
+                        borderWidth: '2px',
+                        boxShadow: editando ? '0 0 10px rgba(0, 123, 255, 0.5)' : 'none',
+                        borderRadius: '20px',
+                      }}
+                    />
+                  </Form.Group>
+
+                  <Form.Group className="mb-3">
+                    <Form.Label>Edad</Form.Label>
+                    <Form.Control
+                      type="number"
+                      name="edad"
+                      value={docente.edad || ''}
+                      disabled
+                      style={{
+                        borderColor: '#007bff',
+                        borderWidth: '2px',
+                        borderRadius: '20px',
+                      }}
+                    />
+                  </Form.Group>
+
+                  <Form.Group className="mb-4">
+                    <Form.Label>Género</Form.Label>
+                    <Form.Select
+                      name="genero"
+                      value={docente.genero || ''}
+                      onChange={handleChange}
+                      disabled={!editando}
+                      style={{
+                        borderColor: '#007bff',
+                        borderWidth: '2px',
+                        boxShadow: editando ? '0 0 10px rgba(0, 123, 255, 0.5)' : 'none',
+                        borderRadius: '20px',
+                      }}
+                    >
+                      <option value="masculino">Masculino</option>
+                      <option value="femenino">Femenino</option>
+                    </Form.Select>
+                  </Form.Group>
+
+                  <div className="d-flex justify-content-center">
+                    {editando ? (
+                      <>
+                        <Button variant="success" onClick={handleGuardar} className="me-2">
+                          Guardar Cambios
+                        </Button>
+                        <Button variant="secondary" onClick={() => setEditando(false)}>
+                          Cancelar
+                        </Button>
+                      </>
+                    ) : (
+                      <Button variant="primary" onClick={() => setEditando(true)}>
+                        Editar Perfil
                       </Button>
-                      <Button variant="secondary" onClick={() => setEditando(false)}>
-                        Cancelar
-                      </Button>
-                    </>
-                  ) : (
-                    <Button variant="primary" onClick={() => setEditando(true)}>
-                      Editar Perfil
-                    </Button>
-                  )}
-                </div>
-              </Form>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
-    </Container>
+                    )}
+                  </div>
+                </Form>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
+    </div>
   );
 }
 

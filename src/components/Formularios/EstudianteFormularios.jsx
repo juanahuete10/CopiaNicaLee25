@@ -1,23 +1,42 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-
-// 👉 Importa Firestore
-import { db } from '../../database/firebaseConfig'; // Ajusta la ruta si es diferente
-import { collection, addDoc } from 'firebase/firestore';
+import { FaHome } from 'react-icons/fa'; // Icono de "Casa" para regresar al inicio
 
 const EstudianteFormularios = () => {
   const [nombre, setNombre] = useState('');
   const [apellido, setApellido] = useState('');
   const [edad, setEdad] = useState('');
+  const [fechaNacimiento, setFechaNacimiento] = useState('');
   const [grado, setGrado] = useState('');
   const [intereses, setIntereses] = useState('');
   const [nivelEducativo, setNivelEducativo] = useState('');
   const [ubicacion, setUbicacion] = useState('');
   const [genero, setGenero] = useState('');
   const [imagen, setImagen] = useState(null);
+  const [verImagenCompleta, setVerImagenCompleta] = useState(false);
+
+  const [errores, setErrores] = useState({
+    nombre: false,
+    apellido: false,
+    grado: false,
+    intereses: false,
+    nivelEducativo: false,
+    ubicacion: false,
+    genero: false,
+    imagen: false,
+    fechaNacimiento: false,
+  });
 
   const navigate = useNavigate();
+
+  const calcularEdad = (fecha) => {
+    const fechaNacimiento = new Date(fecha);
+    const hoy = new Date();
+    const diferencia = hoy - fechaNacimiento;
+    const edadCalculada = new Date(diferencia).getUTCFullYear() - 1970;
+    setEdad(edadCalculada);
+  };
 
   const pickImage = async (e) => {
     const file = e.target.files[0];
@@ -28,16 +47,28 @@ const EstudianteFormularios = () => {
     }
   };
 
-  const handleRegistro = async () => {
-    if (
-      !nombre || !apellido || !edad || !grado || !intereses ||
-      !nivelEducativo || !ubicacion || !genero || !imagen
-    ) {
-      alert('Por favor, completa todos los campos obligatorios.');
+  const handleRegistro = () => {
+    const newErrores = {
+      nombre: !nombre,
+      apellido: !apellido,
+      grado: !grado,
+      intereses: !intereses,
+      nivelEducativo: !nivelEducativo,
+      ubicacion: !ubicacion,
+      genero: !genero,
+      imagen: !imagen,
+      fechaNacimiento: !fechaNacimiento,
+    };
+
+    setErrores(newErrores);
+
+    if (Object.values(newErrores).includes(true)) {
+      alert("Por favor completa todos los campos obligatorios.");
       return;
     }
 
     const estudiante = {
+      id: Date.now(),
       nombre,
       apellido,
       edad,
@@ -47,122 +78,255 @@ const EstudianteFormularios = () => {
       ubicacion,
       genero,
       imagen,
-      creado: new Date()
     };
 
-    try {
-      const docRef = await addDoc(collection(db, 'estudiantes'), estudiante);
-      console.log("Estudiante guardado con ID: ", docRef.id);
-      navigate('/dashboardnino', { state: { estudiante } });
-    } catch (error) {
-      console.error("Error al guardar en Firestore:", error);
-      alert("Error al registrar el estudiante. Intenta nuevamente.");
-    }
+    navigate('/dashboardnino', { state: { estudiante } });
+  };
 
-    // Limpiar formulario
-    setNombre('');
-    setApellido('');
-    setEdad('');
-    setGrado('');
-    setIntereses('');
-    setNivelEducativo('');
-    setUbicacion('');
-    setGenero('');
-    setImagen(null);
+  const handleRegresarInicio = () => {
+    navigate('/'); // Redirige a la pantalla principal de inicio
   };
 
   return (
-    <GradientContainer>
-      <div className="container">
-        <h2>Registro de Estudiante</h2>
+    <RainbowBackground>
+      <FormWrapper>
+        {/* Icono para regresar al inicio, ubicado a un lado de la pantalla */}
+        <BackButton onClick={handleRegresarInicio}>
+          <FaHome size={30} />
+        </BackButton>
 
-        <div>
-          {imagen ? (
-            <img src={imagen} alt="Perfil" style={{ width: '150px', height: '150px', borderRadius: '50%' }} />
-          ) : (
-            <p>Selecciona tu foto de perfil</p>
-          )}
-          <input type="file" onChange={pickImage} required />
-        </div>
+        <Decorations>
+          <span role="img" aria-label="book">📚</span>
+          <span role="img" aria-label="rainbow">🌈</span>
+          <span role="img" aria-label="cloud">☁️</span>
+        </Decorations>
 
-        <InputField type="text" placeholder="Nombres" value={nombre} onChange={(e) => setNombre(e.target.value)} />
-        <InputField type="text" placeholder="Apellidos" value={apellido} onChange={(e) => setApellido(e.target.value)} />
-        <InputField type="number" placeholder="Edad" value={edad} onChange={(e) => setEdad(e.target.value)} />
+        <FormCard>
+          <Title>
+            <span role="img" aria-label="books">📚</span>
+            Registro Estudiantil
+            <span role="img" aria-label="books">📚</span>
+          </Title>
 
-        <SelectField value={grado} onChange={(e) => setGrado(e.target.value)} >
-          <option value="">Selecciona el grado</option>
-          <option value="Primero">Primero</option>
-          <option value="Segundo">Segundo</option>
-          <option value="Tercero">Tercero</option>
-          <option value="Cuarto">Cuarto</option>
-          <option value="Quinto">Quinto</option>
-          <option value="Sexto">Sexto</option>
-        </SelectField>
+          <ImagePreview>
+            {imagen ? (
+              <img
+                src={imagen}
+                alt="Perfil"
+                onClick={() => setVerImagenCompleta(true)}
+              />
+            ) : (
+              <p>📸 ¡Sube tu foto!</p>
+            )}
+            <input type="file" accept="image/*" onChange={pickImage} />
+            {errores.imagen && <ErrorText>¡La foto es obligatoria!</ErrorText>}
+          </ImagePreview>
 
-        <SelectField value={nivelEducativo} onChange={(e) => setNivelEducativo(e.target.value)} >
-          <option value="">Selecciona el nivel educativo</option>
-          <option value="inicial">Inicial</option>
-          <option value="medio">Medio</option>
-          <option value="avanzado">Avanzado</option>
-        </SelectField>
+          <Input type="text" placeholder="Nombre" value={nombre} onChange={(e) => setNombre(e.target.value)} />
+          {errores.nombre && <ErrorText>¡El nombre es obligatorio!</ErrorText>}
 
-        <InputField type="text" placeholder="Intereses" value={intereses} onChange={(e) => setIntereses(e.target.value)} />
-        <InputField type="text" placeholder="Ubicación" value={ubicacion} onChange={(e) => setUbicacion(e.target.value)} />
+          <Input type="text" placeholder="Apellido" value={apellido} onChange={(e) => setApellido(e.target.value)} />
+          {errores.apellido && <ErrorText>¡El apellido es obligatorio!</ErrorText>}
 
-        <SelectField value={genero} onChange={(e) => setGenero(e.target.value)} >
-          <option value="">Selecciona tu género</option>
-          <option value="Masculino">Masculino</option>
-          <option value="Femenino">Femenino</option>
-        </SelectField>
+          <Input 
+            type="date" 
+            placeholder="Fecha de Nacimiento" 
+            value={fechaNacimiento} 
+            onChange={(e) => {
+              setFechaNacimiento(e.target.value);
+              calcularEdad(e.target.value);
+            }} 
+          />
+          {errores.fechaNacimiento && <ErrorText>¡La fecha de nacimiento es obligatoria!</ErrorText>}
+          
+          <Input type="text" placeholder="Edad" value={edad} disabled />
 
-        <StyledButton onClick={handleRegistro}>Registrar Estudiante</StyledButton>
-      </div>
-    </GradientContainer>
+          <Select value={grado} onChange={(e) => setGrado(e.target.value)}>
+            <option value="">Grado</option>
+            <option value="Primero">Primero</option>
+            <option value="Segundo">Segundo</option>
+            <option value="Tercero">Tercero</option>
+            <option value="Cuarto">Cuarto</option>
+            <option value="Quinto">Quinto</option>
+            <option value="Sexto">Sexto</option>
+          </Select>
+          {errores.grado && <ErrorText>¡El grado es obligatorio!</ErrorText>}
+
+          <Select value={nivelEducativo} onChange={(e) => setNivelEducativo(e.target.value)}>
+            <option value="">Nivel Educativo</option>
+            <option value="Inicial">Inicial</option>
+            <option value="Medio">Medio</option>
+            <option value="Avanzado">Avanzado</option>
+          </Select>
+          {errores.nivelEducativo && <ErrorText>¡El nivel educativo es obligatorio!</ErrorText>}
+
+          <Input type="text" placeholder="Intereses" value={intereses} onChange={(e) => setIntereses(e.target.value)} />
+          {errores.intereses && <ErrorText>¡El interés es obligatorio!</ErrorText>}
+
+          <Input type="text" placeholder="Ubicación" value={ubicacion} onChange={(e) => setUbicacion(e.target.value)} />
+          {errores.ubicacion && <ErrorText>¡La ubicación es obligatoria!</ErrorText>}
+
+          <Select value={genero} onChange={(e) => setGenero(e.target.value)}>
+            <option value="">Género</option>
+            <option value="Masculino">Masculino</option>
+            <option value="Femenino">Femenino</option>
+          </Select>
+          {errores.genero && <ErrorText>¡El género es obligatorio!</ErrorText>}
+
+          <Button onClick={handleRegistro}>
+            <span role="img" aria-label="rocket">🚀</span> Registrar
+          </Button>
+        </FormCard>
+
+        {verImagenCompleta && (
+          <FullImageOverlay onClick={() => setVerImagenCompleta(false)}>
+            <FullImage src={imagen} alt="Perfil grande" />
+          </FullImageOverlay>
+        )}
+      </FormWrapper>
+    </RainbowBackground>
   );
 };
 
 export default EstudianteFormularios;
 
-// 🎨 Estilos
-const GradientContainer = styled.div`
-  padding: 20px;
-  background: linear-gradient(to right, #f6f6f6, #d3e0ea);
-  font-family: sans-serif;
+// 🎨 ESTILOS
+const RainbowBackground = styled.div`
+  background: linear-gradient(to bottom right,rgb(76, 163, 245),rgb(248, 248, 248),rgb(248, 248, 245),rgb(247, 105, 117), #bdb2ff);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
 `;
 
-const InputField = styled.input`
-  display: block;
-  margin: 10px 0;
-  padding: 8px;
+const FormWrapper = styled.div`
   width: 100%;
+  max-width: 460px;
+  text-align: center;
+  position: relative;
 `;
 
-const SelectField = styled.select`
-  display: block;
-  margin: 10px 0;
-  padding: 8px;
+const FormCard = styled.div`
+  background: #ffffffd9;
+  backdrop-filter: blur(6px);
+  border-radius: 25px;
+  box-shadow: 0 0 25px rgba(0, 153, 255, 0.3);
+  padding: 30px;
+`;
+
+const Title = styled.h1`
+  font-size: 26px;
+  color: #0077ff;
+  margin-bottom: 20px;
+  font-family: 'Comic Sans MS', cursive;
+`;
+
+const Input = styled.input`
   width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  border: 2px solid #7bdff2;
+  border-radius: 15px;
+  font-size: 14px;
+  background-color: #f3f3f3;
 `;
 
-const StyledButton = styled.button`
-  padding: 12px 25px;
-  background-color: #28a745;
+const Select = styled.select`
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  border: 2px solid #7bdff2;
+  border-radius: 15px;
+  font-size: 14px;
+  background-color: #f3f3f3;
+`;
+
+const Button = styled.button`
+  background-color: #00bbf9;
   color: white;
   font-size: 16px;
+  padding: 12px;
   border: none;
-  border-radius: 8px;
+  border-radius: 20px;
   cursor: pointer;
-  display: block;
-  margin: 20px auto;
-  width: auto;
+  width: 100%;
+  font-family: 'Comic Sans MS', cursive;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px; 
+  transition: 0.3s;
 
   &:hover {
-    background-color: #218838;
+    background-color: #f15bb5;
     transform: scale(1.05);
   }
+`;
 
-  &:active {
-    background-color: #1e7e34;
-    transform: scale(1);
+const ErrorText = styled.p`
+  color: red;
+  font-size: 13px;
+  margin-bottom: 10px;
+`;
+
+const ImagePreview = styled.div`
+  margin-bottom: 15px;
+
+  img {
+    width: 130px; 
+    height: 130px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #00bbf9;
+    cursor: pointer;
   }
+
+  input {
+    margin-top: 10px;
+    font-size: 13px;
+  }
+
+  p {
+    color: #777;
+    font-size: 14px;
+  }
+`;
+
+const BackButton = styled.div`
+  position: fixed;
+  left: 20px;
+  top: 20px;
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 10px;
+  border-radius: 50%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  z-index: 999;
+`;
+
+const Decorations = styled.div`
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 24px;
+`;
+
+const FullImageOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+`;
+
+const FullImage = styled.img`
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
 `;
