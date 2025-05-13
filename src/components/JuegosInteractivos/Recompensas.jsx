@@ -1,48 +1,57 @@
-import React, { useState } from 'react';
-import { Button } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { db } from './firebase'; // Ajusta la ruta si es necesario
+import { doc, getDoc } from 'firebase/firestore';
 
+const Recompensas = ({ uid }) => {
+  const [recompensas, setRecompensas] = useState([]);
 
-const piezasOriginales = ['🧩', '🧩', '🧩', '🧩'];
-const piezasDesordenadas = [...piezasOriginales].sort(() => Math.random() - 0.5);
+  useEffect(() => {
+    const obtenerRecompensas = async () => {
+      try {
+        const usuarioRef = doc(db, 'usuarios', uid);
+        const usuarioSnap = await getDoc(usuarioRef);
 
-export default function Rompecabezas() {
-  const [piezas, setPiezas] = useState(piezasDesordenadas);
-  const [mensaje, setMensaje] = useState('');
+        if (usuarioSnap.exists()) {
+          const data = usuarioSnap.data();
+          setRecompensas(data.recompensas || []);
+        }
+      } catch (error) {
+        console.error('Error al obtener recompensas:', error);
+      }
+    };
 
-  const intercambiar = (i) => {
-    const nuevas = [...piezas];
-    [nuevas[i], nuevas[i + 1]] = [nuevas[i + 1], nuevas[i]];
-    setPiezas(nuevas);
-  };
-
-  const verificar = () => {
-    const esCorrecto = JSON.stringify(piezas) === JSON.stringify(piezasOriginales);
-    setMensaje(esCorrecto ? '¡Rompecabezas completo! 🎉' : 'Inténtalo de nuevo.');
-  };
+    obtenerRecompensas();
+  }, [uid]);
 
   return (
-    <div className="text-center">
-      <h5>Rompecabezas Visual</h5>
-      <div className="d-flex justify-content-center mb-3">
-        {piezas.map((pieza, i) => (
-          <span key={i} style={{ fontSize: '2rem', margin: '0 5px' }}>{pieza}</span>
-        ))}
-      </div>
-      <div className="d-flex justify-content-center mb-2">
-        {piezas.slice(0, -1).map((_, i) => (
-          <Button
-            key={i}
-            size="sm"
-            variant="info"
-            onClick={() => intercambiar(i)}
-            className="me-1"
-          >
-            Intercambiar {i + 1}↔{i + 2}
-          </Button>
-        ))}
-      </div>
-      <Button variant="success" onClick={verificar}>Verificar</Button>
-      <p className="mt-3">{mensaje}</p>
+    <div className="container mt-5 text-center">
+      <h2 style={{ fontFamily: 'Comic Sans MS', color: '#ff9900' }}>🏆 Tus Recompensas</h2>
+
+      {recompensas.length === 0 ? (
+        <p style={{ fontFamily: 'Comic Sans MS' }}>Aún no has ganado recompensas. ¡Sigue jugando y aprendiendo!</p>
+      ) : (
+        <div className="row mt-4">
+          {recompensas.map((recompensa, index) => (
+            <div key={index} className="col-md-4 mb-4">
+              <div
+                className="card shadow-lg"
+                style={{
+                  borderRadius: '15px',
+                  backgroundColor: '#fffbe6',
+                  padding: '20px',
+                  boxShadow: '0 6px 12px rgba(0,0,0,0.1)',
+                }}
+              >
+                <div style={{ fontSize: '2rem' }}>{recompensa.icono || '🌟'}</div>
+                <h4 style={{ fontFamily: 'Comic Sans MS', color: '#ff6600' }}>{recompensa.titulo}</h4>
+                <p style={{ fontFamily: 'Comic Sans MS' }}>{recompensa.descripcion}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
-}
+};
+
+export default Recompensas;

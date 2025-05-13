@@ -1,7 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import Racha from "./Racha"; 
 
-const DashboardNiño = () => {
+const DashboardNiño = ({ uid }) => {  
   const navigate = useNavigate();
 
   return (
@@ -21,6 +22,9 @@ const DashboardNiño = () => {
       <p className="lead" style={{ color: 'black', fontFamily: 'Comic Sans MS' }}>
         Explora juegos, historias y actividades para mejorar tu lectura.
       </p>
+
+      {/* Aquí agregamos el componente Racha */}
+      <Racha uid={uid} />
 
       <div className="row mt-4">
         <div className="col-md-4">

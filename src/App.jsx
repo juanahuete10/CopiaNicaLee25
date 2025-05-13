@@ -23,6 +23,7 @@ import DashboardAdmin from "./components/Administrador/DashboardAdmin";
 import CrearAdmin from "./components/Administrador/CrearAdmin";
 import ListaDocentes from "./components/Administrador/ListaDocentes";
 import Recompensas from "./components/JuegosInteractivos/Recompensas";
+import Racha from "./components/Formularios/Racha";
  
 function AppContent() {
   const location = useLocation();
@@ -54,6 +55,7 @@ function AppContent() {
           <Route path="/listadocentes" element={<ListaDocentes />} />
           <Route path="/listaestudiantes" element={<ListaDocentes />} />
           <Route path="/recompensas" element={<Recompensas />} />
+           <Route path="/racha" element={<Racha />} />
 
           
         </Routes>
