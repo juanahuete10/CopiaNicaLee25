@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
+
 import AbecedarioAE from '../JuegosInteractivos/AbecedarioAE';
 import MemoriaLetras from '../JuegosInteractivos/MemoriaLetras';
 import SonidosLetras from '../JuegosInteractivos/SonidosLetras';
@@ -8,10 +9,26 @@ import SonidosYPronunciacion from '../Pronunciacion/SonidosYPronunciacion';
 import Nivel1AsociarImagen from '../JuegosInteractivos/Nivel1AsociarImagen';
 import Nivel1LetraCorrecta from '../JuegosInteractivos/Nivel1LetraCorrecta';
 import Nivel1RepetirPalabra from '../JuegosInteractivos/Nivel1RepetirPalabra';
-// Importa aquí también los componentes para nivel 3 si existen
-// import LeccionMatch from '../JuegosInteractivos/LeccionMatch';
-// import LeccionFill from '../JuegosInteractivos/LeccionFill';
-// import Biblioteca from '../Biblioteca/Biblioteca';
+import LeccionMatch from '../Lecciones/LeccionMatch';
+import LeccionFill from '../Lecciones/LeccionFill';
+import Biblioteca from '../Lecciones/Biblioteca';
+
+// Nivel 5 
+import CazaNumeroPrimo from '../JuegosInteractivos/CazaNumeroPrimo';
+import OperacionesMatematicas from '../JuegosInteractivos/OperacionesMatematicas';
+import RompecabezasGeometria from '../JuegosInteractivos/RompecabezasGeometria';
+import EscapeRoomMatematica from '../JuegosInteractivos/EscapeRoomMatematica';
+import SopaDeLetras from '../JuegosInteractivos/SopaDeLetras';
+import TriviaFigurasGeometricas from '../JuegosInteractivos/TriviaFigurasGeometricas';
+
+// Nivel 6 
+import JuegoMapasInteractivos from '../JuegosInteractivos/JuegoMapaInteractivo';
+import TriviaGeografica from '../JuegosInteractivos/TriviaGeografica';
+import ExploraTuPais from '../JuegosInteractivos/ExploraTuPais';
+import CompletaPalabra from '../JuegosInteractivos/CompletaPalabra';
+import DetectiveOrtografia from '../JuegosInteractivos/DetectiveOrtografia';
+import LecturasInteractivas from '../JuegosInteractivos/LecturasInteractivas';
+import ClasificaPalabras from '../JuegosInteractivos/ClasificaPalabras';
 
 const levels = [
   { id: 1, label: 'Nivel 1', icon: '/src/assets/nivel1.png' },
@@ -70,29 +87,22 @@ const juegosPorNivel = {
       nombre: 'Unir Palabra con Imagen',
       descripcion: 'Asocia palabras con su imagen correspondiente.',
       icono: '/src/assets/cooperacion.png',
-      componente: <div>LeccionMatch (aquí debe ir el componente real)</div> // reemplazar por <LeccionMatch />
+      componente: <LeccionMatch />
     },
     {
       id: 'leccion2',
       nombre: 'Seleccionar Palabra Correcta',
       descripcion: 'Completa la oración con la palabra correcta.',
       icono: '/src/assets/escoger.png',
-      componente: <div>LeccionFill (aquí debe ir el componente real)</div> // reemplazar por <LeccionFill />
+      componente: <LeccionFill />
     },
     {
       id: 'leccion3',
       nombre: 'Biblioteca NicaLee',
       descripcion: 'Explora cuentos, poemas y lecturas.',
       icono: '/src/assets/libro-de-ninos.png',
-      componente: <div>Biblioteca (aquí debe ir el componente real)</div> // reemplazar por <Biblioteca />
+      componente: <Biblioteca />
     },
-    {
-      id: 'leccion4',
-      nombre: 'Juegos NicaLee',
-      descripcion: 'Actividades divertidas para aprender jugando.',
-      icono: '/src/assets/jugando.png',
-      componente: <div>Próximamente...</div>
-    }
   ],
 
   4: [
@@ -116,6 +126,103 @@ const juegosPorNivel = {
       descripcion: 'Relaciona letras con sonidos',
       icono: '/src/assets/pronunciacion.png',
       componente: <SonidosLetras />
+    },
+  ],
+
+  5: [
+    {
+      id: 'mate1',
+      nombre: 'Caza Números Primos',
+      descripcion: 'Identifica números primos en un juego divertido.',
+      icono: 'bi bi-target',
+      componente: <CazaNumeroPrimo />
+    },
+    {
+      id: 'mate2',
+      nombre: 'Operaciones Matemáticas',
+      descripcion: 'Practica sumas, restas, multiplicaciones y divisiones.',
+      icono: 'bi bi-calculator',
+      componente: <OperacionesMatematicas />
+    },
+    {
+      id: 'mate3',
+      nombre: 'Rompecabezas Geometría',
+      descripcion: 'Arma figuras geométricas con piezas.',
+      icono: 'bi bi-app',
+      componente: <RompecabezasGeometria />
+    },
+    {
+      id: 'mate4',
+      nombre: 'Escape Room Lógica',
+      descripcion: 'Resuelve acertijos lógicos para escapar.',
+      icono: 'bi bi-door-open',
+      componente: <EscapeRoomMatematica />
+    },
+    {
+      id: 'mate5',
+      nombre: 'Sopa de Letras',
+      descripcion: 'Encuentra términos matemáticos en una sopa de letras.',
+      icono: 'bi bi-grid',
+      componente: <SopaDeLetras />
+    },
+    {
+      id: 'mate6',
+      nombre: 'Trivia de Figuras',
+      descripcion: '¿Cuánto sabes de figuras geométricas? Descúbrelo.',
+      icono: 'bi bi-question-circle',
+      componente: <TriviaFigurasGeometricas />
+    },
+  ],
+
+  6: [
+    {
+      id: 'geo1',
+      nombre: 'Mapas Interactivos',
+      descripcion: 'Explora mapas y aprende sobre geografía.',
+      icono: 'bi bi-map',
+      componente: <JuegoMapasInteractivos />
+    },
+    {
+      id: 'geo2',
+      nombre: 'Trivia Geográfica',
+      descripcion: 'Responde preguntas sobre tu país y el mundo.',
+      icono: 'bi bi-geo-alt',
+      componente: <TriviaGeografica />
+    },
+    {
+      id: 'geo3',
+      nombre: 'Explora tu País',
+      descripcion: 'Conoce departamentos y regiones de Nicaragua.',
+      icono: 'bi bi-globe-americas',
+      componente: <ExploraTuPais />
+    },
+    {
+      id: 'leng1',
+      nombre: 'Completa la Palabra',
+      descripcion: 'Rellena letras faltantes para completar palabras.',
+      icono: 'bi bi-pencil',
+      componente: <CompletaPalabra />
+    },
+    {
+      id: 'leng2',
+      nombre: 'Detective de Ortografía',
+      descripcion: 'Detecta errores ortográficos en oraciones.',
+      icono: 'bi bi-search',
+      componente: <DetectiveOrtografia />
+    },
+    {
+      id: 'leng3',
+      nombre: 'Lecturas Interactivas',
+      descripcion: 'Lee y responde preguntas de comprensión.',
+      icono: 'bi bi-book',
+      componente: <LecturasInteractivas />
+    },
+    {
+      id: 'leng4',
+      nombre: 'Clasifica Palabras',
+      descripcion: 'Clasifica palabras por tipo gramatical.',
+      icono: 'bi bi-diagram-3',
+      componente: <ClasificaPalabras />
     },
   ],
 };
@@ -162,8 +269,19 @@ export default function Juegos() {
           <Row className="g-4 justify-content-center">
             {juegos.map((juego) => (
               <Col xs={12} sm={6} md={4} key={juego.id}>
-                <Card className="shadow-sm h-100">
-                  <Card.Img variant="top" src={juego.icono} />
+                <Card className="shadow-sm h-100 text-center">
+                  {nivelSeleccionado >= 5 ? (
+                    <div className="text-primary" style={{ fontSize: '3rem', marginTop: '1rem' }}>
+                      <i className={juego.icono}></i>
+                    </div>
+                  ) : (
+                    <Card.Img
+                      variant="top"
+                      src={juego.icono}
+                      alt={juego.nombre}
+                      style={{ width: '60%', margin: '1rem auto 0', height: 'auto' }}
+                    />
+                  )}
                   <Card.Body>
                     <Card.Title>{juego.nombre}</Card.Title>
                     <Card.Text>{juego.descripcion}</Card.Text>

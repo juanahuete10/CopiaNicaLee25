@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { auth, db } from "../database/firebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
-import { FaArrowLeft } from "react-icons/fa"; // FLECHA
+import { FaArrowLeft } from "react-icons/fa"; 
 import LogoNicaLee from "../assets/LogoNicaLee.png";
 import "../../src/styles.css";
 
@@ -43,7 +43,7 @@ const Login = () => {
 
         if (role === "estudiante") navigate("/dashboardniño");
         else if (role === "docente") navigate("/dashboarddocente");
-        else if (role === "padre") navigate("/dashboard-padre");
+        else if (role === "padre") navigate("/dashboardpfamilia");
         else navigate("/dashboard");
       } else {
         alert("No se encontró información del usuario.");

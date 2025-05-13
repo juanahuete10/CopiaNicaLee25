@@ -1,0 +1,31 @@
+.sopa-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 30px);
+  gap: 4px;
+  justify-content: center;
+}
+
+.sopa-row {
+  display: contents;
+}
+
+.sopa-cell {
+  width: 30px;
+  height: 30px;
+  background-color: #f0f8ff;
+  border: 1px solid #999;
+  text-align: center;
+  line-height: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.3s;
+}
+
+.sopa-cell.seleccionada {
+  background-color: #a0c4ff;
+}
+
+.sopa-cell.encontrada {
+  background-color: #a0ffb7;
+}

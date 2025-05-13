@@ -25,7 +25,7 @@ const Registro = () => {
 
       if (selectedRole === "estudiante") navigate("/estudianteformularios");
       else if (selectedRole === "docente") navigate("/formulariodocente");
-      else if (selectedRole === "padre") navigate("/dashboard-padre");
+      else if (selectedRole === "padre") navigate("/formulariopfamilia");
       else navigate("/dashboard");
     } catch (error) {
       alert(error.message);
