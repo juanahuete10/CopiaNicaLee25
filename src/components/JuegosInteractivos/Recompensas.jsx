@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { db } from './firebase'; // Ajusta la ruta si es necesario
+import { db } from '../../database/firebaseConfig'; 
 import { doc, getDoc } from 'firebase/firestore';
 
 const Recompensas = ({ uid }) => {
