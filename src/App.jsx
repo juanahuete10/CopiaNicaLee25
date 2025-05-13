@@ -23,7 +23,7 @@ import DashboardAdmin from "./components/Administrador/DashboardAdmin";
 import CrearAdmin from "./components/Administrador/CrearAdmin";
 import ListaDocentes from "./components/Administrador/ListaDocentes";
 import Recompensas from "./components/JuegosInteractivos/Recompensas";
-
+ 
 function AppContent() {
   const location = useLocation();
   const isLandingPage = location.pathname === "/";

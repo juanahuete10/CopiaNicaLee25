@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { db, auth } from '../../database/firebaseConfig'; // ✅ asegurarte de importar auth
+import { db, auth } from '../../database/firebaseConfig';
 import { collection, addDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
+import { FaHome } from 'react-icons/fa';
 
 function FormularioDocente() {
   const [nombre, setNombre] = useState('');
@@ -9,7 +10,7 @@ function FormularioDocente() {
   const [fechaNacimiento, setFechaNacimiento] = useState('');
   const [edad, setEdad] = useState('');
   const [genero, setGenero] = useState('masculino');
-  const [ , setFotoPerfil] = useState(null); // no se usa pero se mantiene la vista previa
+  const [, setFotoPerfil] = useState(null);
   const [previewFoto, setPreviewFoto] = useState(null);
   const [errores, setErrores] = useState({});
   const [registroExitoso, setRegistroExitoso] = useState(false);
@@ -65,7 +66,7 @@ function FormularioDocente() {
 
     try {
       await addDoc(collection(db, 'docentes'), {
-        uid: user.uid, // ✅ guarda el UID del usuario autenticado
+        uid: user.uid,
         nombre,
         apellido,
         fechaNacimiento,
@@ -85,79 +86,67 @@ function FormularioDocente() {
   };
 
   return (
-    <div className="container mt-5">
-      <h2 className="mb-4">Registro de Docente</h2>
+    <div
+      style={{
+        minHeight: '100vh',
+        background: 'linear-gradient(to bottom right, #a2d4f6, #e0f7ff)',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: '2rem',
+        position: 'relative',
+      }}
+    >
+      {/* Ícono de la casa en una bolita redonda */}
+      <div
+        onClick={() => navigate('/')}
+        style={{
+          position: 'fixed',
+          top: '20px',
+          left: '20px',
+          width: '50px',
+          height: '50px',
+          borderRadius: '50%',
+          backgroundColor: 'rgba(255, 255, 255, 0.9)',
+          border: '3px solid white',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          cursor: 'pointer',
+          zIndex: 9999,
+          boxShadow: '0 2px 6px rgba(0, 0, 0, 0.2)',
+        }}
+      >
+        <FaHome size={30} color="black" />
+      </div>
 
-      {registroExitoso && (
-        <div className="alert alert-success">¡Registro exitoso! Redirigiendo...</div>
-      )}
-
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label className="form-label">Nombre</label>
-          <input
-            type="text"
-            className={`form-control ${errores.nombre ? 'is-invalid' : ''}`}
-            value={nombre}
-            onChange={(e) => setNombre(e.target.value)}
-          />
-          {errores.nombre && <div className="invalid-feedback">{errores.nombre}</div>}
-        </div>
-
-        <div className="mb-3">
-          <label className="form-label">Apellido</label>
-          <input
-            type="text"
-            className={`form-control ${errores.apellido ? 'is-invalid' : ''}`}
-            value={apellido}
-            onChange={(e) => setApellido(e.target.value)}
-          />
-          {errores.apellido && <div className="invalid-feedback">{errores.apellido}</div>}
-        </div>
-
-        <div className="mb-3">
-          <label className="form-label">Fecha de Nacimiento</label>
-          <input
-            type="date"
-            className={`form-control ${errores.fechaNacimiento ? 'is-invalid' : ''}`}
-            value={fechaNacimiento}
-            max={new Date().toISOString().split('T')[0]}
-            onChange={handleFechaNacimientoChange}
-          />
-          {errores.fechaNacimiento && (
-            <div className="invalid-feedback">{errores.fechaNacimiento}</div>
-          )}
-        </div>
-
-        <div className="mb-3">
-          <label className="form-label">Edad</label>
-          <input
-            type="number"
-            className="form-control"
-            value={edad}
-            readOnly
-          />
-        </div>
+      {/* Contenedor del formulario */}
+      <div
+        style={{
+          backgroundColor: '#fff',
+          borderRadius: '20px',
+          padding: '2rem',
+          boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
+          width: '100%',
+          maxWidth: '500px',
+          border: '3px solid #fff',
+        }}
+      >
+        <h2 className="text-center mb-4" style={{ color: '#00aaff', fontWeight: 'bold' }}>
+          Registro de Docente
+        </h2>
 
         <div className="mb-3">
-          <label className="form-label">Género</label>
-          <select
-            className="form-select"
-            value={genero}
-            onChange={(e) => setGenero(e.target.value)}
-          >
-            <option value="masculino">Masculino</option>
-            <option value="femenino">Femenino</option>
-          </select>
-        </div>
-
-        <div className="mb-3">
-          <label className="form-label">Foto de Perfil (solo vista previa)</label>
+          <label className="form-label">Foto de Perfil</label>
           <input
             type="file"
             accept="image/*"
             className="form-control"
             onChange={handleFotoChange}
+            style={{
+              border: '2px solid #00aaff',
+              borderRadius: '8px',
+            }}
           />
         </div>
 
@@ -167,15 +156,113 @@ function FormularioDocente() {
               src={previewFoto}
               alt="Vista previa"
               className="img-thumbnail"
-              style={{ maxWidth: '200px', maxHeight: '200px' }}
+              style={{
+                maxWidth: '120px',
+                borderRadius: '50%',
+                border: '3px solid #00aaff',
+              }}
             />
           </div>
         )}
 
-        <button type="submit" className="btn btn-success w-100">
-          Registrar Docente
-        </button>
-      </form>
+        {registroExitoso && (
+          <div className="alert alert-success text-center">¡Registro exitoso! Redirigiendo...</div>
+        )}
+
+        <form onSubmit={handleSubmit}>
+          <div className="mb-3">
+            <label className="form-label">Nombre</label>
+            <input
+              type="text"
+              className={`form-control ${errores.nombre ? 'is-invalid' : ''}`}
+              value={nombre}
+              onChange={(e) => setNombre(e.target.value)}
+              placeholder="Escribe tu nombre"
+              style={{
+                border: '2px solid #00aaff',
+                borderRadius: '8px',
+              }}
+            />
+            {errores.nombre && <div className="invalid-feedback">{errores.nombre}</div>}
+          </div>
+
+          <div className="mb-3">
+            <label className="form-label">Apellido</label>
+            <input
+              type="text"
+              className={`form-control ${errores.apellido ? 'is-invalid' : ''}`}
+              value={apellido}
+              onChange={(e) => setApellido(e.target.value)}
+              placeholder="Escribe tu apellido"
+              style={{
+                border: '2px solid #00aaff',
+                borderRadius: '8px',
+              }}
+            />
+            {errores.apellido && <div className="invalid-feedback">{errores.apellido}</div>}
+          </div>
+
+          <div className="mb-3">
+            <label className="form-label">Fecha de Nacimiento</label>
+            <input
+              type="date"
+              className={`form-control ${errores.fechaNacimiento ? 'is-invalid' : ''}`}
+              value={fechaNacimiento}
+              onChange={handleFechaNacimientoChange}
+              style={{
+                border: '2px solid #00aaff',
+                borderRadius: '8px',
+              }}
+            />
+            {errores.fechaNacimiento && <div className="invalid-feedback">{errores.fechaNacimiento}</div>}
+          </div>
+
+          <div className="mb-3">
+            <label className="form-label">Edad</label>
+            <input
+              type="number"
+              className="form-control"
+              value={edad}
+              readOnly
+              style={{
+                border: '2px solid #00aaff',
+                borderRadius: '8px',
+                backgroundColor: '#f8f9fa',
+              }}
+            />
+          </div>
+
+          <div className="mb-3">
+            <label className="form-label">Género</label>
+            <select
+              className="form-control"
+              value={genero}
+              onChange={(e) => setGenero(e.target.value)}
+              style={{
+                border: '2px solid #00aaff',
+                borderRadius: '8px',
+              }}
+            >
+              <option value="masculino">Masculino</option>
+              <option value="femenino">Femenino</option>
+              <option value="otro">Otro</option>
+            </select>
+          </div>
+
+          <button
+            type="submit"
+            className="btn btn-primary w-100"
+            style={{
+              backgroundColor: '#00aaff',
+              borderColor: '#00aaff',
+              borderRadius: '8px',
+              fontWeight: 'bold',
+            }}
+          >
+            Registrar Docente
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
