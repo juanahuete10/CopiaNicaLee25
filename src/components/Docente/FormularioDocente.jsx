@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { db, auth } from '../../database/firebaseConfig';
 import { collection, addDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
+import { FaHome } from 'react-icons/fa';
 
 function FormularioDocente() {
   const [nombre, setNombre] = useState('');
@@ -93,8 +94,33 @@ function FormularioDocente() {
         justifyContent: 'center',
         alignItems: 'center',
         padding: '2rem',
+        position: 'relative',
       }}
     >
+      {/* Ícono de la casa en una bolita redonda */}
+      <div
+        onClick={() => navigate('/')}
+        style={{
+          position: 'fixed',
+          top: '20px',
+          left: '20px',
+          width: '50px',
+          height: '50px',
+          borderRadius: '50%',
+          backgroundColor: 'rgba(255, 255, 255, 0.9)',
+          border: '3px solid white',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          cursor: 'pointer',
+          zIndex: 9999,
+          boxShadow: '0 2px 6px rgba(0, 0, 0, 0.2)',
+        }}
+      >
+        <FaHome size={30} color="black" />
+      </div>
+
+      {/* Contenedor del formulario */}
       <div
         style={{
           backgroundColor: '#fff',
@@ -145,9 +171,7 @@ function FormularioDocente() {
 
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
-            <label className="form-label">
-              <i className="fas fa-user" style={{ marginRight: '8px', color: '#00aaff' }}></i> Nombre
-            </label>
+            <label className="form-label">Nombre</label>
             <input
               type="text"
               className={`form-control ${errores.nombre ? 'is-invalid' : ''}`}
@@ -163,9 +187,7 @@ function FormularioDocente() {
           </div>
 
           <div className="mb-3">
-            <label className="form-label">
-              <i className="fas fa-user" style={{ marginRight: '8px', color: '#00aaff' }}></i> Apellido
-            </label>
+            <label className="form-label">Apellido</label>
             <input
               type="text"
               className={`form-control ${errores.apellido ? 'is-invalid' : ''}`}
@@ -181,29 +203,22 @@ function FormularioDocente() {
           </div>
 
           <div className="mb-3">
-            <label className="form-label">
-              <i className="fas fa-calendar-alt" style={{ marginRight: '8px', color: '#00aaff' }}></i> Fecha de Nacimiento
-            </label>
+            <label className="form-label">Fecha de Nacimiento</label>
             <input
               type="date"
               className={`form-control ${errores.fechaNacimiento ? 'is-invalid' : ''}`}
               value={fechaNacimiento}
-              max={new Date().toISOString().split('T')[0]}
               onChange={handleFechaNacimientoChange}
               style={{
                 border: '2px solid #00aaff',
                 borderRadius: '8px',
               }}
             />
-            {errores.fechaNacimiento && (
-              <div className="invalid-feedback">{errores.fechaNacimiento}</div>
-            )}
+            {errores.fechaNacimiento && <div className="invalid-feedback">{errores.fechaNacimiento}</div>}
           </div>
 
           <div className="mb-3">
-            <label className="form-label">
-              <i className="fas fa-cogs" style={{ marginRight: '8px', color: '#00aaff' }}></i> Edad
-            </label>
+            <label className="form-label">Edad</label>
             <input
               type="number"
               className="form-control"
@@ -212,16 +227,15 @@ function FormularioDocente() {
               style={{
                 border: '2px solid #00aaff',
                 borderRadius: '8px',
+                backgroundColor: '#f8f9fa',
               }}
             />
           </div>
 
           <div className="mb-3">
-            <label className="form-label">
-              <i className="fas fa-venus-mars" style={{ marginRight: '8px', color: '#00aaff' }}></i> Género
-            </label>
+            <label className="form-label">Género</label>
             <select
-              className="form-select"
+              className="form-control"
               value={genero}
               onChange={(e) => setGenero(e.target.value)}
               style={{
@@ -231,19 +245,18 @@ function FormularioDocente() {
             >
               <option value="masculino">Masculino</option>
               <option value="femenino">Femenino</option>
+              <option value="otro">Otro</option>
             </select>
           </div>
 
           <button
             type="submit"
-            className="btn"
+            className="btn btn-primary w-100"
             style={{
               backgroundColor: '#00aaff',
-              color: '#fff',
+              borderColor: '#00aaff',
+              borderRadius: '8px',
               fontWeight: 'bold',
-              fontSize: '18px',
-              width: '100%',
-              borderRadius: '12px',
             }}
           >
             Registrar Docente
