@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { db, auth } from '../../database/firebaseConfig';
 import { collection, addDoc } from 'firebase/firestore';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { useNavigate } from 'react-router-dom';
 import { FaHome } from 'react-icons/fa';
 
@@ -10,7 +11,7 @@ function FormularioDocente() {
   const [fechaNacimiento, setFechaNacimiento] = useState('');
   const [edad, setEdad] = useState('');
   const [genero, setGenero] = useState('masculino');
-  const [, setFotoPerfil] = useState(null);
+  const [fotoPerfil, setFotoPerfil] = useState(null);
   const [previewFoto, setPreviewFoto] = useState(null);
   const [errores, setErrores] = useState({});
   const [registroExitoso, setRegistroExitoso] = useState(false);
@@ -65,6 +66,14 @@ function FormularioDocente() {
     }
 
     try {
+      let urlFoto = '';
+      if (fotoPerfil) {
+        const storage = getStorage();
+        const storageRef = ref(storage, `docentes/${user.uid}/fotoPerfil.jpg`);
+        await uploadBytes(storageRef, fotoPerfil);
+        urlFoto = await getDownloadURL(storageRef);
+      }
+
       await addDoc(collection(db, 'docentes'), {
         uid: user.uid,
         nombre,
@@ -72,6 +81,7 @@ function FormularioDocente() {
         fechaNacimiento,
         edad,
         genero,
+        fotoPerfil: urlFoto,
         creadoEn: new Date()
       });
 
@@ -97,7 +107,7 @@ function FormularioDocente() {
         position: 'relative',
       }}
     >
-      {/* Ícono de la casa en una bolita redonda */}
+      {/* Ícono de regresar */}
       <div
         onClick={() => navigate('/')}
         style={{
@@ -120,7 +130,6 @@ function FormularioDocente() {
         <FaHome size={30} color="black" />
       </div>
 
-      {/* Contenedor del formulario */}
       <div
         style={{
           backgroundColor: '#fff',
@@ -143,10 +152,7 @@ function FormularioDocente() {
             accept="image/*"
             className="form-control"
             onChange={handleFotoChange}
-            style={{
-              border: '2px solid #00aaff',
-              borderRadius: '8px',
-            }}
+            style={{ border: '2px solid #00aaff', borderRadius: '8px' }}
           />
         </div>
 
@@ -178,10 +184,7 @@ function FormularioDocente() {
               value={nombre}
               onChange={(e) => setNombre(e.target.value)}
               placeholder="Escribe tu nombre"
-              style={{
-                border: '2px solid #00aaff',
-                borderRadius: '8px',
-              }}
+              style={{ border: '2px solid #00aaff', borderRadius: '8px' }}
             />
             {errores.nombre && <div className="invalid-feedback">{errores.nombre}</div>}
           </div>
@@ -194,10 +197,7 @@ function FormularioDocente() {
               value={apellido}
               onChange={(e) => setApellido(e.target.value)}
               placeholder="Escribe tu apellido"
-              style={{
-                border: '2px solid #00aaff',
-                borderRadius: '8px',
-              }}
+              style={{ border: '2px solid #00aaff', borderRadius: '8px' }}
             />
             {errores.apellido && <div className="invalid-feedback">{errores.apellido}</div>}
           </div>
@@ -209,10 +209,7 @@ function FormularioDocente() {
               className={`form-control ${errores.fechaNacimiento ? 'is-invalid' : ''}`}
               value={fechaNacimiento}
               onChange={handleFechaNacimientoChange}
-              style={{
-                border: '2px solid #00aaff',
-                borderRadius: '8px',
-              }}
+              style={{ border: '2px solid #00aaff', borderRadius: '8px' }}
             />
             {errores.fechaNacimiento && <div className="invalid-feedback">{errores.fechaNacimiento}</div>}
           </div>
@@ -238,10 +235,7 @@ function FormularioDocente() {
               className="form-control"
               value={genero}
               onChange={(e) => setGenero(e.target.value)}
-              style={{
-                border: '2px solid #00aaff',
-                borderRadius: '8px',
-              }}
+              style={{ border: '2px solid #00aaff', borderRadius: '8px' }}
             >
               <option value="masculino">Masculino</option>
               <option value="femenino">Femenino</option>
