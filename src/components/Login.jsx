@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { auth, db } from "../database/firebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
-import { FaArrowLeft } from "react-icons/fa"; 
+import { FaArrowLeft } from "react-icons/fa";
 import LogoNicaLee from "../assets/LogoNicaLee.png";
 import "../../src/styles.css";
 
@@ -19,37 +19,38 @@ const Login = () => {
       const uid = userCredential.user.uid;
       const correo = userCredential.user.email;
 
-      console.log("Usuario autenticado:", correo, "UID:", uid); // DEBUG
+      console.log("✅ Usuario autenticado:", correo, "UID:", uid);
 
-      // Administrador
+      // Si es el administrador específico
       if (correo === "juanamasis18@gmail.com") {
         navigate("/dashboardadmin");
         return;
       }
 
-      // Firestore
+      // Verificamos en Firestore
       const userDoc = await getDoc(doc(db, "users", uid));
 
       if (userDoc.exists()) {
         const userData = userDoc.data();
         const role = userData.role;
 
-        console.log("Datos en Firestore:", userData); // DEBUG
+        console.log("📄 Datos Firestore:", userData);
 
         if (!role) {
           alert("El usuario no tiene un rol asignado.");
           return;
         }
 
-        if (role === "estudiante") navigate("/dashboardniño");
+        // Redirección según el rol
+        if (role === "estudiante") navigate("/dashboardnino");
         else if (role === "docente") navigate("/dashboarddocente");
         else if (role === "padre") navigate("/dashboardpfamilia");
-        else navigate("/dashboard");
+        else navigate("/dashboard"); // ruta genérica si no coincide ningún rol conocido
       } else {
-        alert("No se encontró información del usuario.");
+        alert("No se encontró información del usuario en Firestore.");
       }
     } catch (error) {
-      console.error("Error al iniciar sesión:", error); // DEBUG
+      console.error("❌ Error al iniciar sesión:", error);
       alert("Error al iniciar sesión: " + error.message);
     }
   };
@@ -63,7 +64,7 @@ const Login = () => {
         padding: "20px",
       }}
     >
-      {/* Botón de retroceso */}
+      {/* Botón de volver */}
       <button
         className="btn btn-link align-self-start ms-3 mb-2 text-decoration-none text-dark"
         onClick={() => navigate(-1)}

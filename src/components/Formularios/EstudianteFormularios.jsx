@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { FaHome } from 'react-icons/fa'; // Icono de "Casa" para regresar al inicio
+import { FaHome } from 'react-icons/fa';
 
 const EstudianteFormularios = () => {
   const [nombre, setNombre] = useState('');
@@ -9,7 +9,7 @@ const EstudianteFormularios = () => {
   const [edad, setEdad] = useState('');
   const [fechaNacimiento, setFechaNacimiento] = useState('');
   const [grado, setGrado] = useState('');
-  const [intereses, setIntereses] = useState('');
+  const [intereses, setIntereses] = useState([]);
   const [nivelEducativo, setNivelEducativo] = useState('');
   const [ubicacion, setUbicacion] = useState('');
   const [genero, setGenero] = useState('');
@@ -52,7 +52,7 @@ const EstudianteFormularios = () => {
       nombre: !nombre,
       apellido: !apellido,
       grado: !grado,
-      intereses: !intereses,
+      intereses: intereses.length === 0,
       nivelEducativo: !nivelEducativo,
       ubicacion: !ubicacion,
       genero: !genero,
@@ -84,13 +84,12 @@ const EstudianteFormularios = () => {
   };
 
   const handleRegresarInicio = () => {
-    navigate('/'); // Redirige a la pantalla principal de inicio
+    navigate('/');
   };
 
   return (
     <RainbowBackground>
       <FormWrapper>
-        {/* Icono para regresar al inicio, ubicado a un lado de la pantalla */}
         <BackButton onClick={handleRegresarInicio}>
           <FaHome size={30} />
         </BackButton>
@@ -102,11 +101,7 @@ const EstudianteFormularios = () => {
         </Decorations>
 
         <FormCard>
-          <Title>
-            <span role="img" aria-label="books">📚</span>
-            Registro Estudiantil
-            <span role="img" aria-label="books">📚</span>
-          </Title>
+          <Title>📚 Registro Estudiantil 📚</Title>
 
           <ImagePreview>
             {imagen ? (
@@ -160,8 +155,25 @@ const EstudianteFormularios = () => {
           </Select>
           {errores.nivelEducativo && <ErrorText>¡El nivel educativo es obligatorio!</ErrorText>}
 
-          <Input type="text" placeholder="Intereses" value={intereses} onChange={(e) => setIntereses(e.target.value)} />
-          {errores.intereses && <ErrorText>¡El interés es obligatorio!</ErrorText>}
+          <label style={{ fontSize: "14px", marginBottom: "5px", display: "block", textAlign: "left" }}>
+            Selecciona tus intereses:
+          </label>
+          <Select
+            multiple
+            value={intereses}
+            onChange={(e) => {
+              const selectedOptions = Array.from(e.target.selectedOptions).map(option => option.value);
+              setIntereses(selectedOptions);
+            }}
+          >
+            <option value="Lectura">Lectura</option>
+            <option value="Matemáticas">Matemáticas</option>
+            <option value="Ciencias">Ciencias</option>
+            <option value="Juegos">Juegos</option>
+            <option value="Tecnología">Tecnología</option>
+            <option value="Arte">Arte</option>
+          </Select>
+          {errores.intereses && <ErrorText>¡Debes seleccionar al menos un interés!</ErrorText>}
 
           <Input type="text" placeholder="Ubicación" value={ubicacion} onChange={(e) => setUbicacion(e.target.value)} />
           {errores.ubicacion && <ErrorText>¡La ubicación es obligatoria!</ErrorText>}
@@ -174,7 +186,7 @@ const EstudianteFormularios = () => {
           {errores.genero && <ErrorText>¡El género es obligatorio!</ErrorText>}
 
           <Button onClick={handleRegistro}>
-            <span role="img" aria-label="rocket">🚀</span> Registrar
+            🚀 Registrar
           </Button>
         </FormCard>
 
@@ -189,6 +201,7 @@ const EstudianteFormularios = () => {
 };
 
 export default EstudianteFormularios;
+
 
 // 🎨 ESTILOS
 const RainbowBackground = styled.div`

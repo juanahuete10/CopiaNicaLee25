@@ -1,12 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  BsFileEarmarkPlusFill,
-  BsPeopleFill,
-  BsBookFill,
-  BsHeartFill,
-  BsBarChartFill,
-} from "react-icons/bs";
+import {BsFileEarmarkPlusFill,BsPeopleFill,BsBookFill,BsHeartFill,BsBarChartFill,} from "react-icons/bs";
 import LogoNicaLee from "../../assets/LogoNicaLee.png";
 
 const DashboardAdmin = () => {
@@ -36,7 +30,7 @@ const DashboardAdmin = () => {
         fontFamily: "'Nunito', sans-serif",
       }}
     >
-      {/* Panel lateral izquierdo */}
+     
       <div
         style={{
           width: "280px",
@@ -94,7 +88,7 @@ const DashboardAdmin = () => {
         </button>
       </div>
 
-      {/* Panel principal */}
+    
       <div
         style={{
           flex: 1,
@@ -105,14 +99,13 @@ const DashboardAdmin = () => {
           alignItems: "center",
         }}
       >
-        {/* Logo centrado */}
+  
         <img
           src={LogoNicaLee}
           alt="Logo"
           style={{ width: "150px", marginBottom: "30px" }}
         />
 
-        {/* Panel de bienvenida con fondo celeste degradado */}
         <div
           style={{
             background: "linear-gradient(135deg, #c0eaff, #b3d4ff)",

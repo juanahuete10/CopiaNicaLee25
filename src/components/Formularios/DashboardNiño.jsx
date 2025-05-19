@@ -1,119 +1,171 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Racha from "./Racha"; 
+import Racha from "./Racha";
 
-const DashboardNiño = ({ uid }) => {  
+const DashboardNiño = ({ uid }) => {
   const navigate = useNavigate();
+  const [menuVisible, setMenuVisible] = useState(false);
+
+  const toggleMenu = () => {
+    setMenuVisible(!menuVisible);
+  };
 
   return (
     <div
-      className="container text-center mt-5"
       style={{
-        background: 'linear-gradient(135deg, #66ccff, #ffcc66)', // Degradado simple con azul y amarillo
-        minHeight: '100vh',
-        padding: '20px',
-        borderRadius: '15px',
-        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
+        display: "flex",
+        minHeight: "100vh",
+        background: "linear-gradient(135deg, #66ccff, #ffcc66)",
+        padding: "10px",
+        boxSizing: "border-box",
+        marginTop: "35px"
       }}
     >
-      <h1 className="mb-4" style={{ color: 'black', fontFamily: 'Comic Sans MS' }}>
-        ¡Bienvenido a NicaLee!
-      </h1>
-      <p className="lead" style={{ color: 'black', fontFamily: 'Comic Sans MS' }}>
-        Explora juegos, historias y actividades para mejorar tu lectura.
-      </p>
-
-      {/* Aquí agregamos el componente Racha */}
-      <Racha uid={uid} />
-
-      <div className="row mt-4">
-        <div className="col-md-4">
-          <div
-            className="card shadow-lg p-3"
-            style={{
-              backgroundColor: '#fff',
-              borderRadius: '15px',
-              boxShadow: '0 10px 20px rgba(0, 0, 0, 0.1)',
-            }}
-          >
-            <h3 style={{ color: 'black' }}>📚 Biblioteca</h3>
-            <p>Lee cuentos y libros interactivos.</p>
-            <button
-              className="btn btn-primary"
-              onClick={() => navigate("/biblioteca")}
-              style={{
-                backgroundColor: '#66ccff',
-                borderColor: '#3399ff',
-                fontWeight: 'bold',
-              }}
-            >
-              Explorar
-            </button>
-          </div>
-        </div>
-
-        <div className="col-md-4">
-          <div
-            className="card shadow-lg p-3"
-            style={{
-              backgroundColor: '#fff',
-              borderRadius: '15px',
-              boxShadow: '0 10px 20px rgba(0, 0, 0, 0.1)',
-            }}
-          >
-            <h3 style={{ color: 'black' }}>🎮 Juegos</h3>
-            <p>Aprende con juegos divertidos y educativos.</p>
-            <button
-              className="btn btn-success"
-              onClick={() => navigate("/juegos")}
-              style={{
-                backgroundColor: '#ffcc66',
-                borderColor: '#ff9966',
-                fontWeight: 'bold',
-              }}
-            >
-              Jugar
-            </button>
-          </div>
-        </div>
-
-        <div className="col-md-4">
-          <div
-            className="card shadow-lg p-3"
-            style={{
-              backgroundColor: '#fff',
-              borderRadius: '15px',
-              boxShadow: '0 10px 20px rgba(0, 0, 0, 0.1)',
-            }}
-          >
-            <h3 style={{ color: 'black' }}>🏆 Recompensas</h3>
-            <p>Consulta tus logros y premios.</p>
-            <button
-              className="btn btn-warning"
-              onClick={() => navigate("/recompensas")}
-              style={{
-                backgroundColor: '#ffcc66',
-                borderColor: '#ff9966',
-                fontWeight: 'bold',
-              }}
-            >
-              Ver
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <button
-        className="btn btn-danger mt-4"
-        onClick={() => navigate("/")}
+      {/* Menú lateral */}
+      <div
         style={{
-          backgroundColor: '#ff4d4d',
-          borderColor: '#ff1a1a',
-          fontWeight: 'bold',
+          width: menuVisible ? 220 : 0,
+          transition: "width 0.3s ease",
+          overflow: "hidden",
+          backgroundColor: "#fff",
+          borderRadius: "15px",
+          boxShadow: "2px 0 8px rgba(0,0,0,0.1)",
+          padding: menuVisible ? "20px" : "0",
+          color: "#333",
+          fontFamily: "Comic Sans MS",
         }}
       >
-        Cerrar sesión
-      </button>
+        <h3>Menú</h3>
+        <ul style={{ listStyle: "none", paddingLeft: 0 }}>
+          <li style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => navigate("/biblioteca")}>📚 Biblioteca</li>
+          <li style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => navigate("/juegos")}>🎮 Juegos</li>
+          <li style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => navigate("/perfilestudiante")}>👤 Perfil</li>
+          <li style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => navigate("/recompensas")}>🏆 Recompensas</li>
+        
+        </ul>
+      </div>
+
+      {/* Contenido principal */}
+      <div
+        style={{
+          flexGrow: 1,
+          marginLeft: menuVisible ? 20 : 0,
+          transition: "margin-left 0.3s ease",
+          borderRadius: "15px",
+          padding: "20px",
+          boxSizing: "border-box",
+          fontFamily: "Comic Sans MS",
+        }}
+      >
+        {/* Botón de menú */}
+        <button
+          onClick={toggleMenu}
+          style={{
+            position: "fixed",
+            top: 20,
+            left: 20,
+            zIndex: 1000,
+            backgroundColor: "#66ccff",
+            border: "none",
+            padding: "10px 15px",
+            borderRadius: "5px",
+            cursor: "pointer",
+            fontSize: "20px",
+            color: "#fff",
+            boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+          }}
+          aria-label="Toggle menu"
+        >
+          &#9776;
+        </button>
+
+        <div style={{ textAlign: "center", marginBottom: "30px" }}>
+          <h1 style={{ color: "black" }}>¡Bienvenido a NicaLee!</h1>
+          <p style={{ color: "black", fontSize: "18px" }}>
+            Explora juegos, cuentos y actividades para mejorar tu lectura.
+          </p>
+        </div>
+
+        <Racha uid={uid} />
+
+        {/* Tarjetas */}
+        <div className="row mt-4">
+          <div className="col-md-6 col-lg-4 mb-4">
+            <div className="card h-100 shadow-sm p-3 text-center" style={{ borderRadius: "15px" }}>
+              <h3>📚 Biblioteca</h3>
+              <p>Lee cuentos y libros interactivos.</p>
+              <button
+                className="btn btn-primary"
+                onClick={() => navigate("/biblioteca")}
+              >
+                Explorar
+              </button>
+            </div>
+          </div>
+
+          <div className="col-md-6 col-lg-4 mb-4">
+            <div className="card h-100 shadow-sm p-3 text-center" style={{ borderRadius: "15px" }}>
+              <h3>🎮 Juegos</h3>
+              <p>Aprende con juegos divertidos y educativos.</p>
+              <button
+                className="btn btn-warning"
+                onClick={() => navigate("/juegos")}
+              >
+                Jugar
+              </button>
+            </div>
+          </div>
+
+          <div className="col-md-6 col-lg-4 mb-4">
+            <div className="card h-100 shadow-sm p-3 text-center" style={{ borderRadius: "15px" }}>
+              <h3>👤 Perfil</h3>
+              <p>Consulta tu perfil de estudiante.</p>
+              <button
+                className="btn btn-info"
+                onClick={() => navigate("/perfilestudiante")}
+              >
+                Ver Perfil
+              </button>
+            </div>
+          </div>
+
+          <div className="col-md-6 col-lg-4 mb-4">
+            <div className="card h-100 shadow-sm p-3 text-center" style={{ borderRadius: "15px" }}>
+              <h3>🏆 Recompensas</h3>
+              <p>Consulta tus logros y premios.</p>
+              <button
+                className="btn btn-success"
+                onClick={() => navigate("/recompensas")}
+              >
+                Ver Recompensas
+              </button>
+            </div>
+          </div>
+
+          <div className="col-md-6 col-lg-4 mb-4">
+            <div className="card h-100 shadow-sm p-3 text-center" style={{ borderRadius: "15px" }}>
+              <h3>📈 Mis Progresos</h3>
+              <p>Mira tus avances y aprendizajes.</p>
+              <button
+                className="btn btn-secondary"
+                onClick={() => navigate("/misprogresos")}
+              >
+                Ver Avances
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Botón de cierre de sesión */}
+        <div className="text-center mt-4">
+          <button
+            className="btn btn-danger"
+            onClick={() => navigate("/")}
+          >
+            Cerrar sesión
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
