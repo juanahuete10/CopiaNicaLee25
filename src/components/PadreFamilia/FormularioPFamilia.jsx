@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { FaHome } from 'react-icons/fa';
 
 const FormularioPFamilia = () => {
@@ -54,7 +54,7 @@ const FormularioPFamilia = () => {
       apellido: !apellido.trim(),
       gradoHijos: !gradoHijos,
       cuantosHijosEstudian: !cuantosHijosEstudian,
-      localidad: !localidad.trim(),
+      localidad: !localidad,
       genero: !genero,
       imagen: !imagen,
       fechaNacimiento: !fechaNacimiento,
@@ -127,7 +127,20 @@ const FormularioPFamilia = () => {
 
           <Input type="text" placeholder="Edad" value={fechaNacimiento ? calcularEdad(fechaNacimiento) : ''} disabled />
 
-          <Input type="text" placeholder="Localidad" value={localidad} onChange={(e) => setLocalidad(e.target.value)} />
+          <Select value={localidad} onChange={(e) => setLocalidad(e.target.value)}>
+            <option value="">Selecciona Localidad</option>
+            <option value="Juigalpa">Juigalpa</option>
+            <option value="Tecolostote">Tecolostote</option>
+            <option value="Boaco">Boaco</option>
+            <option value="San Lorenzo">San Lorenzo</option>
+            <option value="Santo Tómas">Santo Tómas</option>
+            <option value="Managua">Managua</option>
+            <option value="San Esteban">San Esteban</option>
+            <option value="Matagalpa">Matagalpa</option>
+            <option value="Camoapa">Camoapa</option>
+            <option value="Estelí">Estelí</option>
+            <option value="Otra">Otra</option>
+          </Select>
           {errores.localidad && <ErrorText>¡La localidad es obligatoria!</ErrorText>}
 
           <Select value={genero} onChange={(e) => setGenero(e.target.value)}>
@@ -137,7 +150,12 @@ const FormularioPFamilia = () => {
           </Select>
           {errores.genero && <ErrorText>¡El género es obligatorio!</ErrorText>}
 
-          <Input type="number" placeholder="¿Cuántos hijos estudian?" value={cuantosHijosEstudian} onChange={(e) => setCuantosHijosEstudian(e.target.value)} />
+          <Input
+            type="number"
+            placeholder="¿Cuántos hijos estudian?"
+            value={cuantosHijosEstudian}
+            onChange={(e) => setCuantosHijosEstudian(e.target.value)}
+          />
           {errores.cuantosHijosEstudian && <ErrorText>¡Este campo es obligatorio!</ErrorText>}
 
           <Select value={gradoHijos} onChange={(e) => setGradoHijos(e.target.value)}>
@@ -166,10 +184,10 @@ const FormularioPFamilia = () => {
 
 export default FormularioPFamilia;
 
-// Estilos llamativos
+// Estilos con título más pequeño y foto más pequeña
 
 const RainbowBackground = styled.div`
-  background: linear-gradient(135deg, #005f99, #007acc, #00aaff, #66ccff);
+  background: linear-gradient(135deg, #00aaff, #ffffff);
   min-height: 100vh;
   padding: 3rem 1rem;
   display: flex;
@@ -230,141 +248,126 @@ const Decorations = styled.div`
 const FormCard = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1.3rem;
+  gap: 1rem;
 `;
 
 const Title = styled.h2`
   text-align: center;
-  font-size: 2.4rem;
-  color: #004466;
+  font-size: 1.8rem;   /* título más pequeño */
   font-weight: 700;
-  text-shadow: 2px 2px 6px #00aaffaa;
-  user-select: none;
-`;
-
-const Input = styled.input`
-  padding: 0.85rem 1rem;
-  border-radius: 18px;
-  border: 3px solid #00aaff;
-  background-color: #e0f4ff;
-  font-size: 1.1rem;
-  color: #003355;
-  font-weight: 600;
-  box-shadow: inset 0 3px 6px #aaddffaa;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  &:focus {
-    outline: none;
-    border-color: #0077cc;
-    box-shadow: 0 0 8px #00aaffcc;
-    background-color: #ccf0ff;
-  }
-`;
-
-const Select = styled.select`
-  padding: 0.85rem 1rem;
-  border-radius: 18px;
-  border: 3px solid #00aaff;
-  background-color: #e0f4ff;
-  font-size: 1.1rem;
-  color: #003355;
-  font-weight: 600;
-  box-shadow: inset 0 3px 6px #aaddffaa;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  &:focus {
-    outline: none;
-    border-color: #0077cc;
-    box-shadow: 0 0 8px #00aaffcc;
-    background-color: #ccf0ff;
-  }
-`;
-
-const glow = keyframes`
-  0% {
-    box-shadow: 0 0 5px #00aaff88, 0 0 15px #00aaff88;
-  }
-  50% {
-    box-shadow: 0 0 15px #00cfffcc, 0 0 25px #00cfffcc;
-  }
-  100% {
-    box-shadow: 0 0 5px #00aaff88, 0 0 15px #00aaff88;
-  }
-`;
-
-const Button = styled.button`
-  background: linear-gradient(45deg, #0077cc, #00aaff, #0099ff);
-  color: white;
-  padding: 1rem 0;
-  border: none;
-  border-radius: 25px;
-  font-weight: 700;
-  font-size: 1.25rem;
-  cursor: pointer;
-  box-shadow: 0 0 10px #00aaffcc;
-  animation: ${glow} 3s ease-in-out infinite;
-  transition: background 0.3s ease;
-  user-select: none;
-  &:hover {
-    background: linear-gradient(45deg, #005fa3, #0088cc, #006699);
-    box-shadow: 0 0 20px #00ccffdd;
-  }
+  color: #0077cc;
+  text-shadow: 1px 1px 3px #00aaff88;
+  margin-bottom: 1.2rem;
 `;
 
 const ImagePreview = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.6rem;
-  input[type="file"] {
+  justify-content: center;
+  gap: 0.8rem;
+
+  img {
+    width: 100px;   /* imagen más pequeña */
+    height: 100px;  /* imagen más pequeña */
+    border-radius: 50px;
+    object-fit: cover;
     cursor: pointer;
-    border-radius: 15px;
-    border: 2px dashed #0077cc;
-    padding: 0.4rem 0.8rem;
-    background-color: #ccf0ff;
-    font-weight: 600;
-    color: #004466;
-    transition: background-color 0.3s ease;
+    box-shadow: 0 0 12px #0077ccaa;
+    transition: box-shadow 0.3s ease;
     &:hover {
-      background-color: #99ddff;
+      box-shadow: 0 0 18px #00aaffcc;
     }
   }
-  img {
-    max-width: 160px;
-    max-height: 160px;
-    border-radius: 30px;
-    cursor: pointer;
-    box-shadow: 0 0 15px #00aaffcc;
-    border: 3px solid #00aaff;
-    object-fit: cover;
-  }
+
   p {
-    font-size: 1.3rem;
-    color: #005f99;
-    user-select: none;
+    font-size: 1rem;
+    color: #0077ccbb;
+  }
+
+  input[type='file'] {
+    cursor: pointer;
+    border-radius: 25px;
+    border: 2px solid #0077cc;
+    padding: 0.3rem 0.8rem;
+    font-weight: 600;
+    color: #004466;
+    background: #ccf0ffdd;
+    transition: background-color 0.3s ease;
+    &:hover {
+      background: #a0d7ffdd;
+    }
+  }
+`;
+
+const Input = styled.input`
+  padding: 0.75rem 1.2rem;
+  font-size: 1.1rem;
+  border-radius: 25px;
+  border: 2px solid #0077ccaa;
+  outline: none;
+  transition: border-color 0.3s ease;
+  &:focus {
+    border-color: #00aaffcc;
+  }
+`;
+
+const Select = styled.select`
+  padding: 0.7rem 1.2rem;
+  font-size: 1.1rem;
+  border-radius: 25px;
+  border: 2px solid #0077ccaa;
+  background: white;
+  color: #004466;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.3s ease;
+  &:focus {
+    border-color: #00aaffcc;
+  }
+`;
+
+const Button = styled.button`
+  margin-top: 1.5rem;
+  padding: 1rem 2rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: white;
+  background: linear-gradient(135deg, #00aaff, #0077cc);
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: 0 6px 12px #0077ccbb;
+  transition: background 0.3s ease;
+  &:hover {
+    background: linear-gradient(135deg, #0077cc, #004466);
   }
 `;
 
 const ErrorText = styled.span`
-  color: #dd3333;
-  font-weight: 700;
+  color: #cc3300;
+  font-weight: 600;
   font-size: 0.9rem;
-  user-select: none;
+  margin-left: 0.5rem;
 `;
 
 const FullImageOverlay = styled.div`
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background-color: #000000cc;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: zoom-out;
-  z-index: 999;
+  z-index: 2000;
 `;
 
 const FullImage = styled.img`
-  max-width: 95vw;
-  max-height: 95vh;
-  border-radius: 30px;
-  box-shadow: 0 0 30px 8px #00aaffcc;
-  user-select: none;
+  max-width: 90vw;
+  max-height: 90vh;
+  border-radius: 20px;
+  box-shadow: 0 0 30px 10px #00aaffcc;
 `;

@@ -15,10 +15,10 @@ const DashboardNiño = ({ uid }) => {
       style={{
         display: "flex",
         minHeight: "100vh",
-        background: "linear-gradient(135deg, #66ccff, #ffcc66)",
+        background: "linear-gradient(135deg, #00bfff, #ffffff)", // celeste encendido a blanco
         padding: "10px",
         boxSizing: "border-box",
-        marginTop: "35px"
+        marginTop: "35px",
       }}
     >
       {/* Menú lateral */}
@@ -41,7 +41,6 @@ const DashboardNiño = ({ uid }) => {
           <li style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => navigate("/juegos")}>🎮 Juegos</li>
           <li style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => navigate("/perfilestudiante")}>👤 Perfil</li>
           <li style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => navigate("/recompensas")}>🏆 Recompensas</li>
-        
         </ul>
       </div>
 
@@ -65,7 +64,7 @@ const DashboardNiño = ({ uid }) => {
             top: 20,
             left: 20,
             zIndex: 1000,
-            backgroundColor: "#66ccff",
+            backgroundColor: "#00bfff",
             border: "none",
             padding: "10px 15px",
             borderRadius: "5px",

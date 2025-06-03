@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { FaHome } from 'react-icons/fa';
 
@@ -12,6 +12,7 @@ const EstudianteFormularios = () => {
   const [intereses, setIntereses] = useState([]);
   const [nivelEducativo, setNivelEducativo] = useState('');
   const [ubicacion, setUbicacion] = useState('');
+  const [ubicacionOtra, setUbicacionOtra] = useState('');
   const [genero, setGenero] = useState('');
   const [imagen, setImagen] = useState(null);
   const [verImagenCompleta, setVerImagenCompleta] = useState(false);
@@ -47,13 +48,15 @@ const EstudianteFormularios = () => {
   };
 
   const handleRegistro = () => {
+    const ubicacionFinal = ubicacion === 'Otra' ? ubicacionOtra.trim() : ubicacion;
+
     const newErrores = {
       nombre: !nombre,
       apellido: !apellido,
       grado: !grado,
       intereses: intereses.length === 0,
       nivelEducativo: !nivelEducativo,
-      ubicacion: !ubicacion,
+      ubicacion: !ubicacionFinal,
       genero: !genero,
       imagen: !imagen,
       fechaNacimiento: !fechaNacimiento,
@@ -74,7 +77,7 @@ const EstudianteFormularios = () => {
       grado,
       intereses,
       nivelEducativo,
-      ubicacion,
+      ubicacion: ubicacionFinal,
       genero,
       imagen,
     };
@@ -90,7 +93,7 @@ const EstudianteFormularios = () => {
     <Fondo>
       <Contenedor>
         <BotonRegresar onClick={handleRegresarInicio} title="Volver al inicio">
-          <FaHome size={28} />
+          <FaHome size={30} />
         </BotonRegresar>
 
         <Decoraciones>
@@ -112,28 +115,16 @@ const EstudianteFormularios = () => {
               title="Haz clic para ver grande"
             />
           ) : (
-            <p>📸 ¡Sube tu foto divertida!</p>
+            <p>📸 ¡Sube tu foto !</p>
           )}
           <input type="file" accept="image/*" onChange={pickImage} />
           {errores.imagen && <ErrorFoto>¡No olvides subir tu foto! 🌟</ErrorFoto>}
         </VistaImagen>
 
-        <Input
-          type="text"
-          placeholder="Nombre"
-          value={nombre}
-          onChange={(e) => setNombre(e.target.value)}
-          maxLength={20}
-        />
+        <Input type="text" placeholder="Nombre" value={nombre} onChange={(e) => setNombre(e.target.value)} />
         {errores.nombre && <Error>¡Por favor, escribe tu nombre! 🥳</Error>}
 
-        <Input
-          type="text"
-          placeholder="Apellido"
-          value={apellido}
-          onChange={(e) => setApellido(e.target.value)}
-          maxLength={20}
-        />
+        <Input type="text" placeholder="Apellido" value={apellido} onChange={(e) => setApellido(e.target.value)} />
         {errores.apellido && <Error>¡Tu apellido también es importante! 🎈</Error>}
 
         <Input
@@ -168,7 +159,7 @@ const EstudianteFormularios = () => {
         </Select>
         {errores.nivelEducativo && <Error>¡Elige tu nivel educativo! 📚</Error>}
 
-        <label style={{ fontWeight: 'bold', marginBottom: '5px', color: '#ff66cc' }}>
+        <label style={{ fontWeight: 'bold', marginBottom: '5px', color: '#000000' }}>
           Selecciona tus intereses:
         </label>
         <Select
@@ -189,12 +180,28 @@ const EstudianteFormularios = () => {
         </Select>
         {errores.intereses && <Error>¡Elige al menos un interés! 🌟</Error>}
 
-        <Input
-          type="text"
-          placeholder="¿Dónde vives?"
-          value={ubicacion}
-          onChange={(e) => setUbicacion(e.target.value)}
-        />
+        <Select value={ubicacion} onChange={(e) => setUbicacion(e.target.value)}>
+          <option value="">Selecciona tu localidad</option>
+          <option value="Juigalpa">Juigalpa</option>
+          <option value="Tecolostote">Tecolostote</option>
+          <option value="Boaco">Boaco</option>
+          <option value="San Lorenzo">San Lorenzo</option>
+          <option value="Santo Tómas">Santo Tómas</option>
+          <option value="Managua">Managua</option>
+          <option value="San Esteban">San Esteban</option>
+          <option value="Matagalpa">Matagalpa</option>
+          <option value="Camoapa">Camoapa</option>
+          <option value="Estelí">Estelí</option>
+          <option value="Otra">Otra</option>
+        </Select>
+        {ubicacion === 'Otra' && (
+          <Input
+            type="text"
+            placeholder="Escribe tu localidad"
+            value={ubicacionOtra}
+            onChange={(e) => setUbicacionOtra(e.target.value)}
+          />
+        )}
         {errores.ubicacion && <Error>¡La ubicación es necesaria! 📍</Error>}
 
         <Select value={genero} onChange={(e) => setGenero(e.target.value)}>
@@ -219,166 +226,114 @@ const EstudianteFormularios = () => {
 
 export default EstudianteFormularios;
 
-// Animaciones
-const bounce = keyframes`
-  0%, 20%, 50%, 80%, 100% {
-    transform: translateY(0);
-  } 
-  40% {
-    transform: translateY(-15px);
-  } 
-  60% {
-    transform: translateY(-8px);
-  }
-`;
-
 const Fondo = styled.div`
-  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
   min-height: 100vh;
+  background: linear-gradient(135deg, #00aaff 0%, #ffffff 100%);
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
-  font-family: 'Comic Sans MS', cursive, sans-serif;
+  padding: 30px;
 `;
 
 const Contenedor = styled.div`
-  background: #fff3f8;
-  width: 650px;
-  max-width: 95vw;
-  padding: 40px 35px 50px 35px;
-  border-radius: 35px;
-  border: 6px solid;
-  border-image: linear-gradient(45deg, #ff66cc, #ff3399) 1;
-  box-shadow: 0 0 30px #ff66cc;
+  max-width: 600px;
+  width: 100%;
+  background: #ffffffcc;
+  padding: 25px 35px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 170, 255, 0.3);
+  text-align: center;
   position: relative;
-  box-sizing: border-box;
-
-  &:hover {
-    box-shadow: 0 0 50px #ff33aa;
-    transform: scale(1.03);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
 `;
 
-const Titulo = styled.h1`
-  text-align: center;
-  font-size: 36px;
-  color: #ff3399;
-  margin-bottom: 25px;
-  text-shadow: 2px 2px 6px #ff66cc;
-  user-select: none;
+const Titulo = styled.h2`
+  margin-bottom: 20px;
+  font-size: 2.3rem;
+  color: #004466;
 `;
 
 const Input = styled.input`
   width: 100%;
-  padding: 14px 18px;
-  margin-bottom: 15px;
-  border-radius: 25px;
-  border: 2px solid #ff99cc;
-  background: #fff0f6;
-  box-shadow: inset 3px 3px 8px #ffb3d9;
+  padding: 12px 15px;
+  margin: 10px 0 6px 0;
   font-size: 16px;
-  color: #aa0066;
+  border-radius: 20px;  /* aquí más redondeado */
+  border: 1.8px solid #00aaff;
   outline: none;
-  transition: border-color 0.3s;
-
   &:focus {
-    border-color: #ff3399;
-    box-shadow: 0 0 8px #ff3399;
-    background: #ffe6f2;
+    border-color: #005577;
   }
 `;
 
 const Select = styled.select`
   width: 100%;
-  padding: 14px 18px;
-  margin-bottom: 15px;
-  border-radius: 25px;
-  border: 2px solid #ff99cc;
-  background: #fff0f6;
-  box-shadow: inset 3px 3px 8px #ffb3d9;
+  padding: 10px 14px;
+  margin: 10px 0 6px 0;
   font-size: 16px;
-  color: #aa0066;
+  border-radius: 20px; /* aquí más redondeado */
+  border: 1.8px solid #00aaff;
+  background: white;
   outline: none;
-  transition: border-color 0.3s;
-
   &:focus {
-    border-color: #ff3399;
-    box-shadow: 0 0 8px #ff3399;
-    background: #ffe6f2;
+    border-color: #005577;
   }
 `;
 
+
 const Boton = styled.button`
-  background: linear-gradient(45deg, #ff66cc, #ff3399);
+  margin-top: 18px;
+  background: #0088dd;
   color: white;
-  font-weight: 700;
-  font-size: 22px;
-  width: 100%;
-  padding: 15px 0;
-  border-radius: 30px;
+  font-weight: bold;
   border: none;
+  padding: 14px 0;
+  width: 100%;
+  border-radius: 12px;
+  font-size: 1.2rem;
   cursor: pointer;
-  box-shadow: 0 6px 12px #ff3399;
-  transition: background 0.3s, transform 0.2s;
-  user-select: none;
-
+  transition: background 0.3s ease;
   &:hover {
-    background: linear-gradient(45deg, #ff3399, #ff66cc);
-    transform: scale(1.05);
-  }
-
-  &:active {
-    transform: scale(0.95);
+    background: #005577;
   }
 `;
 
 const Error = styled.p`
-  color: #d1006c;
-  font-weight: 700;
-  margin-top: -12px;
-  margin-bottom: 12px;
-  font-size: 14px;
-  user-select: none;
-  animation: ${bounce} 1.5s;
+  margin: 0 0 10px 0;
+  font-size: 13px;
+  color: #ff4444;
+  font-weight: 600;
 `;
 
-const ErrorFoto = styled(Error)`
-  text-align: center;
+const ErrorFoto = styled.p`
+  font-size: 13px;
+  color: #cc0000;
+  font-weight: 600;
+  margin-top: 4px;
 `;
 
 const VistaImagen = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 25px;
-
+  margin-bottom: 15px;
   img {
-    width: 140px;
-    height: 140px;
-    border-radius: 50%;
-    border: 4px solid #ff66cc;
-    cursor: pointer;
-    box-shadow: 0 0 15px #ff66cc;
+    width: 100px;
+    height: 100px;
+    border-radius: 15px;
     object-fit: cover;
-    margin-bottom: 10px;
+    cursor: pointer;
+    border: 3px solid #00aaff;
+    margin-bottom: 8px;
     transition: transform 0.3s ease;
-
     &:hover {
-      transform: scale(1.12);
+      transform: scale(1.07);
+      border-color: #005577;
     }
   }
-
   p {
-    font-size: 18px;
-    color: #ff3399;
-    margin-bottom: 10px;
-    user-select: none;
+    font-size: 16px;
+    color: #555;
   }
-
-  input[type="file"] {
-    cursor: pointer;
+  input[type='file'] {
+    display: block;
+    margin: 8px auto 0 auto;
   }
 `;
 
@@ -386,13 +341,13 @@ const Overlay = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(255, 20, 147, 0.85);
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.8);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 10;
+  z-index: 9999;
   cursor: pointer;
 `;
 
@@ -400,29 +355,26 @@ const ImagenGrande = styled.img`
   max-width: 90%;
   max-height: 90%;
   border-radius: 20px;
-  box-shadow: 0 0 40pxrgb(51, 241, 255);
 `;
 
 const BotonRegresar = styled.button`
   position: absolute;
-  top: 15px;
-  left: 15px;
+  top: 20px;
+  left: 20px;
   background: transparent;
   border: none;
-  color:rgb(51, 156, 255);
+  color: #004466;
   cursor: pointer;
-  transition: color 0.3s;
-  user-select: none;
-
+  transition: color 0.3s ease;
   &:hover {
-    color: #ff66cc;
+    color: #00aaff;
   }
 `;
 
 const Decoraciones = styled.div`
-  display: flex;
-  justify-content: space-around;
-  margin-bottom: 15px;
-  font-size: 30px;
-  user-select: none;
+  font-size: 28px;
+  margin-bottom: 18px;
+  > span {
+    margin: 0 8px;
+  }
 `;

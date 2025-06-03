@@ -10,12 +10,19 @@ function FormularioDocente() {
   const [apellido, setApellido] = useState('');
   const [fechaNacimiento, setFechaNacimiento] = useState('');
   const [edad, setEdad] = useState('');
-  const [genero, setGenero] = useState('masculino');
+  const [genero, setGenero] = useState('');
+  const [localidad, setLocalidad] = useState('');
+  const [localidadOtra, setLocalidadOtra] = useState('');
   const [fotoPerfil, setFotoPerfil] = useState(null);
   const [previewFoto, setPreviewFoto] = useState(null);
   const [errores, setErrores] = useState({});
   const [registroExitoso, setRegistroExitoso] = useState(false);
   const navigate = useNavigate();
+
+  const localidades = [
+    "Juigalpa", "Tecolostote", "Boaco", "San Lorenzo", "Santo Tómas",
+    "Managua", "San Esteban", "Matagalpa", "Camoapa", "Estelí"
+  ];
 
   const calcularEdad = (fecha) => {
     const hoy = new Date();
@@ -33,6 +40,8 @@ function FormularioDocente() {
     if (!nombre.trim()) erroresTemp.nombre = 'El nombre es obligatorio';
     if (!apellido.trim()) erroresTemp.apellido = 'El apellido es obligatorio';
     if (!fechaNacimiento) erroresTemp.fechaNacimiento = 'La fecha de nacimiento es obligatoria';
+    if (!localidad) erroresTemp.localidad = 'La localidad es obligatoria';
+    if (localidad === 'otra' && !localidadOtra.trim()) erroresTemp.localidadOtra = 'Por favor escribe tu localidad';
     setErrores(erroresTemp);
     return Object.keys(erroresTemp).length === 0;
   };
@@ -74,6 +83,8 @@ function FormularioDocente() {
         urlFoto = await getDownloadURL(storageRef);
       }
 
+      const localidadFinal = localidad === 'otra' ? localidadOtra.trim() : localidad;
+
       await addDoc(collection(db, 'docentes'), {
         uid: user.uid,
         nombre,
@@ -81,6 +92,7 @@ function FormularioDocente() {
         fechaNacimiento,
         edad,
         genero,
+        localidad: localidadFinal,
         fotoPerfil: urlFoto,
         creadoEn: new Date()
       });
@@ -99,226 +111,184 @@ function FormularioDocente() {
     <div
       style={{
         minHeight: '100vh',
-        position: 'relative',
-        overflow: 'hidden',
-        background: 'linear-gradient(135deg, #a3d8f4, #71b7e6, #d0ebff)', // Degradado celeste suave
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         padding: '2rem',
-        color: '#004466', // texto en azul oscuro para buen contraste
-        fontWeight: 'bold',
-        fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+        position: 'relative',
+        background: 'linear-gradient(135deg, #00bfff 0%, #e6f2ff 100%)',
       }}
     >
-      {/* SVG decorativo - dibujos blancos y celestes */}
-      <svg
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100vw',
-          height: '100vh',
-          zIndex: 0,
-          pointerEvents: 'none',
-          opacity: 0.12,
-        }}
-        viewBox="0 0 800 600"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <circle cx="150" cy="150" r="100" fill="#d0ebff" />
-        <circle cx="650" cy="450" r="120" fill="#71b7e6" />
-        <rect x="350" y="200" width="100" height="100" fill="#a3d8f4" rx="20" ry="20" />
-        <polygon points="700,100 750,180 650,180" fill="#d0ebff" />
-        <line
-          x1="100"
-          y1="500"
-          x2="700"
-          y2="500"
-          stroke="#71b7e6"
-          strokeWidth="5"
-          strokeDasharray="15 10"
-        />
-      </svg>
-
-      {/* Ícono de Home */}
       <div
-        onClick={() => navigate('/')}
         style={{
-          position: 'fixed',
-          top: '20px',
-          left: '20px',
+          position: 'absolute',
+          top: '1rem',
+          left: '1rem',
           cursor: 'pointer',
-          zIndex: 9999,
-          color: '#004466',
+          color: '#004080',
+          zIndex: 5
         }}
+        onClick={() => navigate('/')}
+        title="Volver a inicio"
       >
-        <FaHome size={30} />
+        <FaHome size={28} />
       </div>
 
-      {/* Formulario con glassmorphism blanco translúcido */}
       <div
         style={{
-          position: 'relative',
-          backgroundColor: 'rgba(255, 255, 255, 0.85)', // blanco translúcido para mejor contraste
-          borderRadius: '20px',
-          padding: '3rem', // aumenté padding
-          boxShadow: '0 8px 32px 0 rgba(0, 68, 102, 0.25)',
+          background: '#e6f2ff',
+          borderRadius: '30px',
+          border: '4px solid',
+          borderImage: 'linear-gradient(45deg, #4facfe, #00f2fe) 1',
+          padding: '2rem',
+          boxShadow: '0 0 15px rgba(0, 102, 255, 0.5)',
           width: '100%',
-          maxWidth: 'px',  // aumenté maxWidth para panel más grande
-          border: '1px solid rgba(0, 68, 102, 0.3)',
-          backdropFilter: 'blur(8px)',
-          WebkitBackdropFilter: 'blur(8px)',
-          color: '#004466',
-          zIndex: 10,
+          maxWidth: '600px',
+          zIndex: 2
         }}
       >
-        <h2 className="text-center mb-4" style={{ color: '#004466' }}>
-          Registro de Docente
-        </h2>
-
-        <div className="mb-3">
-          <label className="form-label">Foto de Perfil</label>
-          <input
-            type="file"
-            accept="image/*"
-            className="form-control"
-            onChange={handleFotoChange}
-            style={{
-              border: '2px solid #71b7e6',
-              borderRadius: '8px',
-              color: '#004466',
-            }}
-          />
-        </div>
-
-        {previewFoto && (
-          <div className="mb-3 text-center">
-            <img
-              src={previewFoto}
-              alt="Vista previa"
-              className="img-thumbnail"
-              style={{
-                maxWidth: '120px',
-                borderRadius: '50%',
-                border: '3px solid #71b7e6',
-              }}
-            />
-          </div>
-        )}
-
-        {registroExitoso && (
-          <div className="alert alert-success text-center" style={{ color: '#0077cc' }}>
-            ¡Registro exitoso! Redirigiendo...
-          </div>
-        )}
+        <div style={{ textAlign: 'center', marginBottom: '1rem', fontSize: '2rem' }}>🎓👩‍🏫📘</div>
+        <h2 style={{ textAlign: 'center', marginBottom: '1.5rem', color: '#004080' }}>Registro de Docente</h2>
 
         <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label className="form-label">Nombre</label>
-            <input
-              type="text"
-              className={`form-control ${errores.nombre ? 'is-invalid' : ''}`}
-              value={nombre}
-              onChange={(e) => setNombre(e.target.value)}
-              placeholder="Escribe tu nombre"
-              style={{
-                border: '2px solid #71b7e6',
-                borderRadius: '8px',
-                color: '#004466',
-              }}
-            />
-            {errores.nombre && <div className="invalid-feedback">{errores.nombre}</div>}
+          <div style={{ marginBottom: '1rem' }}>
+            <label style={{ fontWeight: 'bold', color: '#004080', display: 'block', marginBottom: '0.5rem', textAlign: 'center' }}>
+              📸 ¡Sube tu foto!
+            </label>
+            <div style={{ textAlign: 'center' }}>
+              <input type="file" accept="image/*" onChange={handleFotoChange} />
+            </div>
+            {previewFoto && (
+              <div style={{ textAlign: 'center', marginTop: '1rem' }}>
+                <img
+                  src={previewFoto}
+                  alt="Preview"
+                  style={{
+                    width: '120px',
+                    height: '120px',
+                    borderRadius: '50%',
+                    boxShadow: '0 0 10px rgba(0, 132, 255, 0.8)',
+                    objectFit: 'cover'
+                  }}
+                />
+              </div>
+            )}
           </div>
 
-          <div className="mb-3">
-            <label className="form-label">Apellido</label>
-            <input
-              type="text"
-              className={`form-control ${errores.apellido ? 'is-invalid' : ''}`}
-              value={apellido}
-              onChange={(e) => setApellido(e.target.value)}
-              placeholder="Escribe tu apellido"
-              style={{
-                border: '2px solid #71b7e6',
-                borderRadius: '8px',
-                color: '#004466',
-              }}
-            />
-            {errores.apellido && <div className="invalid-feedback">{errores.apellido}</div>}
-          </div>
+          <input
+            type="text"
+            value={nombre}
+            onChange={(e) => setNombre(e.target.value)}
+            placeholder="Nombre"
+            style={inputStyle(errores.nombre)}
+          />
+          {errores.nombre && <div style={errorStyle}>{errores.nombre}</div>}
 
-          <div className="mb-3">
-            <label className="form-label">Fecha de Nacimiento</label>
-            <input
-              type="date"
-              className={`form-control ${errores.fechaNacimiento ? 'is-invalid' : ''}`}
-              value={fechaNacimiento}
-              onChange={handleFechaNacimientoChange}
-              style={{
-                border: '2px solid #71b7e6',
-                borderRadius: '8px',
-                color: '#004466',
-              }}
-            />
-            {errores.fechaNacimiento && <div className="invalid-feedback">{errores.fechaNacimiento}</div>}
-          </div>
+          <input
+            type="text"
+            value={apellido}
+            onChange={(e) => setApellido(e.target.value)}
+            placeholder="Apellido"
+            style={inputStyle(errores.apellido)}
+          />
+          {errores.apellido && <div style={errorStyle}>{errores.apellido}</div>}
 
-          <div className="mb-3">
-            <label className="form-label">Edad</label>
-            <input
-              type="number"
-              className="form-control"
-              value={edad}
-              readOnly
-              style={{
-                border: '2px solid #71b7e6',
-                borderRadius: '8px',
-                backgroundColor: '#e0f0ff',
-                color: '#004466',
-              }}
-            />
-          </div>
+          <input
+            type="date"
+            value={fechaNacimiento}
+            onChange={handleFechaNacimientoChange}
+            style={inputStyle(errores.fechaNacimiento)}
+          />
+          {errores.fechaNacimiento && <div style={errorStyle}>{errores.fechaNacimiento}</div>}
 
-          <div className="mb-3">
-            <label className="form-label">Género</label>
-            <select
-              className="form-control"
-              value={genero}
-              onChange={(e) => setGenero(e.target.value)}
-              style={{
-                border: '2px solid #71b7e6',
-                borderRadius: '8px',
-                color: '#004466',
-              }}
-            >
-              <option value="masculino">Masculino</option>
-              <option value="femenino">Femenino</option>
-              <option value="otro">Otro</option>
-            </select>
-          </div>
+          <input
+            type="number"
+            value={edad}
+            readOnly
+            style={inputStyle()}
+            placeholder="Edad"
+          />
 
-          <button
-            type="submit"
-            className="btn w-100"
-            style={{
-              backgroundColor: '#004466',
-              color: 'white',
-              borderRadius: '8px',
-              fontWeight: 'bold',
-              fontSize: '1.1rem',
-              padding: '0.5rem',
-              transition: 'background-color 0.3s ease',
-            }}
-            onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#0077cc')}
-            onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '#004466')}
+          <select
+            value={localidad}
+            onChange={(e) => setLocalidad(e.target.value)}
+            style={inputStyle(errores.localidad)}
           >
-            Registrar Docente
-          </button>
+            <option value="">Selecciona tu localidad</option>
+            {localidades.map((loc) => (
+              <option key={loc} value={loc}>{loc}</option>
+            ))}
+            <option value="otra">Otra</option>
+          </select>
+          {errores.localidad && <div style={errorStyle}>{errores.localidad}</div>}
+
+          {localidad === 'otra' && (
+            <input
+              type="text"
+              value={localidadOtra}
+              onChange={(e) => setLocalidadOtra(e.target.value)}
+              placeholder="Escribe tu localidad"
+              style={inputStyle(errores.localidadOtra)}
+            />
+          )}
+          {errores.localidadOtra && <div style={errorStyle}>{errores.localidadOtra}</div>}
+
+          <select
+            value={genero}
+            onChange={(e) => setGenero(e.target.value)}
+            style={inputStyle()}
+          >
+            <option value="">Género</option>
+            <option value="masculino">Masculino</option>
+            <option value="femenino">Femenino</option>
+            <option value="otro">Otro</option>
+          </select>
+
+          <button type="submit" style={submitButtonStyle}>Registrar</button>
+
+          {registroExitoso && (
+            <div style={{ marginTop: '1rem', color: '#004080', textAlign: 'center' }}>
+              ¡Registro exitoso! Redirigiendo...
+            </div>
+          )}
         </form>
       </div>
     </div>
   );
 }
+
+// 🔧 ESTILOS
+const inputStyle = (error = false) => ({
+  width: '100%',
+  padding: '14px 16px',
+  borderRadius: '20px',
+  border: `2px solid ${error ? 'red' : '#a3cfff'}`,
+  backgroundColor: '#ffffff', // Fondo blanco
+  boxShadow: 'inset 0 0 4px rgba(0,0,0,0.05)',
+  color: '#003366',
+  marginBottom: '0.75rem',
+  fontSize: '1rem'
+});
+
+const errorStyle = {
+  color: 'red',
+  fontSize: '0.85rem',
+  marginBottom: '0.5rem',
+  marginTop: '-0.25rem'
+};
+
+const submitButtonStyle = {
+  width: '100%',
+  padding: '12px',
+  background: 'linear-gradient(90deg, #00d2ff, #3a7bd5)',
+  border: 'none',
+  borderRadius: '20px',
+  color: 'white',
+  fontWeight: 'bold',
+  fontSize: '1rem',
+  cursor: 'pointer',
+  marginTop: '1rem',
+  boxShadow: '0 0 10px rgba(0, 102, 255, 0.6)'
+};
 
 export default FormularioDocente;

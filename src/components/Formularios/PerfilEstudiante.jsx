@@ -10,14 +10,14 @@ import {
   Row,
   Col,
   Image,
-  Container
+  Container,
 } from "react-bootstrap";
 
 export default function PerfilEstudiante() {
   const [estudiante, setEstudiante] = useState(null);
   const [editando, setEditando] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [noPerfil, setNoPerfil] = useState(false);
+  const [cargando, setCargando] = useState(true);
 
   const [formData, setFormData] = useState({
     nombre: "",
@@ -30,7 +30,7 @@ export default function PerfilEstudiante() {
     ubicacion: "",
     genero: "",
     correo: "",
-    rol: "estudiante"
+    rol: "estudiante",
   });
 
   useEffect(() => {
@@ -40,7 +40,9 @@ export default function PerfilEstudiante() {
         try {
           const userRef = doc(db, "users", uid);
           const userSnap = await getDoc(userRef);
-          const correo = userSnap.exists() ? userSnap.data().correo || user.email : user.email;
+          const correo = userSnap.exists()
+            ? userSnap.data().correo || user.email
+            : user.email;
 
           const estudianteRef = doc(db, "estudiantes", uid);
           const estudianteSnap = await getDoc(estudianteRef);
@@ -50,14 +52,12 @@ export default function PerfilEstudiante() {
             setEstudiante({ id: uid, ...data });
             setFormData({
               ...data,
-              correo: correo,
-              rol: "estudiante"
+              correo,
+              rol: "estudiante",
             });
-            setNoPerfil(false);
           } else {
-            setEstudiante(null);
-            setNoPerfil(true);
-            setFormData({
+            // Si no existe perfil, crear uno básico automáticamente
+            const perfilInicial = {
               nombre: "",
               apellido: "",
               edad: "",
@@ -67,17 +67,23 @@ export default function PerfilEstudiante() {
               nivelEducativo: "",
               ubicacion: "",
               genero: "",
-              correo: correo,
-              rol: "estudiante"
+            };
+            await setDoc(estudianteRef, perfilInicial);
+            setEstudiante({ id: uid, ...perfilInicial });
+            setFormData({
+              ...perfilInicial,
+              correo,
+              rol: "estudiante",
             });
           }
         } catch (error) {
           console.error("❌ Error cargando datos del perfil:", error);
+          alert("❌ Error cargando perfil.");
         }
       } else {
         setEstudiante(null);
-        setNoPerfil(false);
       }
+      setCargando(false);
     });
     return () => unsubscribe();
   }, []);
@@ -86,7 +92,7 @@ export default function PerfilEstudiante() {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -107,30 +113,6 @@ export default function PerfilEstudiante() {
     }
   };
 
-  const crearPerfil = async () => {
-    try {
-      const user = auth.currentUser;
-      if (!user) {
-        alert("❌ No estás autenticado.");
-        return;
-      }
-
-      const uid = user.uid;
-      const datos = { ...formData };
-      delete datos.correo;
-      delete datos.rol;
-
-      const ref = doc(db, "estudiantes", uid); // ✅ Aquí se asegura que 'uid' está definido
-      await setDoc(ref, datos);
-      setEstudiante({ id: uid, ...datos });
-      setNoPerfil(false);
-      alert("✅ Perfil creado correctamente.");
-    } catch (error) {
-      console.error("Error creando perfil:", error);
-      alert("❌ Ocurrió un error al crear el perfil.");
-    }
-  };
-
   const eliminarPerfil = async () => {
     try {
       const ref = doc(db, "estudiantes", estudiante.id);
@@ -143,55 +125,12 @@ export default function PerfilEstudiante() {
     }
   };
 
-  if (noPerfil) {
-    return (
-      <div
-        style={{
-          minHeight: "100vh",
-          background: "linear-gradient(to bottom, #f0f8ff, #ffffff)",
-          padding: "40px 20px"
-        }}
-      >
-        <Container className="d-flex justify-content-center align-items-center flex-column">
-          <Card className="shadow-lg w-100" style={{ maxWidth: "800px" }}>
-            <Card.Body>
-              <h3 className="text-center text-primary mb-4">
-                Crear Perfil de Estudiante
-              </h3>
-              <Form>
-                <Row className="g-3">
-                  {Object.entries(formData).map(([key, value]) => {
-                    if (key === "correo" || key === "rol") return null;
-                    return (
-                      <Col md={6} xs={12} key={key}>
-                        <Form.Group>
-                          <Form.Label className="text-capitalize">{key}</Form.Label>
-                          <Form.Control
-                            type="text"
-                            name={key}
-                            value={value}
-                            onChange={handleChange}
-                          />
-                        </Form.Group>
-                      </Col>
-                    );
-                  })}
-                </Row>
-                <div className="mt-4 text-end">
-                  <Button variant="success" onClick={crearPerfil}>
-                    💾 Crear Perfil
-                  </Button>
-                </div>
-              </Form>
-            </Card.Body>
-          </Card>
-        </Container>
-      </div>
-    );
+  if (cargando) {
+    return <p className="text-center mt-5">🔄 Cargando perfil del estudiante...</p>;
   }
 
   if (!estudiante) {
-    return <p className="text-center mt-5">Cargando perfil...</p>;
+    return <p className="text-center mt-5">❌ No se encontró usuario autenticado.</p>;
   }
 
   return (
@@ -199,7 +138,7 @@ export default function PerfilEstudiante() {
       style={{
         minHeight: "100vh",
         background: "linear-gradient(to bottom, #f0f8ff, #ffffff)",
-        padding: "40px 20px"
+        padding: "40px 20px",
       }}
     >
       <Container className="d-flex justify-content-center align-items-center flex-column">
@@ -215,7 +154,7 @@ export default function PerfilEstudiante() {
               </Col>
               <Col xs={12} md={8}>
                 <h3 className="text-primary fw-bold mb-2">
-                  {formData.nombre} {formData.apellido}
+                  {formData.nombre || "Nombre no definido"} {formData.apellido || ""}
                 </h3>
                 <p className="mb-1">📩 Correo: {formData.correo}</p>
                 <p className="mb-1">🛡️ Rol: {formData.rol}</p>
