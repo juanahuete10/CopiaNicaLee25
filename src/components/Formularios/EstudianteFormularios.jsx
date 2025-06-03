@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { FaHome } from 'react-icons/fa';
 
@@ -15,7 +15,6 @@ const EstudianteFormularios = () => {
   const [genero, setGenero] = useState('');
   const [imagen, setImagen] = useState(null);
   const [verImagenCompleta, setVerImagenCompleta] = useState(false);
-
   const [errores, setErrores] = useState({
     nombre: false,
     apellido: false,
@@ -38,7 +37,7 @@ const EstudianteFormularios = () => {
     setEdad(edadCalculada);
   };
 
-  const pickImage = async (e) => {
+  const pickImage = (e) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
@@ -63,7 +62,7 @@ const EstudianteFormularios = () => {
     setErrores(newErrores);
 
     if (Object.values(newErrores).includes(true)) {
-      alert("Por favor completa todos los campos obligatorios.");
+      alert("¡Ups! Por favor completa todos los campos para continuar.");
       return;
     }
 
@@ -88,258 +87,342 @@ const EstudianteFormularios = () => {
   };
 
   return (
-    <RainbowBackground>
-      <FormWrapper>
-        <BackButton onClick={handleRegresarInicio}>
-          <FaHome size={30} />
-        </BackButton>
+    <Fondo>
+      <Contenedor>
+        <BotonRegresar onClick={handleRegresarInicio} title="Volver al inicio">
+          <FaHome size={28} />
+        </BotonRegresar>
 
-        <Decorations>
-          <span role="img" aria-label="book">📚</span>
-          <span role="img" aria-label="rainbow">🌈</span>
-          <span role="img" aria-label="cloud">☁️</span>
-        </Decorations>
+        <Decoraciones>
+          <span role="img" aria-label="emoji">📚</span>
+          <span role="img" aria-label="emoji">🌈</span>
+          <span role="img" aria-label="emoji">☁️</span>
+          <span role="img" aria-label="emoji">✨</span>
+          <span role="img" aria-label="emoji">🦄</span>
+        </Decoraciones>
 
-        <FormCard>
-          <Title>📚 Registro Estudiantil 📚</Title>
+        <Titulo>🎉 Registro Estudiantil 🎉</Titulo>
 
-          <ImagePreview>
-            {imagen ? (
-              <img
-                src={imagen}
-                alt="Perfil"
-                onClick={() => setVerImagenCompleta(true)}
-              />
-            ) : (
-              <p>📸 ¡Sube tu foto!</p>
-            )}
-            <input type="file" accept="image/*" onChange={pickImage} />
-            {errores.imagen && <ErrorText>¡La foto es obligatoria!</ErrorText>}
-          </ImagePreview>
+        <VistaImagen>
+          {imagen ? (
+            <img
+              src={imagen}
+              alt="Preview"
+              onClick={() => setVerImagenCompleta(true)}
+              title="Haz clic para ver grande"
+            />
+          ) : (
+            <p>📸 ¡Sube tu foto divertida!</p>
+          )}
+          <input type="file" accept="image/*" onChange={pickImage} />
+          {errores.imagen && <ErrorFoto>¡No olvides subir tu foto! 🌟</ErrorFoto>}
+        </VistaImagen>
 
-          <Input type="text" placeholder="Nombre" value={nombre} onChange={(e) => setNombre(e.target.value)} />
-          {errores.nombre && <ErrorText>¡El nombre es obligatorio!</ErrorText>}
+        <Input
+          type="text"
+          placeholder="Nombre"
+          value={nombre}
+          onChange={(e) => setNombre(e.target.value)}
+          maxLength={20}
+        />
+        {errores.nombre && <Error>¡Por favor, escribe tu nombre! 🥳</Error>}
 
-          <Input type="text" placeholder="Apellido" value={apellido} onChange={(e) => setApellido(e.target.value)} />
-          {errores.apellido && <ErrorText>¡El apellido es obligatorio!</ErrorText>}
+        <Input
+          type="text"
+          placeholder="Apellido"
+          value={apellido}
+          onChange={(e) => setApellido(e.target.value)}
+          maxLength={20}
+        />
+        {errores.apellido && <Error>¡Tu apellido también es importante! 🎈</Error>}
 
-          <Input 
-            type="date" 
-            placeholder="Fecha de Nacimiento" 
-            value={fechaNacimiento} 
-            onChange={(e) => {
-              setFechaNacimiento(e.target.value);
-              calcularEdad(e.target.value);
-            }} 
-          />
-          {errores.fechaNacimiento && <ErrorText>¡La fecha de nacimiento es obligatoria!</ErrorText>}
-          
-          <Input type="text" placeholder="Edad" value={edad} disabled />
+        <Input
+          type="date"
+          value={fechaNacimiento}
+          onChange={(e) => {
+            setFechaNacimiento(e.target.value);
+            calcularEdad(e.target.value);
+          }}
+          max={new Date().toISOString().split('T')[0]}
+        />
+        {errores.fechaNacimiento && <Error>¡Dinos cuándo naciste! 🎂</Error>}
 
-          <Select value={grado} onChange={(e) => setGrado(e.target.value)}>
-            <option value="">Grado</option>
-            <option value="Primero">Primero</option>
-            <option value="Segundo">Segundo</option>
-            <option value="Tercero">Tercero</option>
-            <option value="Cuarto">Cuarto</option>
-            <option value="Quinto">Quinto</option>
-            <option value="Sexto">Sexto</option>
-          </Select>
-          {errores.grado && <ErrorText>¡El grado es obligatorio!</ErrorText>}
+        <Input type="text" value={edad} placeholder="Edad" disabled />
 
-          <Select value={nivelEducativo} onChange={(e) => setNivelEducativo(e.target.value)}>
-            <option value="">Nivel Educativo</option>
-            <option value="Inicial">Inicial</option>
-            <option value="Medio">Medio</option>
-            <option value="Avanzado">Avanzado</option>
-          </Select>
-          {errores.nivelEducativo && <ErrorText>¡El nivel educativo es obligatorio!</ErrorText>}
+        <Select value={grado} onChange={(e) => setGrado(e.target.value)}>
+          <option value="">Selecciona tu grado escolar</option>
+          <option value="Primero">Primero</option>
+          <option value="Segundo">Segundo</option>
+          <option value="Tercero">Tercero</option>
+          <option value="Cuarto">Cuarto</option>
+          <option value="Quinto">Quinto</option>
+          <option value="Sexto">Sexto</option>
+        </Select>
+        {errores.grado && <Error>¡Selecciona tu grado! 🏫</Error>}
 
-          <label style={{ fontSize: "14px", marginBottom: "5px", display: "block", textAlign: "left" }}>
-            Selecciona tus intereses:
-          </label>
-          <Select
-            multiple
-            value={intereses}
-            onChange={(e) => {
-              const selectedOptions = Array.from(e.target.selectedOptions).map(option => option.value);
-              setIntereses(selectedOptions);
-            }}
-          >
-            <option value="Lectura">Lectura</option>
-            <option value="Matemáticas">Matemáticas</option>
-            <option value="Ciencias">Ciencias</option>
-            <option value="Juegos">Juegos</option>
-            <option value="Tecnología">Tecnología</option>
-            <option value="Arte">Arte</option>
-          </Select>
-          {errores.intereses && <ErrorText>¡Debes seleccionar al menos un interés!</ErrorText>}
+        <Select value={nivelEducativo} onChange={(e) => setNivelEducativo(e.target.value)}>
+          <option value="">Nivel Educativo</option>
+          <option value="Inicial">Inicial</option>
+          <option value="Medio">Medio</option>
+          <option value="Avanzado">Avanzado</option>
+        </Select>
+        {errores.nivelEducativo && <Error>¡Elige tu nivel educativo! 📚</Error>}
 
-          <Input type="text" placeholder="Ubicación" value={ubicacion} onChange={(e) => setUbicacion(e.target.value)} />
-          {errores.ubicacion && <ErrorText>¡La ubicación es obligatoria!</ErrorText>}
+        <label style={{ fontWeight: 'bold', marginBottom: '5px', color: '#ff66cc' }}>
+          Selecciona tus intereses:
+        </label>
+        <Select
+          multiple
+          value={intereses}
+          onChange={(e) => {
+            const options = Array.from(e.target.selectedOptions).map(op => op.value);
+            setIntereses(options);
+          }}
+          style={{ height: '90px', fontSize: '14px' }}
+        >
+          <option value="Lectura">📖 Lectura</option>
+          <option value="Matemáticas">➗ Matemáticas</option>
+          <option value="Ciencias">🔬 Ciencias</option>
+          <option value="Juegos">🎮 Juegos</option>
+          <option value="Tecnología">💻 Tecnología</option>
+          <option value="Arte">🎨 Arte</option>
+        </Select>
+        {errores.intereses && <Error>¡Elige al menos un interés! 🌟</Error>}
 
-          <Select value={genero} onChange={(e) => setGenero(e.target.value)}>
-            <option value="">Género</option>
-            <option value="Masculino">Masculino</option>
-            <option value="Femenino">Femenino</option>
-          </Select>
-          {errores.genero && <ErrorText>¡El género es obligatorio!</ErrorText>}
+        <Input
+          type="text"
+          placeholder="¿Dónde vives?"
+          value={ubicacion}
+          onChange={(e) => setUbicacion(e.target.value)}
+        />
+        {errores.ubicacion && <Error>¡La ubicación es necesaria! 📍</Error>}
 
-          <Button onClick={handleRegistro}>
-            🚀 Registrar
-          </Button>
-        </FormCard>
+        <Select value={genero} onChange={(e) => setGenero(e.target.value)}>
+          <option value="">Género</option>
+          <option value="Masculino">👦 Masculino</option>
+          <option value="Femenino">👧 Femenino</option>
+          <option value="Otro">🌟 Otro</option>
+        </Select>
+        {errores.genero && <Error>¡Selecciona tu género! 🚀</Error>}
+
+        <Boton onClick={handleRegistro}>🚀 ¡Regístrate y diviértete!</Boton>
 
         {verImagenCompleta && (
-          <FullImageOverlay onClick={() => setVerImagenCompleta(false)}>
-            <FullImage src={imagen} alt="Perfil grande" />
-          </FullImageOverlay>
+          <Overlay onClick={() => setVerImagenCompleta(false)}>
+            <ImagenGrande src={imagen} alt="Imagen completa" />
+          </Overlay>
         )}
-      </FormWrapper>
-    </RainbowBackground>
+      </Contenedor>
+    </Fondo>
   );
 };
 
 export default EstudianteFormularios;
 
+// Animaciones
+const bounce = keyframes`
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  } 
+  40% {
+    transform: translateY(-15px);
+  } 
+  60% {
+    transform: translateY(-8px);
+  }
+`;
 
-// 🎨 ESTILOS
-const RainbowBackground = styled.div`
-  background: linear-gradient(to bottom right,rgb(76, 163, 245),rgb(248, 248, 248),rgb(248, 248, 245),rgb(247, 105, 117), #bdb2ff);
+const Fondo = styled.div`
+  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 30px;
+  padding: 20px;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
 `;
 
-const FormWrapper = styled.div`
-  width: 100%;
-  max-width: 460px;
-  text-align: center;
+const Contenedor = styled.div`
+  background: #fff3f8;
+  width: 650px;
+  max-width: 95vw;
+  padding: 40px 35px 50px 35px;
+  border-radius: 35px;
+  border: 6px solid;
+  border-image: linear-gradient(45deg, #ff66cc, #ff3399) 1;
+  box-shadow: 0 0 30px #ff66cc;
   position: relative;
+  box-sizing: border-box;
+
+  &:hover {
+    box-shadow: 0 0 50px #ff33aa;
+    transform: scale(1.03);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
 `;
 
-const FormCard = styled.div`
-  background: #ffffffd9;
-  backdrop-filter: blur(6px);
-  border-radius: 25px;
-  box-shadow: 0 0 25px rgba(0, 153, 255, 0.3);
-  padding: 30px;
-`;
-
-const Title = styled.h1`
-  font-size: 26px;
-  color: #0077ff;
-  margin-bottom: 20px;
-  font-family: 'Comic Sans MS', cursive;
+const Titulo = styled.h1`
+  text-align: center;
+  font-size: 36px;
+  color: #ff3399;
+  margin-bottom: 25px;
+  text-shadow: 2px 2px 6px #ff66cc;
+  user-select: none;
 `;
 
 const Input = styled.input`
   width: 100%;
-  padding: 12px;
-  margin-bottom: 12px;
-  border: 2px solid #7bdff2;
-  border-radius: 15px;
-  font-size: 14px;
-  background-color: #f3f3f3;
+  padding: 14px 18px;
+  margin-bottom: 15px;
+  border-radius: 25px;
+  border: 2px solid #ff99cc;
+  background: #fff0f6;
+  box-shadow: inset 3px 3px 8px #ffb3d9;
+  font-size: 16px;
+  color: #aa0066;
+  outline: none;
+  transition: border-color 0.3s;
+
+  &:focus {
+    border-color: #ff3399;
+    box-shadow: 0 0 8px #ff3399;
+    background: #ffe6f2;
+  }
 `;
 
 const Select = styled.select`
   width: 100%;
-  padding: 12px;
-  margin-bottom: 12px;
-  border: 2px solid #7bdff2;
-  border-radius: 15px;
-  font-size: 14px;
-  background-color: #f3f3f3;
+  padding: 14px 18px;
+  margin-bottom: 15px;
+  border-radius: 25px;
+  border: 2px solid #ff99cc;
+  background: #fff0f6;
+  box-shadow: inset 3px 3px 8px #ffb3d9;
+  font-size: 16px;
+  color: #aa0066;
+  outline: none;
+  transition: border-color 0.3s;
+
+  &:focus {
+    border-color: #ff3399;
+    box-shadow: 0 0 8px #ff3399;
+    background: #ffe6f2;
+  }
 `;
 
-const Button = styled.button`
-  background-color: #00bbf9;
+const Boton = styled.button`
+  background: linear-gradient(45deg, #ff66cc, #ff3399);
   color: white;
-  font-size: 16px;
-  padding: 12px;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer;
+  font-weight: 700;
+  font-size: 22px;
   width: 100%;
-  font-family: 'Comic Sans MS', cursive;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px; 
-  transition: 0.3s;
+  padding: 15px 0;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 6px 12px #ff3399;
+  transition: background 0.3s, transform 0.2s;
+  user-select: none;
 
   &:hover {
-    background-color: #f15bb5;
+    background: linear-gradient(45deg, #ff3399, #ff66cc);
     transform: scale(1.05);
   }
+
+  &:active {
+    transform: scale(0.95);
+  }
 `;
 
-const ErrorText = styled.p`
-  color: red;
-  font-size: 13px;
-  margin-bottom: 10px;
+const Error = styled.p`
+  color: #d1006c;
+  font-weight: 700;
+  margin-top: -12px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  user-select: none;
+  animation: ${bounce} 1.5s;
 `;
 
-const ImagePreview = styled.div`
-  margin-bottom: 15px;
+const ErrorFoto = styled(Error)`
+  text-align: center;
+`;
+
+const VistaImagen = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 25px;
 
   img {
-    width: 130px; 
-    height: 130px;
+    width: 140px;
+    height: 140px;
     border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid #00bbf9;
+    border: 4px solid #ff66cc;
     cursor: pointer;
-  }
+    box-shadow: 0 0 15px #ff66cc;
+    object-fit: cover;
+    margin-bottom: 10px;
+    transition: transform 0.3s ease;
 
-  input {
-    margin-top: 10px;
-    font-size: 13px;
+    &:hover {
+      transform: scale(1.12);
+    }
   }
 
   p {
-    color: #777;
-    font-size: 14px;
+    font-size: 18px;
+    color: #ff3399;
+    margin-bottom: 10px;
+    user-select: none;
+  }
+
+  input[type="file"] {
+    cursor: pointer;
   }
 `;
 
-const BackButton = styled.div`
-  position: fixed;
-  left: 20px;
-  top: 20px;
-  background-color: rgba(255, 255, 255, 0.7);
-  padding: 10px;
-  border-radius: 50%;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-  cursor: pointer;
-  z-index: 999;
-`;
-
-const Decorations = styled.div`
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  font-size: 24px;
-`;
-
-const FullImageOverlay = styled.div`
+const Overlay = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
+  width: 100vw;
+  height: 100vh;
+  background: rgba(255, 20, 147, 0.85);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 10;
+  cursor: pointer;
 `;
 
-const FullImage = styled.img`
+const ImagenGrande = styled.img`
   max-width: 90%;
   max-height: 90%;
-  object-fit: contain;
+  border-radius: 20px;
+  box-shadow: 0 0 40pxrgb(51, 241, 255);
+`;
+
+const BotonRegresar = styled.button`
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: transparent;
+  border: none;
+  color:rgb(51, 156, 255);
+  cursor: pointer;
+  transition: color 0.3s;
+  user-select: none;
+
+  &:hover {
+    color: #ff66cc;
+  }
+`;
+
+const Decoraciones = styled.div`
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 15px;
+  font-size: 30px;
+  user-select: none;
 `;

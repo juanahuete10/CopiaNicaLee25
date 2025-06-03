@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { db, auth } from "../../database/firebaseConfig";
-import { doc, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc, deleteDoc, setDoc } from "firebase/firestore";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import {
   Button,
@@ -17,6 +17,7 @@ export default function PerfilEstudiante() {
   const [estudiante, setEstudiante] = useState(null);
   const [editando, setEditando] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [noPerfil, setNoPerfil] = useState(false);
 
   const [formData, setFormData] = useState({
     nombre: "",
@@ -29,7 +30,7 @@ export default function PerfilEstudiante() {
     ubicacion: "",
     genero: "",
     correo: "",
-    rol: ""
+    rol: "estudiante"
   });
 
   useEffect(() => {
@@ -37,12 +38,10 @@ export default function PerfilEstudiante() {
       if (user) {
         const uid = user.uid;
         try {
-          // Obtener correo desde colección 'users'
           const userRef = doc(db, "users", uid);
           const userSnap = await getDoc(userRef);
           const correo = userSnap.exists() ? userSnap.data().correo || user.email : user.email;
 
-         
           const estudianteRef = doc(db, "estudiantes", uid);
           const estudianteSnap = await getDoc(estudianteRef);
 
@@ -54,12 +53,30 @@ export default function PerfilEstudiante() {
               correo: correo,
               rol: "estudiante"
             });
+            setNoPerfil(false);
           } else {
-            console.warn("⚠️ No se encontró el perfil en 'estudiantes'");
+            setEstudiante(null);
+            setNoPerfil(true);
+            setFormData({
+              nombre: "",
+              apellido: "",
+              edad: "",
+              fechaNacimiento: "",
+              grado: "",
+              intereses: "",
+              nivelEducativo: "",
+              ubicacion: "",
+              genero: "",
+              correo: correo,
+              rol: "estudiante"
+            });
           }
         } catch (error) {
           console.error("❌ Error cargando datos del perfil:", error);
         }
+      } else {
+        setEstudiante(null);
+        setNoPerfil(false);
       }
     });
     return () => unsubscribe();
@@ -90,18 +107,88 @@ export default function PerfilEstudiante() {
     }
   };
 
+  const crearPerfil = async () => {
+    try {
+      const user = auth.currentUser;
+      if (!user) {
+        alert("❌ No estás autenticado.");
+        return;
+      }
+
+      const uid = user.uid;
+      const datos = { ...formData };
+      delete datos.correo;
+      delete datos.rol;
+
+      const ref = doc(db, "estudiantes", uid); // ✅ Aquí se asegura que 'uid' está definido
+      await setDoc(ref, datos);
+      setEstudiante({ id: uid, ...datos });
+      setNoPerfil(false);
+      alert("✅ Perfil creado correctamente.");
+    } catch (error) {
+      console.error("Error creando perfil:", error);
+      alert("❌ Ocurrió un error al crear el perfil.");
+    }
+  };
+
   const eliminarPerfil = async () => {
     try {
       const ref = doc(db, "estudiantes", estudiante.id);
       await deleteDoc(ref);
       alert("❌ Perfil eliminado correctamente.");
-      await signOut(auth); // Opcional: cerrar sesión
-      // window.location.href = "/"; // Redireccionar si es necesario
+      await signOut(auth);
     } catch (error) {
       console.error("Error eliminando:", error);
       alert("❌ Error al eliminar perfil.");
     }
   };
+
+  if (noPerfil) {
+    return (
+      <div
+        style={{
+          minHeight: "100vh",
+          background: "linear-gradient(to bottom, #f0f8ff, #ffffff)",
+          padding: "40px 20px"
+        }}
+      >
+        <Container className="d-flex justify-content-center align-items-center flex-column">
+          <Card className="shadow-lg w-100" style={{ maxWidth: "800px" }}>
+            <Card.Body>
+              <h3 className="text-center text-primary mb-4">
+                Crear Perfil de Estudiante
+              </h3>
+              <Form>
+                <Row className="g-3">
+                  {Object.entries(formData).map(([key, value]) => {
+                    if (key === "correo" || key === "rol") return null;
+                    return (
+                      <Col md={6} xs={12} key={key}>
+                        <Form.Group>
+                          <Form.Label className="text-capitalize">{key}</Form.Label>
+                          <Form.Control
+                            type="text"
+                            name={key}
+                            value={value}
+                            onChange={handleChange}
+                          />
+                        </Form.Group>
+                      </Col>
+                    );
+                  })}
+                </Row>
+                <div className="mt-4 text-end">
+                  <Button variant="success" onClick={crearPerfil}>
+                    💾 Crear Perfil
+                  </Button>
+                </div>
+              </Form>
+            </Card.Body>
+          </Card>
+        </Container>
+      </div>
+    );
+  }
 
   if (!estudiante) {
     return <p className="text-center mt-5">Cargando perfil...</p>;

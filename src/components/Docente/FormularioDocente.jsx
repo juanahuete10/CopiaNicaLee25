@@ -99,49 +99,81 @@ function FormularioDocente() {
     <div
       style={{
         minHeight: '100vh',
-        background: 'linear-gradient(to bottom right, #a2d4f6, #e0f7ff)',
+        position: 'relative',
+        overflow: 'hidden',
+        background: 'linear-gradient(135deg, #a3d8f4, #71b7e6, #d0ebff)', // Degradado celeste suave
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         padding: '2rem',
-        position: 'relative',
+        color: '#004466', // texto en azul oscuro para buen contraste
+        fontWeight: 'bold',
+        fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
       }}
     >
-      {/* Ícono de regresar */}
+      {/* SVG decorativo - dibujos blancos y celestes */}
+      <svg
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          zIndex: 0,
+          pointerEvents: 'none',
+          opacity: 0.12,
+        }}
+        viewBox="0 0 800 600"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle cx="150" cy="150" r="100" fill="#d0ebff" />
+        <circle cx="650" cy="450" r="120" fill="#71b7e6" />
+        <rect x="350" y="200" width="100" height="100" fill="#a3d8f4" rx="20" ry="20" />
+        <polygon points="700,100 750,180 650,180" fill="#d0ebff" />
+        <line
+          x1="100"
+          y1="500"
+          x2="700"
+          y2="500"
+          stroke="#71b7e6"
+          strokeWidth="5"
+          strokeDasharray="15 10"
+        />
+      </svg>
+
+      {/* Ícono de Home */}
       <div
         onClick={() => navigate('/')}
         style={{
           position: 'fixed',
           top: '20px',
           left: '20px',
-          width: '50px',
-          height: '50px',
-          borderRadius: '50%',
-          backgroundColor: 'rgba(255, 255, 255, 0.9)',
-          border: '3px solid white',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
           cursor: 'pointer',
           zIndex: 9999,
-          boxShadow: '0 2px 6px rgba(0, 0, 0, 0.2)',
+          color: '#004466',
         }}
       >
-        <FaHome size={30} color="black" />
+        <FaHome size={30} />
       </div>
 
+      {/* Formulario con glassmorphism blanco translúcido */}
       <div
         style={{
-          backgroundColor: '#fff',
+          position: 'relative',
+          backgroundColor: 'rgba(255, 255, 255, 0.85)', // blanco translúcido para mejor contraste
           borderRadius: '20px',
-          padding: '2rem',
-          boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
+          padding: '3rem', // aumenté padding
+          boxShadow: '0 8px 32px 0 rgba(0, 68, 102, 0.25)',
           width: '100%',
-          maxWidth: '500px',
-          border: '3px solid #fff',
+          maxWidth: 'px',  // aumenté maxWidth para panel más grande
+          border: '1px solid rgba(0, 68, 102, 0.3)',
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
+          color: '#004466',
+          zIndex: 10,
         }}
       >
-        <h2 className="text-center mb-4" style={{ color: '#00aaff', fontWeight: 'bold' }}>
+        <h2 className="text-center mb-4" style={{ color: '#004466' }}>
           Registro de Docente
         </h2>
 
@@ -152,7 +184,11 @@ function FormularioDocente() {
             accept="image/*"
             className="form-control"
             onChange={handleFotoChange}
-            style={{ border: '2px solid #00aaff', borderRadius: '8px' }}
+            style={{
+              border: '2px solid #71b7e6',
+              borderRadius: '8px',
+              color: '#004466',
+            }}
           />
         </div>
 
@@ -165,14 +201,16 @@ function FormularioDocente() {
               style={{
                 maxWidth: '120px',
                 borderRadius: '50%',
-                border: '3px solid #00aaff',
+                border: '3px solid #71b7e6',
               }}
             />
           </div>
         )}
 
         {registroExitoso && (
-          <div className="alert alert-success text-center">¡Registro exitoso! Redirigiendo...</div>
+          <div className="alert alert-success text-center" style={{ color: '#0077cc' }}>
+            ¡Registro exitoso! Redirigiendo...
+          </div>
         )}
 
         <form onSubmit={handleSubmit}>
@@ -184,7 +222,11 @@ function FormularioDocente() {
               value={nombre}
               onChange={(e) => setNombre(e.target.value)}
               placeholder="Escribe tu nombre"
-              style={{ border: '2px solid #00aaff', borderRadius: '8px' }}
+              style={{
+                border: '2px solid #71b7e6',
+                borderRadius: '8px',
+                color: '#004466',
+              }}
             />
             {errores.nombre && <div className="invalid-feedback">{errores.nombre}</div>}
           </div>
@@ -197,7 +239,11 @@ function FormularioDocente() {
               value={apellido}
               onChange={(e) => setApellido(e.target.value)}
               placeholder="Escribe tu apellido"
-              style={{ border: '2px solid #00aaff', borderRadius: '8px' }}
+              style={{
+                border: '2px solid #71b7e6',
+                borderRadius: '8px',
+                color: '#004466',
+              }}
             />
             {errores.apellido && <div className="invalid-feedback">{errores.apellido}</div>}
           </div>
@@ -209,7 +255,11 @@ function FormularioDocente() {
               className={`form-control ${errores.fechaNacimiento ? 'is-invalid' : ''}`}
               value={fechaNacimiento}
               onChange={handleFechaNacimientoChange}
-              style={{ border: '2px solid #00aaff', borderRadius: '8px' }}
+              style={{
+                border: '2px solid #71b7e6',
+                borderRadius: '8px',
+                color: '#004466',
+              }}
             />
             {errores.fechaNacimiento && <div className="invalid-feedback">{errores.fechaNacimiento}</div>}
           </div>
@@ -222,9 +272,10 @@ function FormularioDocente() {
               value={edad}
               readOnly
               style={{
-                border: '2px solid #00aaff',
+                border: '2px solid #71b7e6',
                 borderRadius: '8px',
-                backgroundColor: '#f8f9fa',
+                backgroundColor: '#e0f0ff',
+                color: '#004466',
               }}
             />
           </div>
@@ -235,7 +286,11 @@ function FormularioDocente() {
               className="form-control"
               value={genero}
               onChange={(e) => setGenero(e.target.value)}
-              style={{ border: '2px solid #00aaff', borderRadius: '8px' }}
+              style={{
+                border: '2px solid #71b7e6',
+                borderRadius: '8px',
+                color: '#004466',
+              }}
             >
               <option value="masculino">Masculino</option>
               <option value="femenino">Femenino</option>
@@ -245,13 +300,18 @@ function FormularioDocente() {
 
           <button
             type="submit"
-            className="btn btn-primary w-100"
+            className="btn w-100"
             style={{
-              backgroundColor: '#00aaff',
-              borderColor: '#00aaff',
+              backgroundColor: '#004466',
+              color: 'white',
               borderRadius: '8px',
               fontWeight: 'bold',
+              fontSize: '1.1rem',
+              padding: '0.5rem',
+              transition: 'background-color 0.3s ease',
             }}
+            onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#0077cc')}
+            onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '#004466')}
           >
             Registrar Docente
           </button>
