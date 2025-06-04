@@ -226,9 +226,10 @@ const EstudianteFormularios = () => {
 
 export default EstudianteFormularios;
 
+// 🎨 Estilos
 const Fondo = styled.div`
   min-height: 100vh;
-  background: linear-gradient(135deg, #00aaff 0%, #ffffff 100%);
+  background: linear-gradient(to bottom right, #9DE1F3, #FFFFFF);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -241,7 +242,7 @@ const Contenedor = styled.div`
   background: #ffffffcc;
   padding: 25px 35px;
   border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0, 170, 255, 0.3);
+  box-shadow: 0 10px 30px rgba(157, 225, 243, 0.5);
   text-align: center;
   position: relative;
 `;
@@ -257,12 +258,9 @@ const Input = styled.input`
   padding: 12px 15px;
   margin: 10px 0 6px 0;
   font-size: 16px;
-  border-radius: 20px;  /* aquí más redondeado */
+  border-radius: 20px;
   border: 1.8px solid #00aaff;
   outline: none;
-  &:focus {
-    border-color: #005577;
-  }
 `;
 
 const Select = styled.select`
@@ -270,70 +268,47 @@ const Select = styled.select`
   padding: 10px 14px;
   margin: 10px 0 6px 0;
   font-size: 16px;
-  border-radius: 20px; /* aquí más redondeado */
+  border-radius: 15px;
   border: 1.8px solid #00aaff;
-  background: white;
   outline: none;
-  &:focus {
-    border-color: #005577;
-  }
 `;
 
-
 const Boton = styled.button`
-  margin-top: 18px;
-  background: #0088dd;
+  background-color: #00aaff;
   color: white;
-  font-weight: bold;
+  font-size: 16px;
   border: none;
-  padding: 14px 0;
-  width: 100%;
-  border-radius: 12px;
-  font-size: 1.2rem;
+  border-radius: 25px;
+  padding: 12px 20px;
+  margin-top: 20px;
   cursor: pointer;
   transition: background 0.3s ease;
   &:hover {
-    background: #005577;
+    background-color: #0077aa;
   }
 `;
 
 const Error = styled.p`
-  margin: 0 0 10px 0;
+  color: red;
   font-size: 13px;
-  color: #ff4444;
-  font-weight: 600;
+  margin: 0 0 8px;
 `;
 
 const ErrorFoto = styled.p`
-  font-size: 13px;
-  color: #cc0000;
-  font-weight: 600;
-  margin-top: 4px;
+  color: darkred;
+  font-weight: bold;
+  font-size: 14px;
 `;
 
 const VistaImagen = styled.div`
-  margin-bottom: 15px;
+  margin: 15px 0;
   img {
     width: 100px;
     height: 100px;
-    border-radius: 15px;
     object-fit: cover;
+    border-radius: 50%;
     cursor: pointer;
-    border: 3px solid #00aaff;
-    margin-bottom: 8px;
-    transition: transform 0.3s ease;
-    &:hover {
-      transform: scale(1.07);
-      border-color: #005577;
-    }
-  }
-  p {
-    font-size: 16px;
-    color: #555;
-  }
-  input[type='file'] {
-    display: block;
-    margin: 8px auto 0 auto;
+    border: 2px solid #00aaff;
   }
 `;
 
@@ -343,38 +318,34 @@ const Overlay = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.8);
+  background: rgba(0,0,0,0.8);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999;
-  cursor: pointer;
+  z-index: 999;
 `;
 
 const ImagenGrande = styled.img`
-  max-width: 90%;
-  max-height: 90%;
-  border-radius: 20px;
+  max-width: 80%;
+  max-height: 80%;
+  border: 5px solid white;
+  border-radius: 10px;
 `;
 
 const BotonRegresar = styled.button`
   position: absolute;
-  top: 20px;
   left: 20px;
-  background: transparent;
+  top: 20px;
+  background: none;
   border: none;
-  color: #004466;
   cursor: pointer;
-  transition: color 0.3s ease;
-  &:hover {
-    color: #00aaff;
-  }
+  color: #0077aa;
 `;
 
 const Decoraciones = styled.div`
-  font-size: 28px;
-  margin-bottom: 18px;
-  > span {
-    margin: 0 8px;
-  }
+  display: flex;
+  justify-content: center;
+  font-size: 24px;
+  gap: 10px;
+  margin-bottom: 15px;
 `;

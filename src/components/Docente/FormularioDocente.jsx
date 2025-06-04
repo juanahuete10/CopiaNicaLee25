@@ -116,7 +116,7 @@ function FormularioDocente() {
         alignItems: 'center',
         padding: '2rem',
         position: 'relative',
-        background: 'linear-gradient(135deg, #00bfff 0%, #e6f2ff 100%)',
+        background: 'linear-gradient(to bottom right, #9DE1F3, #FFFFFF)',
       }}
     >
       <div
@@ -136,12 +136,12 @@ function FormularioDocente() {
 
       <div
         style={{
-          background: '#e6f2ff',
+          background: '#ffffff',
           borderRadius: '30px',
           border: '4px solid',
-          borderImage: 'linear-gradient(45deg, #4facfe, #00f2fe) 1',
+          borderImage: 'linear-gradient(45deg, #9DE1F3, #4facfe) 1',
           padding: '2rem',
-          boxShadow: '0 0 15px rgba(0, 102, 255, 0.5)',
+          boxShadow: '0 0 15px rgba(0, 102, 255, 0.3)',
           width: '100%',
           maxWidth: '600px',
           zIndex: 2
@@ -175,45 +175,18 @@ function FormularioDocente() {
             )}
           </div>
 
-          <input
-            type="text"
-            value={nombre}
-            onChange={(e) => setNombre(e.target.value)}
-            placeholder="Nombre"
-            style={inputStyle(errores.nombre)}
-          />
+          <input type="text" value={nombre} onChange={(e) => setNombre(e.target.value)} placeholder="Nombre" style={inputStyle(errores.nombre)} />
           {errores.nombre && <div style={errorStyle}>{errores.nombre}</div>}
 
-          <input
-            type="text"
-            value={apellido}
-            onChange={(e) => setApellido(e.target.value)}
-            placeholder="Apellido"
-            style={inputStyle(errores.apellido)}
-          />
+          <input type="text" value={apellido} onChange={(e) => setApellido(e.target.value)} placeholder="Apellido" style={inputStyle(errores.apellido)} />
           {errores.apellido && <div style={errorStyle}>{errores.apellido}</div>}
 
-          <input
-            type="date"
-            value={fechaNacimiento}
-            onChange={handleFechaNacimientoChange}
-            style={inputStyle(errores.fechaNacimiento)}
-          />
+          <input type="date" value={fechaNacimiento} onChange={handleFechaNacimientoChange} style={inputStyle(errores.fechaNacimiento)} />
           {errores.fechaNacimiento && <div style={errorStyle}>{errores.fechaNacimiento}</div>}
 
-          <input
-            type="number"
-            value={edad}
-            readOnly
-            style={inputStyle()}
-            placeholder="Edad"
-          />
+          <input type="number" value={edad} readOnly style={inputStyle()} placeholder="Edad" />
 
-          <select
-            value={localidad}
-            onChange={(e) => setLocalidad(e.target.value)}
-            style={inputStyle(errores.localidad)}
-          >
+          <select value={localidad} onChange={(e) => setLocalidad(e.target.value)} style={inputStyle(errores.localidad)}>
             <option value="">Selecciona tu localidad</option>
             {localidades.map((loc) => (
               <option key={loc} value={loc}>{loc}</option>
@@ -223,21 +196,11 @@ function FormularioDocente() {
           {errores.localidad && <div style={errorStyle}>{errores.localidad}</div>}
 
           {localidad === 'otra' && (
-            <input
-              type="text"
-              value={localidadOtra}
-              onChange={(e) => setLocalidadOtra(e.target.value)}
-              placeholder="Escribe tu localidad"
-              style={inputStyle(errores.localidadOtra)}
-            />
+            <input type="text" value={localidadOtra} onChange={(e) => setLocalidadOtra(e.target.value)} placeholder="Escribe tu localidad" style={inputStyle(errores.localidadOtra)} />
           )}
           {errores.localidadOtra && <div style={errorStyle}>{errores.localidadOtra}</div>}
 
-          <select
-            value={genero}
-            onChange={(e) => setGenero(e.target.value)}
-            style={inputStyle()}
-          >
+          <select value={genero} onChange={(e) => setGenero(e.target.value)} style={inputStyle()}>
             <option value="">Género</option>
             <option value="masculino">Masculino</option>
             <option value="femenino">Femenino</option>
@@ -257,13 +220,12 @@ function FormularioDocente() {
   );
 }
 
-// 🔧 ESTILOS
 const inputStyle = (error = false) => ({
   width: '100%',
   padding: '14px 16px',
   borderRadius: '20px',
   border: `2px solid ${error ? 'red' : '#a3cfff'}`,
-  backgroundColor: '#ffffff', // Fondo blanco
+  backgroundColor: '#ffffff',
   boxShadow: 'inset 0 0 4px rgba(0,0,0,0.05)',
   color: '#003366',
   marginBottom: '0.75rem',
@@ -288,7 +250,7 @@ const submitButtonStyle = {
   fontSize: '1rem',
   cursor: 'pointer',
   marginTop: '1rem',
-  boxShadow: '0 0 10px rgba(0, 102, 255, 0.6)'
+  boxShadow: '0 0 10px rgba(0, 102, 255, 0.5)'
 };
 
 export default FormularioDocente;

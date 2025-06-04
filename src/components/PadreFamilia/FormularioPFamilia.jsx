@@ -31,12 +31,12 @@ const FormularioPFamilia = () => {
     if (!fecha) return '';
     const nacimiento = new Date(fecha);
     const hoy = new Date();
-    let edadCalculada = hoy.getFullYear() - nacimiento.getFullYear();
+    let edad = hoy.getFullYear() - nacimiento.getFullYear();
     const mes = hoy.getMonth() - nacimiento.getMonth();
     if (mes < 0 || (mes === 0 && hoy.getDate() < nacimiento.getDate())) {
-      edadCalculada--;
+      edad--;
     }
-    return edadCalculada;
+    return edad;
   };
 
   const pickImage = (e) => {
@@ -184,41 +184,24 @@ const FormularioPFamilia = () => {
 
 export default FormularioPFamilia;
 
-// Estilos con título más pequeño y foto más pequeña
+// 🟦 Estilos con fondo degradado 9DE1F3 a blanco
 
 const RainbowBackground = styled.div`
-  background: linear-gradient(135deg, #00aaff, #ffffff);
+  background: linear-gradient(135deg, #9DE1F3, #FFFFFF);
   min-height: 100vh;
   padding: 3rem 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 `;
 
 const FormWrapper = styled.div`
   max-width: 600px;
   width: 100%;
-  background: linear-gradient(135deg, #ffffffdd, #cceeffdd);
-  padding: 3rem 3.5rem;
-  border-radius: 30px;
-  box-shadow:
-    0 0 15px 3px #00aaffaa,
-    0 0 30px 10px #0077cc55,
-    0 10px 40px -10px #004466aa;
-  border: 4px solid;
-  border-image-slice: 1;
-  border-width: 4px;
-  border-image-source: linear-gradient(45deg, #0077cc, #00aaff, #66ccff);
-  position: relative;
-  transition: transform 0.3s ease;
-  &:hover {
-    transform: scale(1.02);
-    box-shadow:
-      0 0 20px 5px #00c0ffcc,
-      0 0 40px 15px #0099ffaa,
-      0 15px 50px -15px #006699cc;
-  }
+  background: #ffffffcc;
+  padding: 2.5rem;
+  border-radius: 25px;
+  box-shadow: 0 0 15px 3px #9de1f3aa;
 `;
 
 const BackButton = styled.button`
@@ -230,7 +213,7 @@ const BackButton = styled.button`
   top: 15px;
   left: 15px;
   z-index: 1000;
-  padding: 0.4rem;
+  padding: 0.5rem;
   box-shadow: 0 0 8px #00aaff;
   transition: background-color 0.3s ease;
   &:hover {
@@ -240,8 +223,8 @@ const BackButton = styled.button`
 
 const Decorations = styled.div`
   text-align: center;
-  font-size: 3rem;
-  margin-bottom: 1.2rem;
+  font-size: 2rem;
+  margin-bottom: 1rem;
   user-select: none;
 `;
 
@@ -253,121 +236,76 @@ const FormCard = styled.div`
 
 const Title = styled.h2`
   text-align: center;
-  font-size: 1.8rem;   /* título más pequeño */
-  font-weight: 700;
+  font-size: 1.8rem;
+  font-weight: bold;
   color: #0077cc;
-  text-shadow: 1px 1px 3px #00aaff88;
-  margin-bottom: 1.2rem;
+`;
+
+const Input = styled.input`
+  padding: 0.6rem;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  width: 100%;
+`;
+
+const Select = styled.select`
+  padding: 0.6rem;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  width: 100%;
+`;
+
+const Button = styled.button`
+  background-color: #00aaff;
+  color: white;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 15px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  &:hover {
+    background-color: #0077cc;
+  }
+`;
+
+const ErrorText = styled.span`
+  color: red;
+  font-size: 0.85rem;
 `;
 
 const ImagePreview = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 0.8rem;
-
+  gap: 0.6rem;
   img {
-    width: 100px;   /* imagen más pequeña */
-    height: 100px;  /* imagen más pequeña */
-    border-radius: 50px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
     object-fit: cover;
     cursor: pointer;
-    box-shadow: 0 0 12px #0077ccaa;
-    transition: box-shadow 0.3s ease;
-    &:hover {
-      box-shadow: 0 0 18px #00aaffcc;
-    }
+    box-shadow: 0 0 8px #0077cc;
   }
-
-  p {
-    font-size: 1rem;
-    color: #0077ccbb;
-  }
-
-  input[type='file'] {
-    cursor: pointer;
-    border-radius: 25px;
-    border: 2px solid #0077cc;
-    padding: 0.3rem 0.8rem;
-    font-weight: 600;
-    color: #004466;
-    background: #ccf0ffdd;
-    transition: background-color 0.3s ease;
-    &:hover {
-      background: #a0d7ffdd;
-    }
-  }
-`;
-
-const Input = styled.input`
-  padding: 0.75rem 1.2rem;
-  font-size: 1.1rem;
-  border-radius: 25px;
-  border: 2px solid #0077ccaa;
-  outline: none;
-  transition: border-color 0.3s ease;
-  &:focus {
-    border-color: #00aaffcc;
-  }
-`;
-
-const Select = styled.select`
-  padding: 0.7rem 1.2rem;
-  font-size: 1.1rem;
-  border-radius: 25px;
-  border: 2px solid #0077ccaa;
-  background: white;
-  color: #004466;
-  cursor: pointer;
-  outline: none;
-  transition: border-color 0.3s ease;
-  &:focus {
-    border-color: #00aaffcc;
-  }
-`;
-
-const Button = styled.button`
-  margin-top: 1.5rem;
-  padding: 1rem 2rem;
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: white;
-  background: linear-gradient(135deg, #00aaff, #0077cc);
-  border: none;
-  border-radius: 30px;
-  cursor: pointer;
-  box-shadow: 0 6px 12px #0077ccbb;
-  transition: background 0.3s ease;
-  &:hover {
-    background: linear-gradient(135deg, #0077cc, #004466);
-  }
-`;
-
-const ErrorText = styled.span`
-  color: #cc3300;
-  font-weight: 600;
-  font-size: 0.9rem;
-  margin-left: 0.5rem;
 `;
 
 const FullImageOverlay = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: #000000cc;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.7);
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: zoom-out;
-  z-index: 2000;
+  z-index: 9999;
 `;
 
 const FullImage = styled.img`
-  max-width: 90vw;
-  max-height: 90vh;
-  border-radius: 20px;
-  box-shadow: 0 0 30px 10px #00aaffcc;
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 10px;
+  box-shadow: 0 0 20px #ffffff;
 `;
