@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import Recompensas from "../JuegosInteractivos/Recompensas";
 import Biblioteca from "../Lecciones/Biblioteca";
 
-// Icono de regresar en negro sin cuadro ni texto
+// Icono de regresar
 const IconoRegresar = () => (
   <svg
     onClick={() => window.history.back()}
@@ -18,7 +18,7 @@ const IconoRegresar = () => (
   </svg>
 );
 
-// Ejemplo de dibujo SVG simple como componente
+// SVG Estrella
 const SvgEstrella = () => (
   <svg
     width="40"
@@ -30,6 +30,32 @@ const SvgEstrella = () => (
   >
     <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01L12 2z" />
   </svg>
+);
+
+// Componente sección reutilizable
+const SeccionDashboard = ({ icon, titulo, children }) => (
+  <section
+    style={{
+      marginBottom: 40,
+      display: "flex",
+      alignItems: "center",
+      gap: 20,
+    }}
+  >
+    {icon}
+    <div>
+      <h4
+        style={{
+          marginBottom: 15,
+          fontWeight: "600",
+          fontSize: "1.6rem",
+        }}
+      >
+        {titulo}
+      </h4>
+      {children}
+    </div>
+  </section>
 );
 
 const DashboardPFamilia = () => {
@@ -50,7 +76,6 @@ const DashboardPFamilia = () => {
         position: "relative",
       }}
     >
-      {/* Icono regresar arriba a la izquierda */}
       <div style={{ position: "fixed", top: 20, left: 20, zIndex: 1000 }}>
         <IconoRegresar />
       </div>
@@ -80,102 +105,26 @@ const DashboardPFamilia = () => {
           ¡Bienvenido, {padre?.nombre}!
         </h2>
 
-        <section
-          style={{
-            marginBottom: 40,
-            display: "flex",
-            alignItems: "center",
-            gap: 20,
-          }}
-        >
-          <SvgEstrella />
-          <div>
-            <h4
-              style={{
-                marginBottom: 15,
-                fontWeight: "600",
-                fontSize: "1.6rem",
-              }}
-            >
-              📈 Progreso de tus hijos
-            </h4>
-            <p style={{ fontSize: "1.1rem", lineHeight: 1.5 }}>
-              (Aquí podrías ver cuántas lecciones y juegos han completado tus
-              hijos)
-            </p>
-          </div>
-        </section>
+        <SeccionDashboard icon={<SvgEstrella />} titulo="📈 Progreso de tus hijos">
+          <p style={{ fontSize: "1.1rem", lineHeight: 1.5 }}>
+            (Aquí podrías ver cuántas lecciones y juegos han completado tus hijos)
+          </p>
+        </SeccionDashboard>
 
-        <section
-          style={{
-            marginBottom: 40,
-            display: "flex",
-            alignItems: "center",
-            gap: 20,
-          }}
-        >
-          <SvgEstrella />
-          <div>
-            <h4
-              style={{
-                marginBottom: 15,
-                fontWeight: "600",
-                fontSize: "1.6rem",
-              }}
-            >
-              📚 Biblioteca
-            </h4>
-            <Biblioteca />
-          </div>
-        </section>
+        <SeccionDashboard icon={<SvgEstrella />} titulo="📚 Biblioteca">
+          <Biblioteca />
+        </SeccionDashboard>
 
-        <section
-          style={{
-            marginBottom: 40,
-            display: "flex",
-            alignItems: "center",
-            gap: 20,
-          }}
-        >
-          <SvgEstrella />
-          <div>
-            <h4
-              style={{
-                marginBottom: 15,
-                fontWeight: "600",
-                fontSize: "1.6rem",
-              }}
-            >
-              🏆 Recompensas
-            </h4>
-            <Recompensas />
-          </div>
-        </section>
+        <SeccionDashboard icon={<SvgEstrella />} titulo="🏆 Recompensas">
+          <Recompensas />
+        </SeccionDashboard>
 
-        <section
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 20,
-          }}
-        >
-          <SvgEstrella />
-          <div>
-            <h4
-              style={{
-                marginBottom: 15,
-                fontWeight: "600",
-                fontSize: "1.6rem",
-              }}
-            >
-              👨‍👩‍👧 Hijos Registrados
-            </h4>
-            <p style={{ fontSize: "1.1rem", lineHeight: 1.5 }}>
-              Nombre, grado y edad de los hijos registrados
-            </p>
-            {/* Aquí puedes conectar con Firestore para traer datos de hijos */}
-          </div>
-        </section>
+        <SeccionDashboard icon={<SvgEstrella />} titulo="👨‍👩‍👧 Hijos Registrados">
+          <p style={{ fontSize: "1.1rem", lineHeight: 1.5 }}>
+            Nombre, grado y edad de los hijos registrados
+          </p>
+          {/* Aquí puedes conectar con Firestore para traer datos de hijos */}
+        </SeccionDashboard>
       </div>
     </div>
   );
