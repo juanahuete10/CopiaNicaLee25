@@ -39,7 +39,7 @@ const DashboardNiño = ({ uid }) => {
         <ul style={{ listStyle: "none", paddingLeft: 0 }}>
           <li style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => navigate("/biblioteca")}>📚 Biblioteca</li>
           <li style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => navigate("/juegos")}>🎮 Juegos</li>
-          <li style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => navigate("/perfilestudiante")}>👤 Perfil</li>
+          <li style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => navigate("/c")}>👤 Perfil</li>
           <li style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => navigate("/recompensas")}>🏆 Recompensas</li>
         </ul>
       </div>
@@ -135,6 +135,19 @@ const DashboardNiño = ({ uid }) => {
               <button
                 className="btn btn-success"
                 onClick={() => navigate("/recompensas")}
+              >
+                Ver Recompensas
+              </button>
+            </div>
+          </div>
+
+              <div className="col-md-6 col-lg-4 mb-4">
+            <div className="card h-100 shadow-sm p-3 text-center" style={{ borderRadius: "15px" }}>
+              <h3>Estadisticas</h3>
+              <p>Consulta tus Estadisticas.</p>
+              <button
+                className="btn btn-success"
+                onClick={() => navigate("/estadisticaN")}
               >
                 Ver Recompensas
               </button>

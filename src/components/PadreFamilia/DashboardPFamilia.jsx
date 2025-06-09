@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { getFirestore, collection, query, where, getDocs } from "firebase/firestore";
-import Recompensas from "../JuegosInteractivos/Recompensas";
-import Biblioteca from "../Lecciones/Biblioteca";
 
-const db = getFirestore(); // Asegúrate que firebase está inicializado
+const db = getFirestore();
 
 const IconoRegresar = () => (
   <svg
@@ -33,44 +31,15 @@ const SvgEstrella = () => (
   </svg>
 );
 
-const SeccionDashboard = ({ icon, titulo, children }) => (
-  <section
-    style={{
-      marginBottom: 40,
-      display: "flex",
-      alignItems: "center",
-      gap: 20,
-    }}
-  >
-    {icon}
-    <div>
-      <h4
-        style={{
-          marginBottom: 15,
-          fontWeight: "600",
-          fontSize: "1.6rem",
-        }}
-      >
-        {titulo}
-      </h4>
-      {children}
-    </div>
-  </section>
-);
-
 const DashboardPFamilia = () => {
   const location = useLocation();
   const padre = location.state?.padreFamilia;
 
-  // Estado para el código MINED buscado
   const [codigoMined, setCodigoMined] = useState("");
-  // Estado para el estudiante encontrado
   const [estudiante, setEstudiante] = useState(null);
-  // Estado para manejar el loading y errores
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Función para buscar estudiante por código MINED
   const buscarEstudiante = async () => {
     setLoading(true);
     setError("");
@@ -79,13 +48,11 @@ const DashboardPFamilia = () => {
     try {
       const estudiantesRef = collection(db, "estudiantes");
       const q = query(estudiantesRef, where("codigoMined", "==", codigoMined.trim()));
-
       const querySnapshot = await getDocs(q);
 
       if (querySnapshot.empty) {
         setError("No se encontró ningún estudiante con ese código.");
       } else {
-        // Tomamos el primer estudiante encontrado
         const doc = querySnapshot.docs[0];
         setEstudiante({ id: doc.id, ...doc.data() });
       }
@@ -116,7 +83,7 @@ const DashboardPFamilia = () => {
 
       <div
         style={{
-          maxWidth: 900,
+          maxWidth: 700,
           width: "95%",
           backgroundColor: "#e0f7fa",
           borderRadius: 20,
@@ -139,67 +106,49 @@ const DashboardPFamilia = () => {
           ¡Bienvenido, {padre?.nombre}!
         </h2>
 
-        <SeccionDashboard icon={<SvgEstrella />} titulo="🔍 Buscar hijo por código MINED">
-          <input
-            type="text"
-            placeholder="Ingresa el código MINED"
-            value={codigoMined}
-            onChange={(e) => setCodigoMined(e.target.value)}
-            style={{ padding: 10, fontSize: "1rem", width: "60%", marginRight: 10 }}
-          />
-          <button
-            onClick={buscarEstudiante}
-            disabled={loading || !codigoMined.trim()}
+        <h3 style={{ marginBottom: 10 }}>🔍 Buscar hijo por código MINED</h3>
+        <input
+          type="text"
+          placeholder="Ingresa el código MINED"
+          value={codigoMined}
+          onChange={(e) => setCodigoMined(e.target.value)}
+          style={{ padding: 10, fontSize: "1rem", width: "60%", marginRight: 10 }}
+        />
+        <button
+          onClick={buscarEstudiante}
+          disabled={loading || !codigoMined.trim()}
+          style={{
+            padding: "10px 20px",
+            fontSize: "1rem",
+            backgroundColor: "#00aaff",
+            color: "white",
+            border: "none",
+            borderRadius: 5,
+            cursor: "pointer",
+          }}
+        >
+          {loading ? "Buscando..." : "Buscar"}
+        </button>
+
+        {error && <p style={{ color: "red", marginTop: 10 }}>{error}</p>}
+
+        {estudiante && (
+          <div
             style={{
-              padding: "10px 20px",
-              fontSize: "1rem",
-              backgroundColor: "#00aaff",
-              color: "white",
-              border: "none",
-              borderRadius: 5,
-              cursor: "pointer",
+              marginTop: 30,
+              padding: 20,
+              backgroundColor: "#b2ebf2",
+              borderRadius: 10,
             }}
           >
-            {loading ? "Buscando..." : "Buscar"}
-          </button>
-
-          {error && <p style={{ color: "red", marginTop: 10 }}>{error}</p>}
-          {estudiante && (
-            <div
-              style={{
-                marginTop: 20,
-                padding: 20,
-                backgroundColor: "#b2ebf2",
-                borderRadius: 10,
-              }}
-            >
-              <h3>Perfil del hijo:</h3>
-              <p><strong>Nombre:</strong> {estudiante.nombre}</p>
-              <p><strong>Grado:</strong> {estudiante.grado}</p>
-              <p><strong>Edad:</strong> {estudiante.edad}</p>
-              {/* Aquí puedes agregar más datos y progreso personalizado */}
-              <SeccionDashboard icon={<SvgEstrella />} titulo="📈 Progreso">
-                <p>Lecciones completadas: {estudiante.leccionesCompletadas || 0}</p>
-                <p>Juegos completados: {estudiante.juegosCompletados || 0}</p>
-              </SeccionDashboard>
-            </div>
-          )}
-        </SeccionDashboard>
-
-        <SeccionDashboard icon={<SvgEstrella />} titulo="📚 Biblioteca">
-          <Biblioteca />
-        </SeccionDashboard>
-
-        <SeccionDashboard icon={<SvgEstrella />} titulo="🏆 Recompensas">
-          <Recompensas />
-        </SeccionDashboard>
-
-        <SeccionDashboard icon={<SvgEstrella />} titulo="👨‍👩‍👧 Hijos Registrados">
-          <p style={{ fontSize: "1.1rem", lineHeight: 1.5 }}>
-            Nombre, grado y edad de los hijos registrados
-          </p>
-          {/* Aquí puedes conectar con Firestore para traer datos de hijos */}
-        </SeccionDashboard>
+            <h3>📄 Perfil del hijo:</h3>
+            <p><strong>Nombre:</strong> {estudiante.nombre}</p>
+            <p><strong>Grado:</strong> {estudiante.grado}</p>
+            <p><strong>Edad:</strong> {estudiante.edad}</p>
+            <p><strong>Lecciones completadas:</strong> {estudiante.leccionesCompletadas || 0}</p>
+            <p><strong>Juegos completados:</strong> {estudiante.juegosCompletados || 0}</p>
+          </div>
+        )}
       </div>
     </div>
   );

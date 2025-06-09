@@ -27,6 +27,7 @@ import Racha from "./components/Formularios/Racha";
 import FormularioPFamilia from "./components/PadreFamilia/FormularioPFamilia";
 import DashboardPFamilia from "./components/PadreFamilia/DashboardPFamilia";
 import PerfilEstudiante from "./components/Formularios/PerfilEstudiante";
+import EstadisticaN from "./views/EstadisticaN";
 
  
 function AppContent() {
@@ -63,6 +64,7 @@ function AppContent() {
           <Route path="/formulariopfamilia" element={<FormularioPFamilia />} />
           <Route path="/dashboardpfamilia" element={<DashboardPFamilia />} />
           <Route path="/perfilestudiante" element={<PerfilEstudiante />} />
+            <Route path="/estadisticaN" element={<EstadisticaN />} />
     
 
           

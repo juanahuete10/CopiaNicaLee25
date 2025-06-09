@@ -18,7 +18,7 @@ const EstudianteFormularios = () => {
   const [verImagenCompleta, setVerImagenCompleta] = useState(false);
   const [mostrarResumen, setMostrarResumen] = useState(false);
   
-  // --- AGREGADO: estado para código MINED ---
+
   const [codigoMined, setCodigoMined] = useState('');
 
   const [errores, setErrores] = useState({
