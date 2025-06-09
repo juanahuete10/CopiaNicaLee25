@@ -39,24 +39,54 @@ export default function AsistenteIA() {
   };
 
   return (
-    <Card className="p-4 shadow">
-      <h5>🧠 Asistente IA para Docentes</h5>
-      <Form.Group className="my-3">
-        <Form.Label>¿Qué necesitas generar?</Form.Label>
+    <Card className="p-4 shadow" style={{ maxWidth: "700px", margin: "auto", backgroundColor: "#f7f9fc", borderRadius: "16px" }}>
+      <div className="text-center mb-3">
+        <h5 className="fw-bold text-primary">
+          🧠 Asistente IA para Docentes
+        </h5>
+        <p className="text-muted" style={{ fontSize: "0.9rem" }}>
+          Genera lecturas educativas adaptadas según el nivel o tema que necesites.
+        </p>
+      </div>
+
+      <Form.Group className="mb-3">
+        <Form.Label className="fw-semibold">¿Qué necesitas generar?</Form.Label>
         <Form.Control
           type="text"
           placeholder="Ej: Genera una lectura sobre animales del bosque para tercer grado"
           value={mensaje}
           onChange={(e) => setMensaje(e.target.value)}
+          style={{
+            borderRadius: "12px",
+            borderColor: "#ced4da",
+            padding: "10px",
+            fontSize: "0.95rem",
+          }}
         />
       </Form.Group>
-      <Button onClick={manejarEnvio} disabled={cargando}>
-        {cargando ? <Spinner size="sm" animation="border" /> : "Generar con IA"}
-      </Button>
+
+      <div className="text-center">
+        <Button
+          variant="primary"
+          onClick={manejarEnvio}
+          disabled={cargando}
+          style={{ paddingLeft: "30px", paddingRight: "30px", borderRadius: "20px" }}
+        >
+          {cargando ? <Spinner size="sm" animation="border" /> : "✨ Generar con IA"}
+        </Button>
+      </div>
+
       {respuesta && (
-        <Card className="mt-4 p-3 bg-light">
-          <h6>📄 Resultado generado:</h6>
-          <p style={{ whiteSpace: "pre-wrap" }}>{respuesta}</p>
+        <Card
+          className="mt-4 p-3"
+          style={{
+            backgroundColor: "#fff",
+            borderLeft: "5px solid #0d6efd",
+            borderRadius: "12px",
+          }}
+        >
+          <h6 className="fw-bold text-success mb-2">📘 Resultado generado:</h6>
+          <p style={{ whiteSpace: "pre-wrap", fontSize: "0.95rem" }}>{respuesta}</p>
         </Card>
       )}
     </Card>

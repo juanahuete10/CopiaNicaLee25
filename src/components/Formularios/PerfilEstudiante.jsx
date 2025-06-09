@@ -4,13 +4,12 @@ import { doc, getDoc, updateDoc, deleteDoc, setDoc } from "firebase/firestore";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import {
   Button,
-  Form,
   Card,
-  Modal,
   Row,
   Col,
   Image,
   Container,
+  Modal,
 } from "react-bootstrap";
 
 export default function PerfilEstudiante() {
@@ -31,6 +30,8 @@ export default function PerfilEstudiante() {
     genero: "",
     correo: "",
     rol: "estudiante",
+    imagen: null,
+    codigoMined: "",
   });
 
   useEffect(() => {
@@ -67,6 +68,8 @@ export default function PerfilEstudiante() {
               nivelEducativo: "",
               ubicacion: "",
               genero: "",
+              imagen: null,
+              codigoMined: "",
             };
             await setDoc(estudianteRef, perfilInicial);
             setEstudiante({ id: uid, ...perfilInicial });
@@ -146,11 +149,21 @@ export default function PerfilEstudiante() {
           <Card.Body>
             <Row className="align-items-center">
               <Col xs={12} md={4} className="text-center mb-3">
-                <Image
-                  src="https://cdn-icons-png.flaticon.com/512/4715/4715327.png"
-                  roundedCircle
-                  style={{ width: "130px", border: "4px solid #0d6efd" }}
-                />
+                {formData.imagen ? (
+                  <Image
+                    src={formData.imagen}
+                    roundedCircle
+                    style={{ width: "130px", border: "4px solid #0d6efd" }}
+                    alt="Foto de perfil"
+                  />
+                ) : (
+                  <Image
+                    src="https://cdn-icons-png.flaticon.com/512/4715/4715327.png"
+                    roundedCircle
+                    style={{ width: "130px", border: "4px solid #0d6efd" }}
+                    alt="Icono de usuario"
+                  />
+                )}
               </Col>
               <Col xs={12} md={8}>
                 <h3 className="text-primary fw-bold mb-2">
@@ -165,6 +178,7 @@ export default function PerfilEstudiante() {
                 <p className="mb-1">📅 Edad: {formData.edad}</p>
                 <p className="mb-1">🎂 Fecha de Nacimiento: {formData.fechaNacimiento}</p>
                 <p className="mb-1">🧬 Género: {formData.genero}</p>
+                <p className="mb-1">🔢 Código MINED: {formData.codigoMined || "No asignado"}</p>
                 <div className="mt-3 d-flex gap-3 flex-wrap">
                   <Button onClick={() => setEditando(true)} variant="primary">
                     ✏️ Editar
@@ -184,49 +198,80 @@ export default function PerfilEstudiante() {
               <h5 className="mb-3 text-center text-secondary">
                 Editar Información del Perfil
               </h5>
-              <Form>
+              <form>
                 <Row className="g-3">
-                  {Object.entries(formData).map(([key, value]) => (
-                    <Col md={6} xs={12} key={key}>
-                      <Form.Group>
-                        <Form.Label className="text-capitalize">{key}</Form.Label>
-                        <Form.Control
+                  {Object.entries(formData).map(([key, value]) => {
+                    // No editar correo ni rol
+                    if (key === "correo" || key === "rol") return null;
+                    // Para imagen, mostrar input file separado
+                    if (key === "imagen")
+                      return (
+                        <Col md={6} xs={12} key={key}>
+                          <label className="form-label text-capitalize">{key}</label>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => {
+                              const file = e.target.files[0];
+                              if (file) {
+                                const reader = new FileReader();
+                                reader.onloadend = () =>
+                                  setFormData((prev) => ({
+                                    ...prev,
+                                    imagen: reader.result,
+                                  }));
+                                reader.readAsDataURL(file);
+                              }
+                            }}
+                            className="form-control"
+                          />
+                        </Col>
+                      );
+
+                    return (
+                      <Col md={6} xs={12} key={key}>
+                        <label className="form-label text-capitalize">{key}</label>
+                        <input
                           type="text"
                           name={key}
-                          value={value}
+                          value={value || ""}
                           onChange={handleChange}
-                          disabled={key === "correo" || key === "rol"}
+                          className="form-control"
                         />
-                      </Form.Group>
-                    </Col>
-                  ))}
+                      </Col>
+                    );
+                  })}
                 </Row>
                 <div className="mt-4 text-end">
-                  <Button variant="success" onClick={guardarCambios}>
+                  <Button type="button" variant="success" onClick={guardarCambios}>
                     💾 Guardar Cambios
                   </Button>{" "}
-                  <Button variant="secondary" onClick={() => setEditando(false)}>
+                  <Button type="button" variant="secondary" onClick={() => setEditando(false)}>
                     ❌ Cancelar
                   </Button>
                 </div>
-              </Form>
+              </form>
             </Card.Body>
           </Card>
         )}
 
         <Modal show={showConfirm} onHide={() => setShowConfirm(false)} centered>
           <Modal.Header closeButton>
-            <Modal.Title>¿Eliminar perfil?</Modal.Title>
+            <Modal.Title>Confirmar eliminación</Modal.Title>
           </Modal.Header>
-          <Modal.Body>
-            Esta acción eliminará permanentemente el perfil del estudiante.
-          </Modal.Body>
+          <Modal.Body>¿Seguro que quieres eliminar tu perfil? Esta acción no se puede deshacer.</Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={() => setShowConfirm(false)}>
               Cancelar
             </Button>
-            <Button variant="danger" onClick={eliminarPerfil}>
-              Sí, eliminar
+            <Button
+              variant="danger"
+              onClick={() => {
+                setShowConfirm(false);
+                eliminarPerfil();
+              }}
+            >
+              Eliminar Perfil
             </Button>
           </Modal.Footer>
         </Modal>

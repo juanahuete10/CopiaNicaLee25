@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
+import { getFirestore, collection, query, where, getDocs } from "firebase/firestore";
 import Recompensas from "../JuegosInteractivos/Recompensas";
 import Biblioteca from "../Lecciones/Biblioteca";
 
-// Icono de regresar
+const db = getFirestore(); // Asegúrate que firebase está inicializado
+
 const IconoRegresar = () => (
   <svg
     onClick={() => window.history.back()}
@@ -18,7 +20,6 @@ const IconoRegresar = () => (
   </svg>
 );
 
-// SVG Estrella
 const SvgEstrella = () => (
   <svg
     width="40"
@@ -32,7 +33,6 @@ const SvgEstrella = () => (
   </svg>
 );
 
-// Componente sección reutilizable
 const SeccionDashboard = ({ icon, titulo, children }) => (
   <section
     style={{
@@ -61,6 +61,40 @@ const SeccionDashboard = ({ icon, titulo, children }) => (
 const DashboardPFamilia = () => {
   const location = useLocation();
   const padre = location.state?.padreFamilia;
+
+  // Estado para el código MINED buscado
+  const [codigoMined, setCodigoMined] = useState("");
+  // Estado para el estudiante encontrado
+  const [estudiante, setEstudiante] = useState(null);
+  // Estado para manejar el loading y errores
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  // Función para buscar estudiante por código MINED
+  const buscarEstudiante = async () => {
+    setLoading(true);
+    setError("");
+    setEstudiante(null);
+
+    try {
+      const estudiantesRef = collection(db, "estudiantes");
+      const q = query(estudiantesRef, where("codigoMined", "==", codigoMined.trim()));
+
+      const querySnapshot = await getDocs(q);
+
+      if (querySnapshot.empty) {
+        setError("No se encontró ningún estudiante con ese código.");
+      } else {
+        // Tomamos el primer estudiante encontrado
+        const doc = querySnapshot.docs[0];
+        setEstudiante({ id: doc.id, ...doc.data() });
+      }
+    } catch (err) {
+      setError("Error al buscar el estudiante: " + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div
@@ -105,10 +139,51 @@ const DashboardPFamilia = () => {
           ¡Bienvenido, {padre?.nombre}!
         </h2>
 
-        <SeccionDashboard icon={<SvgEstrella />} titulo="📈 Progreso de tus hijos">
-          <p style={{ fontSize: "1.1rem", lineHeight: 1.5 }}>
-            (Aquí podrías ver cuántas lecciones y juegos han completado tus hijos)
-          </p>
+        <SeccionDashboard icon={<SvgEstrella />} titulo="🔍 Buscar hijo por código MINED">
+          <input
+            type="text"
+            placeholder="Ingresa el código MINED"
+            value={codigoMined}
+            onChange={(e) => setCodigoMined(e.target.value)}
+            style={{ padding: 10, fontSize: "1rem", width: "60%", marginRight: 10 }}
+          />
+          <button
+            onClick={buscarEstudiante}
+            disabled={loading || !codigoMined.trim()}
+            style={{
+              padding: "10px 20px",
+              fontSize: "1rem",
+              backgroundColor: "#00aaff",
+              color: "white",
+              border: "none",
+              borderRadius: 5,
+              cursor: "pointer",
+            }}
+          >
+            {loading ? "Buscando..." : "Buscar"}
+          </button>
+
+          {error && <p style={{ color: "red", marginTop: 10 }}>{error}</p>}
+          {estudiante && (
+            <div
+              style={{
+                marginTop: 20,
+                padding: 20,
+                backgroundColor: "#b2ebf2",
+                borderRadius: 10,
+              }}
+            >
+              <h3>Perfil del hijo:</h3>
+              <p><strong>Nombre:</strong> {estudiante.nombre}</p>
+              <p><strong>Grado:</strong> {estudiante.grado}</p>
+              <p><strong>Edad:</strong> {estudiante.edad}</p>
+              {/* Aquí puedes agregar más datos y progreso personalizado */}
+              <SeccionDashboard icon={<SvgEstrella />} titulo="📈 Progreso">
+                <p>Lecciones completadas: {estudiante.leccionesCompletadas || 0}</p>
+                <p>Juegos completados: {estudiante.juegosCompletados || 0}</p>
+              </SeccionDashboard>
+            </div>
+          )}
         </SeccionDashboard>
 
         <SeccionDashboard icon={<SvgEstrella />} titulo="📚 Biblioteca">
