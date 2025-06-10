@@ -166,6 +166,20 @@ const DashboardNiño = ({ uid }) => {
               </button>
             </div>
           </div>
+
+<div className="col-md-6 col-lg-4 mb-4">
+            <div className="card h-100 shadow-sm p-3 text-center" style={{ borderRadius: "15px" }}>
+              <h3> Grupos</h3>
+              <p>Mira tus Grupos y lecciones.</p>
+              <button
+                className="btn btn-secondary"
+                onClick={() => navigate("/estudiantegruposchat")}
+              >
+                Ver Avances
+              </button>
+            </div>
+          </div>
+
         </div>
 
         {/* Botón de cierre de sesión */}

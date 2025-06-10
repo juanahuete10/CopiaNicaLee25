@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { db } from '../../database/firebaseConfig';
-import { collection, query, where, getDocs, deleteDoc, doc, updateDoc } from 'firebase/firestore';
+import { collection, query, where, getDocs, updateDoc, doc, arrayUnion } from 'firebase/firestore';
 import { useAuth } from '../../database/AuthContext';
-import { Container, Row, Col, Card, Spinner, Button, Form } from 'react-bootstrap';
-import { FaTrashAlt, FaEdit, FaSave } from 'react-icons/fa';
+import { Container, Row, Col, ListGroup, Card, Form, Button, Spinner } from 'react-bootstrap';
 
 function MisGrupos() {
   const { user } = useAuth();
   const [grupos, setGrupos] = useState([]);
   const [cargando, setCargando] = useState(true);
-  const [editandoId, setEditandoId] = useState(null);
-  const [formEdit, setFormEdit] = useState({ nombre: '', grado: '', seccion: '' });
+  const [grupoSeleccionado, setGrupoSeleccionado] = useState(null);
+  const [nuevoMensaje, setNuevoMensaje] = useState('');
 
+  // Obtener grupos del docente
   useEffect(() => {
     const obtenerGrupos = async () => {
       try {
@@ -19,6 +19,7 @@ function MisGrupos() {
         const querySnapshot = await getDocs(q);
         const lista = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setGrupos(lista);
+        if (lista.length > 0) setGrupoSeleccionado(lista[0]);
       } catch (error) {
         console.error('Error al obtener los grupos:', error);
       } finally {
@@ -31,38 +32,39 @@ function MisGrupos() {
     }
   }, [user]);
 
-  const eliminarGrupo = async (id) => {
-    if (window.confirm('¿Estás seguro de que deseas eliminar este grupo?')) {
-      try {
-        await deleteDoc(doc(db, 'grupos', id));
-        setGrupos(prev => prev.filter(g => g.id !== id));
-      } catch (error) {
-        console.error('Error eliminando el grupo:', error);
-      }
-    }
-  };
+  // Enviar mensaje / nota al grupo (guardamos mensajes en Firestore en un campo "mensajes")
+  const enviarMensaje = async () => {
+    if (!nuevoMensaje.trim() || !grupoSeleccionado) return;
 
-  const iniciarEdicion = (grupo) => {
-    setEditandoId(grupo.id);
-    setFormEdit({
-      nombre: grupo.nombre,
-      grado: grupo.grado,
-      seccion: grupo.seccion || '',
-    });
-  };
+    const grupoRef = doc(db, 'grupos', grupoSeleccionado.id);
+    const mensajeObj = {
+      texto: nuevoMensaje.trim(),
+      fecha: new Date().toISOString(),
+      enviadoPor: user.uid,
+    };
 
-  const guardarEdicion = async (id) => {
     try {
-      const grupoRef = doc(db, 'grupos', id);
       await updateDoc(grupoRef, {
-        nombre: formEdit.nombre,
-        grado: formEdit.grado,
-        seccion: formEdit.seccion,
+        mensajes: arrayUnion(mensajeObj),
       });
-      setGrupos(prev => prev.map(g => (g.id === id ? { ...g, ...formEdit } : g)));
-      setEditandoId(null);
+
+      // Actualizar localmente el estado para mostrar el mensaje
+      setGrupos(prev =>
+        prev.map(g =>
+          g.id === grupoSeleccionado.id
+            ? { ...g, mensajes: [...(g.mensajes || []), mensajeObj] }
+            : g
+        )
+      );
+
+      setGrupoSeleccionado(prev => ({
+        ...prev,
+        mensajes: [...(prev.mensajes || []), mensajeObj],
+      }));
+
+      setNuevoMensaje('');
     } catch (error) {
-      console.error('Error al guardar los cambios:', error);
+      console.error('Error enviando mensaje:', error);
     }
   };
 
@@ -76,80 +78,96 @@ function MisGrupos() {
   }
 
   return (
-    <Container className="mt-5">
-      <h3 className="text-center mb-4">📚 Mis Grupos</h3>
-      <Row>
-        {grupos.length > 0 ? (
-          grupos.map(grupo => (
-            <Col key={grupo.id} xs={12} sm={6} md={4} className="mb-4">
-              <Card className="shadow-sm">
+    <Container fluid className="mt-4" style={{ height: '80vh' }}>
+      <Row className="h-100">
+        {/* Lista lateral tipo WhatsApp */}
+        <Col xs={12} md={4} className="border-end overflow-auto" style={{ maxHeight: '80vh' }}>
+          <h4>📚 Mis Grupos</h4>
+          <ListGroup variant="flush">
+            {grupos.map(grupo => (
+              <ListGroup.Item
+                key={grupo.id}
+                action
+                active={grupoSeleccionado?.id === grupo.id}
+                onClick={() => setGrupoSeleccionado(grupo)}
+                style={{ cursor: 'pointer' }}
+              >
+                <strong>{grupo.nombre}</strong> <br />
+                <small>{grupo.grado} - {grupo.seccion || 'Sin sección'}</small>
+              </ListGroup.Item>
+            ))}
+          </ListGroup>
+        </Col>
+
+        {/* Panel de detalle y chat */}
+        <Col xs={12} md={8} className="d-flex flex-column" style={{ maxHeight: '80vh' }}>
+          {grupoSeleccionado ? (
+            <>
+              <Card className="mb-3 flex-grow-0">
                 <Card.Body>
-                  {editandoId === grupo.id ? (
-                    <>
-                      <Form.Group className="mb-2">
-                        <Form.Label><strong>Nombre</strong></Form.Label>
-                        <Form.Control
-                          type="text"
-                          value={formEdit.nombre}
-                          onChange={(e) => setFormEdit({ ...formEdit, nombre: e.target.value })}
-                        />
-                      </Form.Group>
-                      <Form.Group className="mb-2">
-                        <Form.Label><strong>Grado</strong></Form.Label>
-                        <Form.Select
-                          value={formEdit.grado}
-                          onChange={(e) => setFormEdit({ ...formEdit, grado: e.target.value })}
-                        >
-                          <option value="">Seleccionar grado</option>
-                          <option value="Primero">Primero</option>
-                          <option value="Segundo">Segundo</option>
-                          <option value="Tercero">Tercero</option>
-                          <option value="Cuarto">Cuarto</option>
-                          <option value="Quinto">Quinto</option>
-                          <option value="Sexto">Sexto</option>
-                        </Form.Select>
-                      </Form.Group>
-                      <Form.Group className="mb-3">
-                        <Form.Label><strong>Sección</strong></Form.Label>
-                        <Form.Control
-                          type="text"
-                          value={formEdit.seccion}
-                          onChange={(e) => setFormEdit({ ...formEdit, seccion: e.target.value })}
-                        />
-                      </Form.Group>
-                      <div className="d-flex justify-content-end gap-2">
-                        <Button variant="success" size="sm" onClick={() => guardarEdicion(grupo.id)}>
-                          <FaSave /> Guardar
-                        </Button>
-                        <Button variant="secondary" size="sm" onClick={() => setEditandoId(null)}>
-                          Cancelar
-                        </Button>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <Card.Title>{grupo.nombre}</Card.Title>
-                      <Card.Text>
-                        Grado: {grupo.grado} <br />
-                        Sección: {grupo.seccion || 'N/A'}
-                      </Card.Text>
-                      <div className="d-flex justify-content-end gap-2">
-                        <Button variant="outline-primary" size="sm" onClick={() => iniciarEdicion(grupo)}>
-                          <FaEdit />
-                        </Button>
-                        <Button variant="outline-danger" size="sm" onClick={() => eliminarGrupo(grupo.id)}>
-                          <FaTrashAlt />
-                        </Button>
-                      </div>
-                    </>
-                  )}
+                  <Card.Title>{grupoSeleccionado.nombre}</Card.Title>
+                  <Card.Subtitle className="mb-2 text-muted">
+                    Grado: {grupoSeleccionado.grado} | Sección: {grupoSeleccionado.seccion || 'N/A'}
+                  </Card.Subtitle>
+                  <Card.Text>
+                    <strong>Estudiantes:</strong>
+                    <ul>
+                      {(grupoSeleccionado.estudiantes || []).length > 0 ? (
+                        grupoSeleccionado.estudiantes.map((est, idx) => <li key={idx}>{est}</li>)
+                      ) : (
+                        <li>No hay estudiantes asignados</li>
+                      )}
+                    </ul>
+                  </Card.Text>
+                  <Button
+                    variant="success"
+                    onClick={() => window.alert(`Aquí podrías abrir asignar lecciones para el grupo ${grupoSeleccionado.nombre}`)}
+                  >
+                    📚 Asignar Lecciones
+                  </Button>
                 </Card.Body>
               </Card>
-            </Col>
-          ))
-        ) : (
-          <p className="text-center">No has creado ningún grupo aún.</p>
-        )}
+
+              {/* Chat / Notas del grupo */}
+              <Card className="flex-grow-1 d-flex flex-column">
+                <Card.Body style={{ overflowY: 'auto', flexGrow: 1 }}>
+                  {grupoSeleccionado.mensajes && grupoSeleccionado.mensajes.length > 0 ? (
+                    grupoSeleccionado.mensajes
+                      .sort((a, b) => new Date(a.fecha) - new Date(b.fecha))
+                      .map((msg, i) => (
+                        <div
+                          key={i}
+                          className={`mb-2 p-2 rounded ${
+                            msg.enviadoPor === user.uid ? 'bg-primary text-white ms-auto' : 'bg-light'
+                          }`}
+                          style={{ maxWidth: '75%' }}
+                        >
+                          <small>{new Date(msg.fecha).toLocaleString()}</small>
+                          <p className="mb-0">{msg.texto}</p>
+                        </div>
+                      ))
+                  ) : (
+                    <p className="text-muted">No hay mensajes todavía.</p>
+                  )}
+                </Card.Body>
+                <Card.Footer className="d-flex gap-2">
+                  <Form.Control
+                    type="text"
+                    placeholder="Escribe un mensaje..."
+                    value={nuevoMensaje}
+                    onChange={(e) => setNuevoMensaje(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); enviarMensaje(); } }}
+                  />
+                  <Button onClick={enviarMensaje} variant="primary">
+                    Enviar
+                  </Button>
+                </Card.Footer>
+              </Card>
+            </>
+          ) : (
+            <p className="text-center text-muted mt-5">Selecciona un grupo para ver detalles.</p>
+          )}
+        </Col>
       </Row>
     </Container>
   );

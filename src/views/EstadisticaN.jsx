@@ -1,66 +1,54 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
-  LineChart, Line, ResponsiveContainer, RadarChart, PolarGrid,
-  PolarAngleAxis, PolarRadiusAxis, Radar
+  LineChart, Line, ResponsiveContainer
 } from "recharts";
+import { getFirestore, doc, getDoc } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 
 const EstadisticaN = () => {
-  // 1. Tiempo promedio de juego por nivel
-  const tiempoPorNivel = [
-    { nivel: "Nivel 1", minutos: 12 },
-    { nivel: "Nivel 2", minutos: 10 },
-    { nivel: "Nivel 3", minutos: 15 },
-    { nivel: "Nivel 4", minutos: 8 },
-    { nivel: "Nivel 5", minutos: 13 },
-    { nivel: "Nivel 6", minutos: 9 },
-  ];
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // 2. Juegos más jugados
-  const juegosPopulares = [
-    { juego: "Abecedario", usos: 120 },
-    { juego: "Sopas", usos: 90 },
-    { juego: "Detectives", usos: 70 },
-    { juego: "Rompecabezas", usos: 50 },
-  ];
+  const auth = getAuth();
+  const db = getFirestore();
 
-  // 3. Avance promedio por usuario por nivel
-  const avanceUsuarios = [
-    { nivel: "Nivel 1", UsuarioA: 80, UsuarioB: 65 },
-    { nivel: "Nivel 2", UsuarioA: 70, UsuarioB: 60 },
-    { nivel: "Nivel 3", UsuarioA: 90, UsuarioB: 75 },
-    { nivel: "Nivel 4", UsuarioA: 60, UsuarioB: 55 },
-    { nivel: "Nivel 5", UsuarioA: 85, UsuarioB: 70 },
-    { nivel: "Nivel 6", UsuarioA: 65, UsuarioB: 60 },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      const user = auth.currentUser;
+      if (!user) return;
 
-  // 4. Comprensión lectora por mes
-  const comprensionMensual = [
-    { mes: "Enero", comprension: 45 },
-    { mes: "Febrero", comprension: 60 },
-    { mes: "Marzo", comprension: 80 },
-    { mes: "Abril", comprension: 75 },
-  ];
+      try {
+        const docRef = doc(db, "estadisticasDocente", user.uid);
+        const docSnap = await getDoc(docRef);
 
-  // 5. Juegos por nivel (como GraficoJuegosPorNivel.jsx)
-  const juegosPorNivel = [
-    { nivel: "Nivel 1", juegos: 3 },
-    { nivel: "Nivel 2", juegos: 4 },
-    { nivel: "Nivel 3", juegos: 5 },
-    { nivel: "Nivel 4", juegos: 3 },
-    { nivel: "Nivel 5", juegos: 4 },
-    { nivel: "Nivel 6", juegos: 5 },
-  ];
+        if (docSnap.exists()) {
+          setData(docSnap.data());
+        } else {
+          console.log("No hay datos para este docente.");
+        }
+      } catch (error) {
+        console.error("Error al cargar estadísticas:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) return <p className="text-center">Cargando estadísticas...</p>;
+  if (!data) return <p className="text-center">No hay datos estadísticos aún.</p>;
 
   return (
     <div className="p-4 grid gap-8">
-      {/* 1. Tiempo promedio de juego */}
+      {/* 1. Tiempo promedio de juego por nivel */}
       <div>
         <h3 className="text-xl font-bold mb-2">⏱️ Tiempo Promedio de Juego por Nivel</h3>
         <ResponsiveContainer width="100%" height={250}>
-          <BarChart data={tiempoPorNivel} layout="vertical" margin={{ left: 30 }}>
+          <BarChart data={data.tiempoPorNivel} layout="vertical" margin={{ left: 30 }}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis type="number" label={{ value: "Minutos", position: "insideBottom", offset: -5 }} />
+            <XAxis type="number" />
             <YAxis type="category" dataKey="nivel" />
             <Tooltip />
             <Bar dataKey="minutos" fill="#8884d8" />
@@ -72,7 +60,7 @@ const EstadisticaN = () => {
       <div>
         <h3 className="text-xl font-bold mb-2">🎮 Juegos Más Jugados</h3>
         <ResponsiveContainer width="100%" height={250}>
-          <BarChart data={juegosPopulares}>
+          <BarChart data={data.juegosPopulares}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="juego" />
             <YAxis />
@@ -82,11 +70,11 @@ const EstadisticaN = () => {
         </ResponsiveContainer>
       </div>
 
-      {/* 3. Avance promedio por usuario */}
+      {/* 3. Avance promedio por usuario por nivel */}
       <div>
         <h3 className="text-xl font-bold mb-2">📈 Avance Promedio por Usuario por Nivel</h3>
         <ResponsiveContainer width="100%" height={250}>
-          <LineChart data={avanceUsuarios}>
+          <LineChart data={data.avanceUsuarios}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="nivel" />
             <YAxis unit="%" />
@@ -102,7 +90,7 @@ const EstadisticaN = () => {
       <div>
         <h3 className="text-xl font-bold mb-2">📚 Comprensión Lectora por Mes</h3>
         <ResponsiveContainer width="100%" height={250}>
-          <LineChart data={comprensionMensual}>
+          <LineChart data={data.comprensionMensual}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="mes" />
             <YAxis unit="%" />
@@ -112,11 +100,11 @@ const EstadisticaN = () => {
         </ResponsiveContainer>
       </div>
 
-      {/* 5. Juegos por nivel (como GraficoJuegosPorNivel.jsx) */}
+      {/* 5. Juegos por nivel */}
       <div>
         <h3 className="text-xl font-bold mb-2">🎯 Cantidad de Juegos por Nivel</h3>
         <ResponsiveContainer width="100%" height={250}>
-          <BarChart data={juegosPorNivel}>
+          <BarChart data={data.juegosPorNivel}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="nivel" />
             <YAxis />
