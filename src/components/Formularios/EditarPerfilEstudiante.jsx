@@ -1,24 +1,29 @@
+// EditarPerfilEstudiante.jsx
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const EditarPerfilEstudiante = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const estudiante = location.state?.estudiante; // Los datos originales del estudiante
+  const estudiante = location.state?.estudiante;
 
-  // Estado para los campos del formulario
-  const [nombre, setNombre] = useState(estudiante?.nombre || '');
-  const [apellido, setApellido] = useState(estudiante?.apellido || '');
-  const [edad, setEdad] = useState(estudiante?.edad || '');
-  const [grado, setGrado] = useState(estudiante?.grado || '');
-  const [intereses, setIntereses] = useState(estudiante?.intereses || '');
-  const [nivelEducativo, setNivelEducativo] = useState(estudiante?.nivelEducativo || '');
-  const [ubicacion, setUbicacion] = useState(estudiante?.ubicacion || '');
-  const [genero, setGenero] = useState(estudiante?.genero || '');
-  const [imagen, setImagen] = useState(estudiante?.imagen || null);
+  // Si no hay datos, redirigir a perfil (evita error)
+  if (!estudiante) {
+    navigate('/perfil-estudiante');
+    return null;
+  }
 
-  // Función para manejar la carga de la imagen
-  const pickImage = async (e) => {
+  const [nombre, setNombre] = useState(estudiante.nombre || '');
+  const [apellido, setApellido] = useState(estudiante.apellido || '');
+  const [edad, setEdad] = useState(estudiante.edad || '');
+  const [grado, setGrado] = useState(estudiante.grado || '');
+  const [intereses, setIntereses] = useState(estudiante.intereses || '');
+  const [nivelEducativo, setNivelEducativo] = useState(estudiante.nivelEducativo || '');
+  const [ubicacion, setUbicacion] = useState(estudiante.ubicacion || '');
+  const [genero, setGenero] = useState(estudiante.genero || '');
+  const [imagen, setImagen] = useState(estudiante.imagen || null);
+
+  const pickImage = (e) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
@@ -27,16 +32,13 @@ const EditarPerfilEstudiante = () => {
     }
   };
 
-  // Función para manejar la acción de guardar los cambios
   const handleGuardarCambios = () => {
-    // Validación de campos
     if (!nombre || !apellido || !edad || !grado || !nivelEducativo || !intereses || !ubicacion || !genero) {
       alert('Por favor, completa todos los campos.');
       return;
     }
 
     const estudianteActualizado = {
-      ...estudiante,
       nombre,
       apellido,
       edad,
@@ -47,10 +49,11 @@ const EditarPerfilEstudiante = () => {
       genero,
       imagen,
     };
-    console.log(estudianteActualizado); // Puedes guardarlo en tu base de datos si lo deseas
 
-    // Navegar de vuelta al perfil con los datos actualizados
-    navigate('/ver-perfil-estudiante', { state: { estudiante: estudianteActualizado } });
+    // Aquí guardarías los datos actualizados en la base de datos
+
+    // Por ahora solo redirigimos al perfil pasando los datos actualizados
+    navigate('/perfil-estudiante', { state: { estudiante: estudianteActualizado } });
   };
 
   return (
@@ -138,6 +141,7 @@ const EditarPerfilEstudiante = () => {
 
       <div>
         <select value={genero} onChange={(e) => setGenero(e.target.value)}>
+          <option value="">Selecciona género</option>
           <option value="Masculino">Masculino</option>
           <option value="Femenino">Femenino</option>
         </select>

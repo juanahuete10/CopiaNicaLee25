@@ -17,8 +17,6 @@ const EstudianteFormularios = () => {
   const [imagen, setImagen] = useState(null);
   const [verImagenCompleta, setVerImagenCompleta] = useState(false);
   const [mostrarResumen, setMostrarResumen] = useState(false);
-  
-
   const [codigoMined, setCodigoMined] = useState('');
 
   const [errores, setErrores] = useState({
@@ -31,12 +29,10 @@ const EstudianteFormularios = () => {
     genero: false,
     imagen: false,
     fechaNacimiento: false,
-    // --- AGREGADO: no obligatorio, así que no lo agregamos en errores ---
   });
 
   const navigate = useNavigate();
 
-  // Función para calcular la edad desde fecha nacimiento
   const calcularEdad = (fecha) => {
     const fechaNac = new Date(fecha);
     const hoy = new Date();
@@ -45,7 +41,6 @@ const EstudianteFormularios = () => {
     setEdad(edadCalc);
   };
 
-  // Manejo de la imagen cargada por input file
   const pickImage = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -55,15 +50,12 @@ const EstudianteFormularios = () => {
     }
   };
 
-  // Función para generar código MINED automático
   const generarCodigoMinedAutomatico = () => {
-    // Ejemplo: "MINED" + fecha + random 4 dígitos
-    const fechaStr = new Date().toISOString().slice(0,10).replace(/-/g, '');
+    const fechaStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
     const randomNum = Math.floor(1000 + Math.random() * 9000);
     return `MINED${fechaStr}${randomNum}`;
   };
 
-  // Validar datos para mostrar resumen
   const validarDatos = () => {
     const ubicacionFinal = ubicacion === 'Otra' ? ubicacionOtra.trim() : ubicacion;
 
@@ -80,17 +72,13 @@ const EstudianteFormularios = () => {
     };
 
     setErrores(nuevosErrores);
-
     return !Object.values(nuevosErrores).includes(true);
   };
 
-  // Cuando el usuario da clic en "Registrarse" para mostrar resumen
   const handleMostrarResumen = () => {
     if (validarDatos()) {
-      // --- AGREGADO: si no hay código MINED, generar uno automático ---
       if (!codigoMined.trim()) {
-        const nuevoCodigo = generarCodigoMinedAutomatico();
-        setCodigoMined(nuevoCodigo);
+        setCodigoMined(generarCodigoMinedAutomatico());
       }
       setMostrarResumen(true);
     } else {
@@ -98,7 +86,6 @@ const EstudianteFormularios = () => {
     }
   };
 
-  // Confirmar registro y navegar al dashboard
   const handleConfirmarRegistro = () => {
     const estudiante = {
       id: Date.now(),
@@ -111,12 +98,11 @@ const EstudianteFormularios = () => {
       ubicacion: ubicacion === 'Otra' ? ubicacionOtra.trim() : ubicacion,
       genero,
       imagen,
-      codigoMined: codigoMined || generarCodigoMinedAutomatico(), // por seguridad
+      codigoMined: codigoMined || generarCodigoMinedAutomatico(),
     };
     navigate('/dashboardnino', { state: { estudiante } });
   };
 
-  // Cancelar resumen para editar datos
   const handleCancelarResumen = () => {
     setMostrarResumen(false);
   };
@@ -129,16 +115,8 @@ const EstudianteFormularios = () => {
     <Fondo>
       <Contenedor>
         <BotonRegresar onClick={handleRegresarInicio} title="Volver al inicio">
-          <FaHome size={30} />
+          <FaHome size={24} />
         </BotonRegresar>
-
-        <Decoraciones>
-          <span role="img" aria-label="emoji">📚</span>
-          <span role="img" aria-label="emoji">🌈</span>
-          <span role="img" aria-label="emoji">☁️</span>
-          <span role="img" aria-label="emoji">✨</span>
-          <span role="img" aria-label="emoji">🦄</span>
-        </Decoraciones>
 
         <Titulo>🎉 Registro Estudiantil 🎉</Titulo>
 
@@ -159,20 +137,10 @@ const EstudianteFormularios = () => {
               {errores.imagen && <ErrorFoto>¡No olvides subir tu foto! 🌟</ErrorFoto>}
             </VistaImagen>
 
-            <Input
-              type="text"
-              placeholder="Nombre"
-              value={nombre}
-              onChange={(e) => setNombre(e.target.value)}
-            />
+            <Input type="text" placeholder="Nombre" value={nombre} onChange={(e) => setNombre(e.target.value)} />
             {errores.nombre && <Error>¡Por favor, escribe tu nombre! 🥳</Error>}
 
-            <Input
-              type="text"
-              placeholder="Apellido"
-              value={apellido}
-              onChange={(e) => setApellido(e.target.value)}
-            />
+            <Input type="text" placeholder="Apellido" value={apellido} onChange={(e) => setApellido(e.target.value)} />
             {errores.apellido && <Error>¡Tu apellido también es importante! 🎈</Error>}
 
             <Input
@@ -207,9 +175,7 @@ const EstudianteFormularios = () => {
             </Select>
             {errores.nivelEducativo && <Error>¡Elige tu nivel educativo! 📚</Error>}
 
-            <label style={{ fontWeight: 'bold', marginBottom: '5px', color: '#000000' }}>
-              Selecciona tus intereses:
-            </label>
+            <label>Selecciona tus intereses:</label>
             <Select
               multiple
               value={intereses}
@@ -217,7 +183,7 @@ const EstudianteFormularios = () => {
                 const options = Array.from(e.target.selectedOptions).map(op => op.value);
                 setIntereses(options);
               }}
-              style={{ height: '90px', fontSize: '14px' }}
+              style={{ height: '90px' }}
             >
               <option value="Lectura">📖 Lectura</option>
               <option value="Matemáticas">➗ Matemáticas</option>
@@ -236,276 +202,135 @@ const EstudianteFormularios = () => {
               <option value="Otra">Otra</option>
             </Select>
             {ubicacion === 'Otra' && (
-              <Input
-                type="text"
-                placeholder="Escribe tu ubicación"
-                value={ubicacionOtra}
-                onChange={(e) => setUbicacionOtra(e.target.value)}
-              />
+              <Input type="text" placeholder="Escribe tu ubicación" value={ubicacionOtra} onChange={(e) => setUbicacionOtra(e.target.value)} />
             )}
             {errores.ubicacion && <Error>¡Indica dónde estás! 📍</Error>}
 
             <div>
-              <label style={{ fontWeight: 'bold' }}>Género:</label><br />
-              <label>
-                <input
-                  type="radio"
-                  name="genero"
-                  value="Masculino"
-                  checked={genero === 'Masculino'}
-                  onChange={(e) => setGenero(e.target.value)}
-                /> Masculino
-              </label>
+              <label>Género:</label><br />
+              <label><input type="radio" name="genero" value="Masculino" checked={genero === 'Masculino'} onChange={(e) => setGenero(e.target.value)} /> Masculino</label>
               {' '}
-              <label>
-                <input
-                  type="radio"
-                  name="genero"
-                  value="Femenino"
-                  checked={genero === 'Femenino'}
-                  onChange={(e) => setGenero(e.target.value)}
-                /> Femenino
-              </label>
+              <label><input type="radio" name="genero" value="Femenino" checked={genero === 'Femenino'} onChange={(e) => setGenero(e.target.value)} /> Femenino</label>
             </div>
             {errores.genero && <Error>¡Selecciona tu género! ⚧️</Error>}
 
-            {/* --- AGREGADO: input opcional para código MINED --- */}
-            <Input
-              type="text"
-              placeholder="Código MINED (opcional)"
-              value={codigoMined}
-              onChange={(e) => setCodigoMined(e.target.value)}
-              maxLength={20}
-            />
+            <Input type="text" placeholder="Código MINED (opcional)" value={codigoMined} onChange={(e) => setCodigoMined(e.target.value)} maxLength={20} />
 
-            <BotonRegistrar onClick={handleMostrarResumen}>
-              Mostrar resumen para confirmar
-            </BotonRegistrar>
+            <BotonRegistrar onClick={handleMostrarResumen}>Registrar</BotonRegistrar>
           </>
         ) : (
           <Resumen>
-            <h2>Resumen de tu registro</h2>
-            <p><strong>Nombre:</strong> {nombre} {apellido}</p>
-            <p><strong>Edad:</strong> {edad} años</p>
-            <p><strong>Fecha de nacimiento:</strong> {fechaNacimiento}</p>
-            <p><strong>Grado escolar:</strong> {grado}</p>
-            <p><strong>Nivel educativo:</strong> {nivelEducativo}</p>
-            <p><strong>Intereses:</strong> {intereses.join(', ')}</p>
-            <p><strong>Ubicación:</strong> {ubicacion === 'Otra' ? ubicacionOtra : ubicacion}</p>
-            <p><strong>Género:</strong> {genero}</p>
-            <p><strong>Código MINED:</strong> {codigoMined}</p> {/* Mostrar código generado o ingresado */}
-            {imagen && <img src={imagen} alt="Foto del estudiante" style={{ width: '200px', borderRadius: '15px', marginTop: '10px' }} />}
-            <ContBotones>
-              <BotonConfirmar onClick={handleConfirmarRegistro}>Confirmar Registro</BotonConfirmar>
-              <BotonCancelar onClick={handleCancelarResumen}>Editar Datos</BotonCancelar>
-            </ContBotones>
+            <h3>Resumen del Registro:</h3>
+            <p>👤 {nombre} {apellido}</p>
+            <p>🎂 Edad: {edad}</p>
+            <p>📘 Grado: {grado}</p>
+            <p>📚 Nivel: {nivelEducativo}</p>
+            <p>🎯 Intereses: {intereses.join(', ')}</p>
+            <p>📍 Ubicación: {ubicacion === 'Otra' ? ubicacionOtra : ubicacion}</p>
+            <p>⚧️ Género: {genero}</p>
+            <p>📄 Código MINED: {codigoMined}</p>
+            <BotonRegistrar onClick={handleConfirmarRegistro}>Confirmar</BotonRegistrar>
+            <BotonCancelar onClick={handleCancelarResumen}>Editar</BotonCancelar>
           </Resumen>
-        )}
-
-        {verImagenCompleta && (
-          <ImagenGrande onClick={() => setVerImagenCompleta(false)}>
-            <img src={imagen} alt="Imagen completa" />
-          </ImagenGrande>
         )}
       </Contenedor>
     </Fondo>
   );
 };
 
+// 🔷 Estilos
 const Fondo = styled.div`
-  background: linear-gradient(to right, #f8fafc, #e0f2fe);
   min-height: 100vh;
-  padding: 40px 20px;
-  font-family: 'Comic Sans MS', cursive, sans-serif;
+  background: linear-gradient(to bottom, #9DE1F3, #FFFFFF);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
 `;
 
 const Contenedor = styled.div`
-  max-width: 420px;
-  margin: auto;
-  background: #fff;
-  border-radius: 30px;
-  padding: 30px 25px 40px;
-  box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+  background-color: white;
+  border-radius: 20px;
+  padding: 30px;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   position: relative;
 `;
 
-const BotonRegresar = styled.button`
-  position: absolute;
-  top: 15px;
-  left: 15px;
-  background: #fbbf24;
-  border: none;
-  border-radius: 50%;
-  padding: 7px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  &:hover {
-    background: #f59e0b;
-  }
-`;
-
-const Decoraciones = styled.div`
-  font-size: 30px;
-  margin-bottom: 20px;
-  display: flex;
-  justify-content: space-between;
-  color: #fbbf24;
-`;
-
-const Titulo = styled.h1`
+const Titulo = styled.h2`
   text-align: center;
-  margin-bottom: 25px;
-  font-weight: 900;
-  color: #0f172a;
-  font-size: 26px;
-`;
-
-const VistaImagen = styled.div`
-  border: 3px solid #fbbf24;
-  border-radius: 25px;
-  padding: 10px;
   margin-bottom: 20px;
-  text-align: center;
-  background: #fff9e5;
-  p {
-    font-size: 16px;
-    color: #a16207;
-  }
-  img {
-    max-width: 100%;
-    max-height: 150px;
-    border-radius: 20px;
-    cursor: pointer;
-    margin-bottom: 10px;
-  }
-  input[type='file'] {
-    margin-top: 8px;
-  }
 `;
 
 const Input = styled.input`
   width: 100%;
-  border-radius: 15px;
-  padding: 10px 14px;
-  border: 2px solid #fbbf24;
-  margin-bottom: 15px;
-  font-size: 14px;
-  transition: all 0.3s ease;
-  &:focus {
-    border-color: #f59e0b;
-    outline: none;
-  }
+  margin: 10px 0;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
 `;
 
 const Select = styled.select`
   width: 100%;
-  border-radius: 15px;
-  padding: 10px 14px;
-  border: 2px solid #fbbf24;
-  margin-bottom: 15px;
-  font-size: 14px;
-  background: white;
-  cursor: pointer;
-  &:focus {
-    border-color: #f59e0b;
-    outline: none;
+  margin: 10px 0;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+`;
+
+const VistaImagen = styled.div`
+  text-align: center;
+  img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    cursor: pointer;
   }
 `;
 
 const BotonRegistrar = styled.button`
+  background-color: #4caf50;
+  color: white;
+  padding: 10px;
+  margin: 15px 0;
   width: 100%;
-  background: #fbbf24;
   border: none;
-  border-radius: 25px;
-  padding: 14px 0;
-  font-weight: 700;
-  font-size: 18px;
-  color: #0c0c0c;
+  border-radius: 10px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  &:hover {
-    background: #f59e0b;
-  }
+  font-size: 16px;
 `;
 
-const Error = styled.div`
-  color: #b91c1c;
-  font-weight: 700;
-  margin-top: -12px;
-  margin-bottom: 10px;
-  font-size: 13px;
-  font-style: italic;
+const BotonCancelar = styled(BotonRegistrar)`
+  background-color: #f44336;
+`;
+
+const Error = styled.p`
+  color: red;
+  margin: 0;
+  font-size: 14px;
 `;
 
 const ErrorFoto = styled(Error)`
-  margin-top: 0;
+  margin-top: 5px;
 `;
 
 const Resumen = styled.div`
   text-align: center;
-  font-size: 15px;
-  color: #334155;
-  h2 {
-    margin-bottom: 20px;
-    font-weight: 800;
-    color: #b45309;
-  }
-  p {
-    margin-bottom: 10px;
-  }
-  img {
-    border: 3px solid #fbbf24;
-  }
 `;
 
-const ContBotones = styled.div`
-  margin-top: 25px;
-  display: flex;
-  justify-content: space-around;
-  gap: 20px;
-`;
-
-const BotonConfirmar = styled.button`
-  background: #16a34a;
+const BotonRegresar = styled.button`
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: none;
   border: none;
-  border-radius: 25px;
-  padding: 12px 25px;
-  font-weight: 700;
-  color: white;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  color: #555;
+  transition: transform 0.2s;
   &:hover {
-    background: #15803d;
-  }
-`;
-
-const BotonCancelar = styled.button`
-  background: #ef4444;
-  border: none;
-  border-radius: 25px;
-  padding: 12px 25px;
-  font-weight: 700;
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  &:hover {
-    background: #b91c1c;
-  }
-`;
-
-const ImagenGrande = styled.div`
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.75);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  img {
-    max-width: 90%;
-    max-height: 90%;
-    border-radius: 20px;
-    box-shadow: 0 0 15px #fbbf24;
-    cursor: zoom-out;
+    transform: scale(1.1);
   }
 `;
 

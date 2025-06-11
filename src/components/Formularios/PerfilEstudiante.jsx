@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { db, auth } from "../../database/firebaseConfig";
-import { doc, getDoc, updateDoc, deleteDoc, setDoc } from "firebase/firestore";
+import {doc,getDoc,updateDoc,deleteDoc,setDoc,
+} from "firebase/firestore";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import {
   Button,
@@ -36,75 +37,81 @@ export default function PerfilEstudiante() {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        const uid = user.uid;
-        try {
-          const userRef = doc(db, "users", uid);
-          const userSnap = await getDoc(userRef);
-          const correo = userSnap.exists()
-            ? userSnap.data().correo || user.email
-            : user.email;
-
-          const estudianteRef = doc(db, "estudiantes", uid);
-          const estudianteSnap = await getDoc(estudianteRef);
-
-          if (estudianteSnap.exists()) {
-            const data = estudianteSnap.data();
-            setEstudiante({ id: uid, ...data });
-            setFormData({
-              ...data,
-              correo,
-              rol: "estudiante",
-            });
-          } else {
-            // Si no existe perfil, crear uno básico automáticamente
-            const perfilInicial = {
-              nombre: "",
-              apellido: "",
-              edad: "",
-              fechaNacimiento: "",
-              grado: "",
-              intereses: "",
-              nivelEducativo: "",
-              ubicacion: "",
-              genero: "",
-              imagen: null,
-              codigoMined: "",
-            };
-            await setDoc(estudianteRef, perfilInicial);
-            setEstudiante({ id: uid, ...perfilInicial });
-            setFormData({
-              ...perfilInicial,
-              correo,
-              rol: "estudiante",
-            });
-          }
-        } catch (error) {
-          console.error("❌ Error cargando datos del perfil:", error);
-          alert("❌ Error cargando perfil.");
-        }
-      } else {
+      if (!user) {
         setEstudiante(null);
+        setCargando(false);
+        return;
       }
+
+      const uid = user.uid;
+      try {
+        const userRef = doc(db, "users", uid);
+        const userSnap = await getDoc(userRef);
+        const correo = userSnap.exists() ? userSnap.data().correo || user.email : user.email;
+
+        const estudianteRef = doc(db, "estudiantes", uid);
+        const estudianteSnap = await getDoc(estudianteRef);
+
+        if (estudianteSnap.exists()) {
+          const data = estudianteSnap.data();
+          setEstudiante({ id: uid, ...data });
+          setFormData({
+            ...data,
+            correo,
+            rol: "estudiante",
+            imagen: data.imagen || null,
+          });
+        } else {
+          const perfilInicial = {
+            nombre: "",
+            apellido: "",
+            edad: "",
+            fechaNacimiento: "",
+            grado: "",
+            intereses: "",
+            nivelEducativo: "",
+            ubicacion: "",
+            genero: "",
+            imagen: null,
+            codigoMined: "",
+          };
+          await setDoc(estudianteRef, perfilInicial);
+          setEstudiante({ id: uid, ...perfilInicial });
+          setFormData({
+            ...perfilInicial,
+            correo,
+            rol: "estudiante",
+          });
+        }
+      } catch (error) {
+        console.error("❌ Error cargando datos del perfil:", error);
+      }
+
       setCargando(false);
     });
+
     return () => unsubscribe();
   }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData((prev) => ({ ...prev, imagen: reader.result }));
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const guardarCambios = async () => {
     try {
-      const datosActualizables = { ...formData };
-      delete datosActualizables.correo;
-      delete datosActualizables.rol;
-
+      const { correo, rol, ...datosActualizables } = formData;
       const ref = doc(db, "estudiantes", estudiante.id);
       await updateDoc(ref, datosActualizables);
       setEstudiante({ ...estudiante, ...datosActualizables });
@@ -149,21 +156,12 @@ export default function PerfilEstudiante() {
           <Card.Body>
             <Row className="align-items-center">
               <Col xs={12} md={4} className="text-center mb-3">
-                {formData.imagen ? (
-                  <Image
-                    src={formData.imagen}
-                    roundedCircle
-                    style={{ width: "130px", border: "4px solid #0d6efd" }}
-                    alt="Foto de perfil"
-                  />
-                ) : (
-                  <Image
-                    src="https://cdn-icons-png.flaticon.com/512/4715/4715327.png"
-                    roundedCircle
-                    style={{ width: "130px", border: "4px solid #0d6efd" }}
-                    alt="Icono de usuario"
-                  />
-                )}
+                <Image
+                  src={formData.imagen || "https://cdn-icons-png.flaticon.com/512/4715/4715327.png"}
+                  roundedCircle
+                  style={{ width: "130px", border: "4px solid #0d6efd" }}
+                  alt="Foto de perfil"
+                />
               </Col>
               <Col xs={12} md={8}>
                 <h3 className="text-primary fw-bold mb-2">
@@ -201,32 +199,29 @@ export default function PerfilEstudiante() {
               <form>
                 <Row className="g-3">
                   {Object.entries(formData).map(([key, value]) => {
-                    // No editar correo ni rol
                     if (key === "correo" || key === "rol") return null;
-                    // Para imagen, mostrar input file separado
-                    if (key === "imagen")
+
+                    if (key === "imagen") {
                       return (
                         <Col md={6} xs={12} key={key}>
                           <label className="form-label text-capitalize">{key}</label>
                           <input
                             type="file"
                             accept="image/*"
-                            onChange={(e) => {
-                              const file = e.target.files[0];
-                              if (file) {
-                                const reader = new FileReader();
-                                reader.onloadend = () =>
-                                  setFormData((prev) => ({
-                                    ...prev,
-                                    imagen: reader.result,
-                                  }));
-                                reader.readAsDataURL(file);
-                              }
-                            }}
+                            onChange={handleImageChange}
                             className="form-control"
                           />
+                          {formData.imagen && (
+                            <Image
+                              src={formData.imagen}
+                              roundedCircle
+                              style={{ width: "100px", marginTop: "10px", border: "2px solid #0d6efd" }}
+                              alt="Preview imagen"
+                            />
+                          )}
                         </Col>
                       );
+                    }
 
                     return (
                       <Col md={6} xs={12} key={key}>
@@ -234,7 +229,7 @@ export default function PerfilEstudiante() {
                         <input
                           type="text"
                           name={key}
-                          value={value || ""}
+                          value={value}
                           onChange={handleChange}
                           className="form-control"
                         />
@@ -259,18 +254,14 @@ export default function PerfilEstudiante() {
           <Modal.Header closeButton>
             <Modal.Title>Confirmar eliminación</Modal.Title>
           </Modal.Header>
-          <Modal.Body>¿Seguro que quieres eliminar tu perfil? Esta acción no se puede deshacer.</Modal.Body>
+          <Modal.Body>
+            ¿Seguro que quieres eliminar tu perfil? Esta acción no se puede deshacer.
+          </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={() => setShowConfirm(false)}>
               Cancelar
             </Button>
-            <Button
-              variant="danger"
-              onClick={() => {
-                setShowConfirm(false);
-                eliminarPerfil();
-              }}
-            >
+            <Button variant="danger" onClick={eliminarPerfil}>
               Eliminar Perfil
             </Button>
           </Modal.Footer>
