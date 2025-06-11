@@ -1,6 +1,7 @@
 // src/components/LayoutDocente.jsx
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FaComments } from 'react-icons/fa';
 import {
   Container,
   Row,
@@ -62,8 +63,9 @@ function DashboardDocente() {
             <Nav className="me-auto">
               <Nav.Link onClick={() => navigate('/dashboarddocente')}>Inicio</Nav.Link>
               <Nav.Link onClick={() => navigate('/perfildocente')}>Perfil</Nav.Link>
+              <Nav.Link onClick={() => navigate('/asistenteia')}>Chat IA</Nav.Link>
               <Nav.Link onClick={() => navigate('/creargrupo')}>Crear Grupo</Nav.Link>
-              <Nav.Link onClick={() => navigate('/listargrupos')}>Asignar Lecciones</Nav.Link>
+          
               <Nav.Link onClick={() => navigate('/misgrupos')}>Mis Grupos</Nav.Link>
               <Nav.Link onClick={() => navigate('/estadisticasdocente')}>Estadísticas</Nav.Link>
             </Nav>
@@ -171,14 +173,7 @@ function DashboardDocente() {
                 onClick={() => navigate('/listargrupos')}
                 className="d-flex align-items-center"
               >
-                <FaBookOpen className="me-2" size={20} />
-                {sidebarOpen && 'Asignar Lecciones'}
-              </ListGroup.Item>
-              <ListGroup.Item
-                action
-                onClick={() => navigate('/misgrupos')}
-                className="d-flex align-items-center"
-              >
+                
                 <FaListUl className="me-2" size={20} />
                 {sidebarOpen && 'Mis Grupos'}
               </ListGroup.Item>
@@ -244,25 +239,9 @@ function DashboardDocente() {
                 </Card>
               </Col>
 
-              {/* Asignar Lecciones */}
-              <Col xs={12} sm={6} md={6} lg={4}>
-                <Card className="shadow-sm h-100">
-                  <Card.Body className="d-flex flex-column align-items-center text-center">
-                    <FaBookOpen size={50} className="mb-3 text-info" />
-                    <Card.Title>Asignar Lecciones</Card.Title>
-                    <Card.Text>Selecciona un grupo y asigna lecciones.</Card.Text>
-                    <Button
-                      variant="info"
-                      className="mt-auto w-100"
-                      onClick={() => navigate('/listargrupos')}
-                    >
-                      Asignar Lecciones
-                    </Button>
-                  </Card.Body>
-                </Card>
-              </Col>
+      
 
-              {/* Mis Grupos */}
+           
               <Col xs={12} sm={6} md={6} lg={4}>
                 <Card className="shadow-sm h-100">
                   <Card.Body className="d-flex flex-column align-items-center text-center">
@@ -280,6 +259,8 @@ function DashboardDocente() {
                 </Card>
               </Col>
 
+
+    
               {/* Estadísticas */}
               <Col xs={12} sm={6} md={6} lg={4}>
                 <Card className="shadow-sm h-100">
@@ -297,6 +278,23 @@ function DashboardDocente() {
                   </Card.Body>
                 </Card>
               </Col>
+
+              <Col xs={12} sm={6} md={6} lg={4}>
+  <Card className="shadow-sm h-100">
+    <Card.Body className="d-flex flex-column align-items-center text-center">
+      <FaComments size={50} className="mb-3 text-warning" />
+      <Card.Title>Mi chat IA</Card.Title>
+      <Card.Text>Consulta en tu Chat IA.</Card.Text>
+      <Button
+        variant="warning"
+        className="mt-auto w-100"
+        onClick={() => navigate('/asistenteia')}
+      >
+        Ir a chat IA
+      </Button>
+    </Card.Body>
+  </Card>
+</Col>
             </Row>
           </Col>
         </Row>

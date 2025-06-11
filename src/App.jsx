@@ -29,8 +29,9 @@ import DashboardPFamilia from "./components/PadreFamilia/DashboardPFamilia";
 import PerfilEstudiante from "./components/Formularios/PerfilEstudiante";
 import EstadisticaN from "./views/EstadisticaN";
 import EstadisticasDocente from "./views/EstadisticasDocente";
-import ListarGrupos from "./components/Docente/ListarGrupos";
 import EstudianteGruposChat from "./components/Formularios/EstudianteGruposChat";
+import AsistenteIA from "./components/Chat/AsistenteIA";
+import CuentacuentosIA from "./components/Cuentos/CuentacuentosIA";
 
  
 function AppContent() {
@@ -70,6 +71,9 @@ function AppContent() {
           <Route path="/estadisticaN" element={<EstadisticaN />} />
           <Route path="/estadisticasdocente" element={<EstadisticasDocente />} />
           <Route path="/estudiantegruposchat" element={<EstudianteGruposChat/>} />
+          <Route path="/asistenteia" element={<AsistenteIA/>} />
+           <Route path="/cuentacuentosia" element={<CuentacuentosIA/>} />
+          
     
     
 
