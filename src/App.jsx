@@ -17,7 +17,7 @@ import DashboardNiño from "./components/Formularios/DashboardNiño";
 import LeccionMatch from "./components/Lecciones/LeccionMatch";
 import Lecciones from "./components/Lecciones/Lecciones";
 import Juegos from "./components/Lecciones/Juegos"
-import Biblioteca from "./components/Lecciones/Biblioteca";
+import Biblioteca from "./components/Lecciones/BibliotecaChat";
 import LeccionFill from "./components/Lecciones/LeccionFill";
 import DashboardAdmin from "./components/Administrador/DashboardAdmin";
 import CrearAdmin from "./components/Administrador/CrearAdmin";

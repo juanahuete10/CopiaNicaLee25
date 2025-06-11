@@ -11,9 +11,8 @@ import Nivel1LetraCorrecta from '../JuegosInteractivos/Nivel1LetraCorrecta';
 import Nivel1RepetirPalabra from '../JuegosInteractivos/Nivel1RepetirPalabra';
 import LeccionMatch from '../Lecciones/LeccionMatch';
 import LeccionFill from '../Lecciones/LeccionFill';
-import Biblioteca from '../Lecciones/Biblioteca';
+import Biblioteca from './BibliotecaChat';
 
-// Nivel 5 
 import CazaNumeroPrimo from '../JuegosInteractivos/CazaNumeroPrimo';
 import OperacionesMatematicas from '../JuegosInteractivos/OperacionesMatematicas';
 import RompecabezasGeometria from '../JuegosInteractivos/RompecabezasGeometria';
@@ -21,7 +20,6 @@ import EscapeRoomMatematica from '../JuegosInteractivos/EscapeRoomMatematica';
 import SopaDeLetras from '../JuegosInteractivos/SopaDeLetras';
 import TriviaFigurasGeometricas from '../JuegosInteractivos/TriviaFigurasGeometricas';
 
-// Nivel 6 
 import JuegoMapasInteractivos from '../JuegosInteractivos/JuegoMapaInteractivo';
 import TriviaGeografica from '../JuegosInteractivos/TriviaGeografica';
 import ExploraTuPais from '../JuegosInteractivos/ExploraTuPais';
@@ -31,12 +29,12 @@ import LecturasInteractivas from '../JuegosInteractivos/LecturasInteractivas';
 import ClasificaPalabras from '../JuegosInteractivos/ClasificaPalabras';
 
 const levels = [
-  { id: 1, label: 'Nivel 1', icon: '/src/assets/nivel1.png' },
-  { id: 2, label: 'Nivel 2', icon: '/src/assets/dos.png' },
-  { id: 3, label: 'Nivel 3', icon: '/src/assets/nivel3.png' },
-  { id: 4, label: 'Nivel 4', icon: '/src/assets/cuatro.png' },
-  { id: 5, label: 'Nivel 5', icon: '/src/assets/numero-5.png' },
-  { id: 6, label: 'Nivel 6', icon: '/src/assets/seis.png' },
+  { id: 1, label: 'Nivel 1', icon: 'bi bi-123' },
+  { id: 2, label: 'Nivel 2', icon: 'bi bi-volume-up' },
+  { id: 3, label: 'Nivel 3', icon: 'bi bi-image' },
+ { id: 4, label: 'Nivel 4', icon: 'bi bi-book' },
+  { id: 5, label: 'Nivel 5', icon: 'bi bi-calculator' },
+  { id: 6, label: 'Nivel 6', icon: 'bi bi-map' },
 ];
 
 const juegosPorNivel = {
@@ -45,21 +43,21 @@ const juegosPorNivel = {
       id: 'leccion1',
       nombre: 'Asociar Imagen',
       descripcion: 'Asocia imagen con las palabras.',
-      icono: '/src/assets/escoger.png',
+      icono: 'bi bi-image',
       componente: <Nivel1AsociarImagen />
     },
     {
       id: 'leccion2',
       nombre: 'Letras Correctas',
       descripcion: 'Puedes ver las letras correctas de tus lecciones.',
-      icono: '/src/assets/Letras.png',
+      icono: 'bi bi-alphabet',
       componente: <Nivel1LetraCorrecta />
     },
     {
       id: 'leccion3',
       nombre: 'Repetición de Palabras',
       descripcion: 'Puedes repetir palabras.',
-      icono: '/src/assets/repeticion.png',
+      icono: 'bi bi-repeat',
       componente: <Nivel1RepetirPalabra />
     },
   ],
@@ -69,14 +67,14 @@ const juegosPorNivel = {
       id: 'pronunciacion1',
       nombre: 'Actividades de Pronunciación',
       descripcion: 'Escucha y repite palabras',
-      icono: '/src/assets/pronunciacion.png',
+      icono: 'bi bi-mic',
       componente: <ActividadesPronunciacion />
     },
     {
       id: 'pronunciacion2',
       nombre: 'Sonidos y Pronunciación',
       descripcion: 'Relaciona sonidos con letras',
-      icono: '/src/assets/auricular.png',
+      icono: 'bi bi-volume-up',
       componente: <SonidosYPronunciacion />
     },
   ],
@@ -86,21 +84,21 @@ const juegosPorNivel = {
       id: 'leccion1',
       nombre: 'Unir Palabra con Imagen',
       descripcion: 'Asocia palabras con su imagen correspondiente.',
-      icono: '/src/assets/cooperacion.png',
+      icono: 'bi bi-link',
       componente: <LeccionMatch />
     },
     {
       id: 'leccion2',
       nombre: 'Seleccionar Palabra Correcta',
       descripcion: 'Completa la oración con la palabra correcta.',
-      icono: '/src/assets/escoger.png',
+      icono: 'bi bi-check-circle',
       componente: <LeccionFill />
     },
     {
       id: 'leccion3',
       nombre: 'Biblioteca NicaLee',
       descripcion: 'Explora cuentos, poemas y lecturas.',
-      icono: '/src/assets/libro-de-ninos.png',
+      icono: 'bi bi-book',
       componente: <Biblioteca />
     },
   ],
@@ -110,21 +108,21 @@ const juegosPorNivel = {
       id: 'abc1',
       nombre: 'Abecedario A-E',
       descripcion: 'Aprende las letras A-E',
-      icono: '/src/assets/bloque-abc.png',
+      icono: 'bi bi-book',
       componente: <AbecedarioAE />
     },
     {
       id: 'parejas1',
       nombre: 'Memoria de Letras',
       descripcion: 'Haz coincidir las letras',
-      icono: '/src/assets/alfabeto.png',
+      icono: 'bi bi-ui-checks',
       componente: <MemoriaLetras />
     },
     {
       id: 'sonidos1',
       nombre: 'Sonidos y Letras',
       descripcion: 'Relaciona letras con sonidos',
-      icono: '/src/assets/pronunciacion.png',
+      icono: 'bi bi-ear',
       componente: <SonidosLetras />
     },
   ],
@@ -243,7 +241,9 @@ export default function Juegos() {
           {levels.map((lvl) => (
             <Col xs={6} sm={4} md={2} key={lvl.id}>
               <Card className="shadow-sm h-100">
-                <Card.Img variant="top" src={lvl.icon} />
+                <div className="text-primary mt-3" style={{ fontSize: '3rem' }}>
+                  <i className={lvl.icon}></i>
+                </div>
                 <Card.Body className="d-flex flex-column">
                   <Card.Title style={{ fontSize: '1rem' }}>{lvl.label}</Card.Title>
                   <Button
@@ -270,18 +270,9 @@ export default function Juegos() {
             {juegos.map((juego) => (
               <Col xs={12} sm={6} md={4} key={juego.id}>
                 <Card className="shadow-sm h-100 text-center">
-                  {nivelSeleccionado >= 5 ? (
-                    <div className="text-primary" style={{ fontSize: '3rem', marginTop: '1rem' }}>
-                      <i className={juego.icono}></i>
-                    </div>
-                  ) : (
-                    <Card.Img
-                      variant="top"
-                      src={juego.icono}
-                      alt={juego.nombre}
-                      style={{ width: '60%', margin: '1rem auto 0', height: 'auto' }}
-                    />
-                  )}
+                  <div className="text-primary" style={{ fontSize: '3rem', marginTop: '1rem' }}>
+                    <i className={juego.icono}></i>
+                  </div>
                   <Card.Body>
                     <Card.Title>{juego.nombre}</Card.Title>
                     <Card.Text>{juego.descripcion}</Card.Text>
@@ -297,12 +288,12 @@ export default function Juegos() {
       )}
 
       {juegoActivo && (
-        <>
-          <Button variant="secondary" className="mb-3" onClick={() => setJuegoActivo(null)}>
+        <div className="mt-4">
+          <Button variant="warning" className="mb-3" onClick={() => setJuegoActivo(null)}>
             ← Volver a juegos
           </Button>
-          <div className="text-start p-3 border rounded bg-light">{juegoActivo}</div>
-        </>
+          {juegoActivo}
+        </div>
       )}
     </Container>
   );
